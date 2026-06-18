@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>About Us — TechDataSeeders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
+    body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
+    a{text-decoration:none;color:inherit;}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
+    .nav-logo img{height:32px;}
+    .nav-cta{background:var(--blue);color:#fff;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px);}
+
+    /* BREADCRUMB */
+    .crumb-bar{position:absolute;top:92px;left:0;right:0;padding:0 80px;z-index:3;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+    .back-link{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:8px 16px;border-radius:100px;transition:all .25s;backdrop-filter:blur(6px);}
+    .back-link:hover{background:rgba(255,255,255,.2);color:#fff;transform:translateX(-2px);}
+    .back-link svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .breadcrumb{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,.6);flex-wrap:wrap;}
+    .breadcrumb a{color:rgba(255,255,255,.72);transition:color .2s;}
+    .breadcrumb a:hover{color:#fff;}
+    .breadcrumb .sep{color:rgba(255,255,255,.35);}
+    .breadcrumb .current{color:#fff;font-weight:600;}
+
+    /* HERO */
+    .ind-hero{min-height:520px;padding:180px 80px 100px;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+    .ind-hero-bg{position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1400&q=80');background-size:cover;background-position:center;}
+    .ind-hero-overlay{position:absolute;inset:0;background:linear-gradient(150deg,rgba(6,6,18,.92) 0%,rgba(37,99,255,.5) 100%);}
+    .ind-hero-content{position:relative;z-index:2;max-width:780px;}
+    .ind-hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(37,99,255,.2);border:1px solid rgba(37,99,255,.45);color:rgba(255,255,255,.88);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:28px;}
+    .ind-hero-h1{font-family:var(--font-d);font-size:clamp(42px,6vw,68px);font-weight:800;color:#fff;line-height:1.05;letter-spacing:-.035em;margin-bottom:22px;}
+    .ind-hero-sub{font-size:18px;line-height:1.75;color:rgba(255,255,255,.68);max-width:580px;}
+
+    /* INTRO / STORY */
+    .sec-intro{padding:90px 80px 80px;}
+    
+    .intro-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:20px;}
+    .intro-kicker::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:2px;}
+    .intro-h{font-family:var(--font-d);font-size:clamp(28px,3vw,40px);font-weight:700;line-height:1.14;letter-spacing:-.025em;color:var(--black);margin-bottom:22px;}
+    .intro-h em{font-style:italic;color:var(--blue);}
+    .intro-p{font-size:17px;line-height:1.85;color:#555;margin-bottom:20px;}
+    .intro-p:last-child{margin-bottom:0;}
+
+    /* STATS BAND */
+    .sec-stats{padding:0 80px 90px;}
+    .stats-band{background:linear-gradient(140deg,#06091a 0%,#0d1840 55%,#162050 100%);border-radius:28px;padding:56px 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;overflow:hidden;}
+    .stats-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 80% 120%,rgba(37,99,255,.35),transparent);}
+    .stat{position:relative;z-index:1;text-align:center;}
+    .stat-n{font-family:var(--font-d);font-size:clamp(32px,4vw,46px);font-weight:800;color:#fff;line-height:1;letter-spacing:-.02em;}
+    .stat-n span{color:rgba(96,165,250,.95);}
+    .stat-l{font-size:13.5px;color:rgba(255,255,255,.55);margin-top:10px;}
+
+    /* MISSION & VISION */
+    .sec-mv{padding:0 80px 90px;}
+    .mv-head{max-width:640px;margin-bottom:48px;}
+    .mv-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;}
+    .mv-kicker::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:2px;}
+    .mv-h{font-family:var(--font-d);font-size:clamp(26px,3vw,40px);font-weight:700;line-height:1.12;letter-spacing:-.025em;color:var(--black);}
+    .mv-h em{font-style:italic;color:var(--blue);}
+    .mv-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+    .mv-card{background:#f8f9fb;border:1px solid rgba(0,0,0,.07);border-radius:22px;padding:40px;transition:all .35s cubic-bezier(.16,1,.3,1);}
+    .mv-card:hover{border-color:rgba(37,99,255,.22);box-shadow:0 18px 50px rgba(37,99,255,.08);transform:translateY(-5px);}
+    .mv-ico{width:54px;height:54px;border-radius:15px;background:linear-gradient(135deg,rgba(37,99,255,.12),rgba(37,99,255,.06));display:flex;align-items:center;justify-content:center;margin-bottom:22px;transition:all .3s;}
+    .mv-ico svg{width:26px;height:26px;stroke:var(--blue);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s;}
+    .mv-card:hover .mv-ico{background:var(--blue);transform:rotate(-5deg) scale(1.1);}
+    .mv-card:hover .mv-ico svg{stroke:#fff;}
+    .mv-t{font-family:var(--font-d);font-size:22px;font-weight:700;color:var(--black);margin-bottom:12px;}
+    .mv-d{font-size:15.5px;line-height:1.8;color:#666;}
+
+    /* VALUES */
+    .sec-val{padding:90px 80px;background:#f8f9fb;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);}
+    .val-head{max-width:640px;margin-bottom:52px;}
+    .val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .val-card{background:#fff;border:1px solid rgba(37,99,255,.08);border-radius:20px;padding:32px;transition:all .35s cubic-bezier(.16,1,.3,1);}
+    .val-card:hover{border-color:rgba(37,99,255,.25);box-shadow:0 18px 50px rgba(37,99,255,.1);transform:translateY(-6px);}
+    .val-ico{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,rgba(37,99,255,.12),rgba(37,99,255,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:all .3s;}
+    .val-ico svg{width:24px;height:24px;stroke:var(--blue);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;transition:stroke .3s;}
+    .val-card:hover .val-ico{background:var(--blue);transform:rotate(-5deg) scale(1.1);}
+    .val-card:hover .val-ico svg{stroke:#fff;}
+    .val-t{font-family:var(--font-d);font-size:18px;font-weight:700;color:var(--black);margin-bottom:11px;}
+    .val-d{font-size:14px;line-height:1.7;color:#666;}
+
+    /* WHAT WE DO */
+    .sec-wd{padding:90px 80px;}
+    .wd-head{max-width:640px;margin-bottom:48px;}
+    .wd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+    .wd-link{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:26px 30px;transition:all .3s;}
+    .wd-link:hover{border-color:rgba(37,99,255,.3);background:#f8f9ff;transform:translateX(5px);box-shadow:0 12px 36px rgba(37,99,255,.08);}
+    .wd-link-t{font-family:var(--font-d);font-size:17px;font-weight:700;color:var(--black);margin-bottom:5px;}
+    .wd-link-d{font-size:13.5px;color:#777;}
+    .wd-link svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;transition:transform .3s;}
+    .wd-link:hover svg{transform:translateX(4px);}
+
+    /* CTA */
+    .cta-band{padding:100px 80px;background:linear-gradient(140deg,#06091a 0%,#0d1840 55%,#162050 100%);position:relative;overflow:hidden;text-align:center;}
+    .cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 70% at 50% 110%,rgba(37,99,255,.3),transparent);}
+    .cta-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(96,165,250,.85);margin-bottom:18px;position:relative;}
+    .cta-kicker::before{content:'';width:20px;height:2px;background:rgba(96,165,250,.85);border-radius:2px;}
+    .cta-h{font-family:var(--font-d);font-size:clamp(30px,4vw,50px);font-weight:800;color:#fff;line-height:1.08;letter-spacing:-.03em;margin-bottom:18px;position:relative;}
+    .cta-h em{font-style:italic;color:rgba(96,165,250,.9);}
+    .cta-p{font-size:17px;line-height:1.75;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto 40px;position:relative;}
+    .cta-btns{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;position:relative;}
+    .btn-p{background:var(--blue);color:#fff;padding:16px 38px;border-radius:100px;font-family:var(--font-d);font-size:15px;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:all .3s;}
+    .btn-p:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 14px 40px rgba(37,99,255,.5);}
+    .btn-s{color:rgba(255,255,255,.7);padding:16px 38px;border-radius:100px;font-family:var(--font-d);font-size:15px;font-weight:600;border:1px solid rgba(255,255,255,.2);transition:all .3s;}
+    .btn-s:hover{color:#fff;border-color:rgba(255,255,255,.4);transform:translateY(-2px);}
+
+    .footer-mini{text-align:center;padding:28px;font-size:13px;color:#aaa;border-top:1px solid rgba(0,0,0,.06);}
+
+    @media(max-width:900px){
+      .nav{padding:0 24px;}
+      .ind-hero{padding:150px 24px 64px;}
+      .crumb-bar{padding:0 24px;top:84px;}
+      .sec-intro,.sec-stats,.sec-mv,.sec-val,.sec-wd{padding-left:24px;padding-right:24px;}
+      .sec-intro{padding-top:60px;padding-bottom:56px;}
+      .sec-val,.sec-wd{padding-top:60px;padding-bottom:60px;}
+      .stats-band{grid-template-columns:1fr 1fr;gap:32px 16px;padding:40px 24px;}
+      .mv-grid,.val-grid,.wd-grid{grid-template-columns:1fr;}
+      .cta-band{padding:72px 24px;}
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="./index.html" class="nav-logo"><img src="./logo/Tech DataSeeders Logo.png" alt="TechDataSeeders"></a>
+  <a href="./index.html#contact" class="nav-cta">Get a Quote →</a>
+</nav>
+
+<section class="ind-hero">
+  <div class="ind-hero-bg"></div>
+  <div class="ind-hero-overlay"></div>
+  <div class="crumb-bar">
+    <a href="./index.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</a>
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="./index.html">Home</a>
+      <span class="sep">/</span>
+      <span class="current">About Us</span>
+    </nav>
+  </div>
+  <div class="ind-hero-content">
+    <div class="ind-hero-tag">About Us</div>
+    <h1 class="ind-hero-h1">We Turn the Open Web Into Decision-Ready Data</h1>
+    <p class="ind-hero-sub">TechDataSeeders is a data-engineering team helping brands extract, structure, and act on web data at scale — accurately, ethically, and on time.</p>
+  </div>
+</section>
+
+<section class="sec-intro">
+  <div class="intro-inner">
+    <div class="intro-kicker">Our Story</div>
+    <h2 class="intro-h">Built by Engineers Who Were<br><em>Tired of Dirty Data</em></h2>
+    <p class="intro-p">TechDataSeeders started with a simple frustration: businesses everywhere were drowning in web data they couldn't trust. Scrapers broke overnight, records arrived half-empty, and teams burned hours cleaning spreadsheets instead of making decisions. We believed there was a better way — one built on solid engineering rather than brittle scripts.</p>
+    <p class="intro-p">Today we operate distributed, fault-tolerant pipelines that deliver more than ten million clean, validated records every day to clients across seven industries. From global enterprises to fast-moving startups, our partners rely on us for the one thing that makes data valuable: trust. We handle the crawling, the anti-bot defenses, the validation, and the delivery — so our clients can focus on insight, not infrastructure.</p>
+  </div>
+</section>
+
+<section class="sec-stats">
+  <div class="stats-band">
+    <div class="stat"><div class="stat-n">10M<span>+</span></div><div class="stat-l">Records Scraped Daily</div></div>
+    <div class="stat"><div class="stat-n">100<span>+</span></div><div class="stat-l">Happy Clients Worldwide</div></div>
+    <div class="stat"><div class="stat-n">7</div><div class="stat-l">Industries Served</div></div>
+    <div class="stat"><div class="stat-n">99.9<span>%</span></div><div class="stat-l">Data Accuracy</div></div>
+  </div>
+</section>
+
+<section class="sec-mv">
+  <div class="mv-head">
+    <div class="mv-kicker">What Drives Us</div>
+    <h2 class="mv-h">Our Mission &<br><em>Our Vision</em></h2>
+  </div>
+  <div class="mv-grid">
+    <div class="mv-card">
+      <div class="mv-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></div>
+      <div class="mv-t">Our Mission</div>
+      <div class="mv-d">To make accurate, large-scale web data accessible to every business — delivered clean, on schedule, and ready to drive decisions. We exist to remove the engineering burden of data collection so our clients can compete on insight.</div>
+    </div>
+    <div class="mv-card">
+      <div class="mv-ico"><svg viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></div>
+      <div class="mv-t">Our Vision</div>
+      <div class="mv-d">A world where no decision is made on stale or incomplete data. We're building the most reliable data-extraction infrastructure on the web — one that scales effortlessly and earns trust through quality, transparency, and ethics.</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-val">
+  <div class="val-head">
+    <div class="mv-kicker">What We Stand For</div>
+    <h2 class="mv-h">The Values Behind<br><em>Every Dataset</em></h2>
+  </div>
+  <div class="val-grid">
+    <div class="val-card">
+      <div class="val-ico"><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="val-t">Accuracy First</div>
+      <div class="val-d">99.9% validated data is non-negotiable. Every record passes layered ML checks before it reaches you — no junk, no nulls, no guessing.</div>
+    </div>
+    <div class="val-card">
+      <div class="val-ico"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><path d="M6 6h.01M6 18h.01"/></svg></div>
+      <div class="val-t">Built to Scale</div>
+      <div class="val-d">Distributed, redundant infrastructure that grows from thousands to millions of records a day without missing a beat.</div>
+    </div>
+    <div class="val-card">
+      <div class="val-ico"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="val-t">Client Partnership</div>
+      <div class="val-d">We're an extension of your team — scoping your exact needs, adapting as they change, and growing alongside your business.</div>
+    </div>
+    <div class="val-card">
+      <div class="val-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <div class="val-t">Ethical & Compliant</div>
+      <div class="val-d">Responsible collection by design — robots.txt respected, public data prioritized, and GDPR handled from day one.</div>
+    </div>
+    <div class="val-card">
+      <div class="val-ico"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg></div>
+      <div class="val-t">Speed & Reliability</div>
+      <div class="val-d">Proposals within 24 hours and a 99.2% uptime SLA. Data delivery in days, not months — monitored around the clock.</div>
+    </div>
+    <div class="val-card">
+      <div class="val-ico"><svg viewBox="0 0 24 24"><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/><path d="M17.7 7.5A2.5 2.5 0 1 1 19.5 12H2"/></svg></div>
+      <div class="val-t">Continuous Innovation</div>
+      <div class="val-d">We invest in ML-driven QA, anti-bot research, and new delivery formats so your pipelines stay ahead of a changing web.</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec-wd">
+  <div class="wd-head">
+    <div class="mv-kicker">What We Do</div>
+    <h2 class="mv-h">Four Ways We Turn the<br><em>Web Into Value</em></h2>
+  </div>
+  <div class="wd-grid">
+    <a href="./services/enterprise-web-scraping.html" class="wd-link">
+      <div><div class="wd-link-t">Enterprise Web Scraping</div><div class="wd-link-d">Millions of structured records from thousands of sites.</div></div>
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a href="./services/mobile-app-scraping.html" class="wd-link">
+      <div><div class="wd-link-t">Mobile App Scraping</div><div class="wd-link-d">Ratings, reviews, menus & pricing from iOS and Android.</div></div>
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a href="./services/data-analytics-intelligence.html" class="wd-link">
+      <div><div class="wd-link-t">Data Analytics & Intelligence</div><div class="wd-link-d">Benchmarks, price signals & sentiment, dashboard-ready.</div></div>
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+    <a href="./services/custom-data-api.html" class="wd-link">
+      <div><div class="wd-link-t">Custom Data API Delivery</div><div class="wd-link-d">REST, GraphQL, CSV & real-time streams, your way.</div></div>
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+</section>
+
+<section class="cta-band">
+  <div class="cta-kicker">Let's Build Together</div>
+  <h2 class="cta-h">Ready to Work With<br><em>TechDataSeeders?</em></h2>
+  <p class="cta-p">Tell us your data needs and what you've got in mind. We'll send a tailored proposal within 24 hours.</p>
+  <div class="cta-btns">
+    <a href="./index.html#contact" class="btn-p">Get a Quote →</a>
+    <a href="./index.html#services" class="btn-s">Explore Our Services</a>
+  </div>
+</section>
+
+<div class="footer-mini">© 2025 TechDataSeeders. All rights reserved.</div>
+
+</body>
+</html>

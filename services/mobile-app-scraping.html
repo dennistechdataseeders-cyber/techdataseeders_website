@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Mobile App Scraping Services — TechDataSeeders</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --blue: #2563FF;
+      --blue-dark: #1a4fd8;
+      --black: #0a0a0a;
+      --font-d: 'Plus Jakarta Sans', sans-serif;
+      --font-b: 'Inter', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-b);
+      background: #fff;
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* NAV */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 60px;
+      background: rgba(255, 255, 255, .95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(0, 0, 0, .07);
+      z-index: 100;
+    }
+
+    .nav-logo img {
+      height: 32px;
+    }
+
+    .nav-cta {
+      background: var(--blue);
+      color: #fff;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all .25s;
+    }
+
+    .nav-cta:hover {
+      background: var(--blue-dark);
+      transform: translateY(-1px);
+    }
+
+    /* BREADCRUMB BAR */
+    .crumb-bar {
+      position: absolute;
+      top: 92px;
+      left: 0;
+      right: 0;
+      padding: 0 80px;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, .85);
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .22);
+      padding: 8px 16px;
+      border-radius: 100px;
+      transition: all .25s;
+      backdrop-filter: blur(6px);
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, .2);
+      color: #fff;
+      transform: translateX(-2px);
+    }
+
+    .back-link svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, .6);
+      flex-wrap: wrap;
+    }
+
+    .breadcrumb a {
+      color: rgba(255, 255, 255, .72);
+      transition: color .2s;
+    }
+
+    .breadcrumb a:hover {
+      color: #fff;
+    }
+
+    .breadcrumb .sep {
+      color: rgba(255, 255, 255, .35);
+    }
+
+    .breadcrumb .current {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* HERO */
+    .ind-hero {
+      min-height: 540px;
+      padding: 180px 80px 100px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .ind-hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1400&q=80');
+      background-size: cover;
+      background-position: center;
+    }
+
+    .ind-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(150deg, rgba(6, 6, 18, .92) 0%, rgba(37, 99, 255, .5) 100%);
+    }
+
+    .ind-hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .ind-hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37, 99, 255, .2);
+      border: 1px solid rgba(37, 99, 255, .45);
+      color: rgba(255, 255, 255, .88);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+    }
+
+    .ind-hero-h1 {
+      font-family: var(--font-d);
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.04;
+      letter-spacing: -.035em;
+      margin-bottom: 22px;
+    }
+
+    .ind-hero-sub {
+      font-size: 18px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, .68);
+    }
+
+    /* INTRO */
+    .sec-intro {
+      padding: 80px 80px 72px;
+      border-bottom: 1px solid rgba(0, 0, 0, .06);
+    }
+
+   
+
+    .intro-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 20px;
+    }
+
+    .intro-kicker::before {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    .intro-h {
+      font-family: var(--font-d);
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 700;
+      line-height: 1.14;
+      letter-spacing: -.025em;
+      color: var(--black);
+      margin-bottom: 20px;
+    }
+
+    .intro-h em {
+      font-style: italic;
+      color: var(--blue);
+    }
+
+    .intro-p {
+      font-size: 17px;
+      line-height: 1.85;
+      color: #555;
+      max-width: 720px;
+    }
+
+    /* MAIN + SIDEBAR */
+    .sec-main {
+      padding: 80px 80px 96px;
+      background: #f8f9fb;
+      border-bottom: 1px solid rgba(0, 0, 0, .06);
+    }
+
+    .svc-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .svc-block {
+      margin-bottom: 56px;
+    }
+
+    .svc-block:last-child {
+      margin-bottom: 0;
+    }
+
+    .blk-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+
+    .blk-kicker::before {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    .blk-h {
+      font-family: var(--font-d);
+      font-size: clamp(24px, 2.4vw, 32px);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -.02em;
+      color: var(--black);
+      margin-bottom: 14px;
+    }
+
+    .blk-h em {
+      font-style: italic;
+      color: var(--blue);
+    }
+
+    .blk-p {
+      font-size: 15.5px;
+      line-height: 1.8;
+      color: #666;
+      max-width: 640px;
+      margin-bottom: 28px;
+    }
+
+    .offer-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .offer-item {
+      background: #fff;
+      border: 1px solid rgba(37, 99, 255, .08);
+      border-radius: 18px;
+      padding: 26px;
+      transition: all .35s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .offer-item:hover {
+      border-color: rgba(37, 99, 255, .25);
+      box-shadow: 0 16px 44px rgba(37, 99, 255, .09);
+      transform: translateY(-5px);
+    }
+
+    .offer-ico {
+      width: 48px;
+      height: 48px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, rgba(37, 99, 255, .12), rgba(37, 99, 255, .06));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      transition: all .3s;
+    }
+
+    .offer-ico svg {
+      width: 24px;
+      height: 24px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke .3s;
+    }
+
+    .offer-item:hover .offer-ico {
+      background: var(--blue);
+      transform: rotate(-5deg) scale(1.1);
+    }
+
+    .offer-item:hover .offer-ico svg {
+      stroke: #fff;
+    }
+
+    .offer-t {
+      font-family: var(--font-d);
+      font-size: 16.5px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 9px;
+      line-height: 1.3;
+    }
+
+    .offer-d {
+      font-size: 13.5px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* why list */
+    .why-points {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .why-point {
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .why-point-ico {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: rgba(37, 99, 255, .1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2px;
+    }
+
+    .why-point-ico svg {
+      width: 15px;
+      height: 15px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .why-point-t {
+      font-family: var(--font-d);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 4px;
+    }
+
+    .why-point-d {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* SIDEBAR */
+    .svc-side {
+      position: sticky;
+      top: 90px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .side-card {
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, .07);
+      border-radius: 22px;
+      padding: 28px;
+    }
+
+    .side-h {
+      font-family: var(--font-d);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 6px;
+    }
+
+    .side-sub {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .side-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 0, 0, .08);
+      background: #fff;
+      margin-bottom: 12px;
+      transition: all .3s;
+    }
+
+    .side-link:last-child {
+      margin-bottom: 0;
+    }
+
+    .side-link:hover {
+      border-color: rgba(37, 99, 255, .35);
+      background: #f8f9ff;
+      transform: translateX(4px);
+      box-shadow: 0 10px 30px rgba(37, 99, 255, .08);
+    }
+
+    .side-link-t {
+      font-family: var(--font-d);
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--black);
+      line-height: 1.3;
+    }
+
+    .side-link svg {
+      width: 17px;
+      height: 17px;
+      stroke: var(--blue);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+      transition: transform .3s;
+    }
+
+    .side-link:hover svg {
+      transform: translateX(3px);
+    }
+
+    .side-cta {
+      background: linear-gradient(140deg, #0d1840, #162050);
+      border-radius: 22px;
+      padding: 30px;
+      color: #fff;
+    }
+
+    .side-cta-h {
+      font-family: var(--font-d);
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    .side-cta-p {
+      font-size: 13.5px;
+      color: rgba(255, 255, 255, .6);
+      line-height: 1.7;
+      margin-bottom: 22px;
+    }
+
+    .side-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--blue);
+      color: #fff;
+      padding: 13px 26px;
+      border-radius: 100px;
+      font-family: var(--font-d);
+      font-size: 14px;
+      font-weight: 700;
+      transition: all .3s;
+    }
+
+    .side-cta-btn:hover {
+      background: var(--blue-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(37, 99, 255, .4);
+    }
+
+    /* PROCESS */
+    .sec-proc {
+      padding: 80px 80px 96px;
+    }
+
+    .proc-head {
+      text-align: center;
+      max-width: 640px;
+      margin: 0 auto 56px;
+    }
+
+    .proc-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+
+    .proc-kicker::before,
+    .proc-kicker::after {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+
+    .proc-h {
+      font-family: var(--font-d);
+      font-size: clamp(28px, 3vw, 42px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -.025em;
+      color: var(--black);
+    }
+
+    .proc-h em {
+      font-style: italic;
+      color: var(--blue);
+    }
+
+    .proc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .proc-card {
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, .07);
+      border-radius: 20px;
+      padding: 34px 30px;
+      transition: all .35s cubic-bezier(.16, 1, .3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .proc-card:hover {
+      border-color: rgba(37, 99, 255, .22);
+      box-shadow: 0 18px 50px rgba(37, 99, 255, .08);
+      transform: translateY(-6px);
+    }
+
+    .proc-num {
+      font-family: var(--font-d);
+      font-size: 42px;
+      font-weight: 800;
+      color: rgba(37, 99, 255, .16);
+      line-height: 1;
+      margin-bottom: 16px;
+      transition: color .3s;
+    }
+
+    .proc-card:hover .proc-num {
+      color: rgba(37, 99, 255, .4);
+    }
+
+    .proc-t {
+      font-family: var(--font-d);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 10px;
+    }
+
+    .proc-d {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    /* CTA */
+    .cta-band {
+      padding: 100px 80px;
+      background: linear-gradient(140deg, #06091a 0%, #0d1840 55%, #162050 100%);
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .cta-band::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 55% 70% at 50% 110%, rgba(37, 99, 255, .3), transparent);
+    }
+
+    .cta-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(96, 165, 250, .85);
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .cta-kicker::before {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: rgba(96, 165, 250, .85);
+      border-radius: 2px;
+    }
+
+    .cta-h {
+      font-family: var(--font-d);
+      font-size: clamp(30px, 4vw, 50px);
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .cta-h em {
+      font-style: italic;
+      color: rgba(96, 165, 250, .9);
+    }
+
+    .cta-p {
+      font-size: 17px;
+      line-height: 1.75;
+      color: rgba(255, 255, 255, .5);
+      max-width: 520px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    .cta-btns {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .btn-p {
+      background: var(--blue);
+      color: #fff;
+      padding: 16px 38px;
+      border-radius: 100px;
+      font-family: var(--font-d);
+      font-size: 15px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all .3s;
+    }
+
+    .btn-p:hover {
+      background: var(--blue-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(37, 99, 255, .5);
+    }
+
+    .btn-s {
+      color: rgba(255, 255, 255, .7);
+      padding: 16px 38px;
+      border-radius: 100px;
+      font-family: var(--font-d);
+      font-size: 15px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, .2);
+      transition: all .3s;
+    }
+
+    .btn-s:hover {
+      color: #fff;
+      border-color: rgba(255, 255, 255, .4);
+      transform: translateY(-2px);
+    }
+
+    .footer-mini {
+      text-align: center;
+      padding: 28px;
+      font-size: 13px;
+      color: #aaa;
+      border-top: 1px solid rgba(0, 0, 0, .06);
+    }
+
+    @media(max-width:1000px) {
+      .svc-layout {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .svc-side {
+        position: static;
+      }
+    }
+
+    @media(max-width:900px) {
+      .nav {
+        padding: 0 24px;
+      }
+
+      .ind-hero {
+        padding: 150px 24px 64px;
+      }
+
+      .crumb-bar {
+        padding: 0 24px;
+        top: 84px;
+      }
+
+      .sec-intro,
+      .sec-main,
+      .sec-proc {
+        padding: 60px 24px;
+      }
+
+      .offer-list {
+        grid-template-columns: 1fr;
+      }
+
+      .proc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-band {
+        padding: 72px 24px;
+      }
+    }
+  
+    /* ---- FULL NAV OVERRIDE ---- */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:70px;padding:0 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:all .4s;}
+    .nav-logo img{height:36px;}
+    .nl{display:flex;align-items:center;gap:36px;list-style:none;margin:0;padding:0;}
+    .nl a{font-size:14px;font-weight:500;color:rgba(0,0,0,.7);transition:color .25s;position:relative;}
+    .nl a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:var(--blue);transition:width .3s;}
+    .nl a:hover::after{width:100%;}
+    .nl a:hover{color:var(--blue);}
+    .nav-cta{background:var(--blue);color:#fff !important;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);box-shadow:0 6px 20px rgba(37,99,255,.4);transform:translateY(-1px);}
+    .nav-cta::after{display:none !important;}
+    .nl .has-drop{position:relative;}
+    .nl .has-drop>a::after{display:none;}
+    .nl .has-drop>a{cursor:pointer;}
+    .nl .has-drop>a span{display:inline-block;transition:transform .25s;}
+    .nl .has-drop.open>a span{transform:rotate(180deg);}
+    .nav-drop{display:none;flex-direction:column;gap:2px;position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.12);padding:10px;min-width:230px;z-index:200;}
+    .nav-menu{color:#333 !important;}
+    .has-drop.open>.nav-drop{display:flex;}
+    .nav-drop a{display:block;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#333;white-space:nowrap;transition:background .18s,color .18s;}
+    .nav-drop a:hover{background:#f0f4ff;color:var(--blue);}
+    .nav-drop a::after{display:none !important;}
+    .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;background:none;border:none;cursor:pointer;padding:0;z-index:1100;}
+    .nav-toggle span{display:block;width:24px;height:2px;background:var(--black);border-radius:2px;transition:transform .3s,opacity .3s;}
+    .nav-open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .nav-open .nav-toggle span:nth-child(2){opacity:0;}
+    .nav-open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    /* ---- FOOTER ---- */
+    .footer{background:var(--black);color:#fff;padding:72px 80px 36px;}
+    .ft{display:grid;grid-template-columns:2.5fr 1fr 1.5fr 1fr 1fr;gap:44px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.06);}
+    .fb-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.4);max-width:250px;margin:18px 0 26px;}
+    .socials{display:flex;gap:10px;}
+    .soc{width:36px;height:36px;border:1px solid rgba(255,255,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.45);transition:all .3s;}
+    .soc:hover{border-color:var(--blue);background:rgba(37,99,255,.15);color:#fff;transform:translateY(-2px);}
+    .fc h4{font-family:var(--font-d);font-size:12px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;}
+    .fl{display:flex;flex-direction:column;gap:11px;}
+    .fl a{font-size:14px;color:rgba(255,255,255,.5);transition:color .25s;}
+    .fl a:hover{color:#fff;}
+    .fbot{display:flex;align-items:center;justify-content:space-between;padding-top:30px;}
+    .fcopy{font-size:13px;color:rgba(255,255,255,.25);}
+    .fleg{display:flex;gap:22px;}
+    .fleg a{font-size:13px;color:rgba(255,255,255,.25);transition:color .25s;}
+    .fleg a:hover{color:rgba(255,255,255,.6);}
+    .fdisclaim{font-size:11px;color:rgba(255,255,255,.14);text-align:center;margin-top:20px;}
+    /* ---- SCROLL-TO-TOP ---- */
+    .stb{position:fixed;bottom:32px;right:32px;width:46px;height:46px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;box-shadow:0 6px 20px rgba(37,99,255,.4);}
+    .stb.on{opacity:1;transform:none;}
+    .stb:hover{background:var(--blue-dark);transform:translateY(-3px);}
+    @media(max-width:768px){
+      .nav{padding:0 22px;}
+      .nav-toggle{display:flex;}
+      .nl{position:fixed;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;padding:10px 22px 22px;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 24px 44px rgba(0,0,0,.13);max-height:calc(100vh - 70px);overflow-y:auto;transform:translateY(-14px);opacity:0;visibility:hidden;transition:transform .3s,opacity .3s,visibility .3s;}
+      .nav-open .nl{transform:translateY(0);opacity:1;visibility:visible;}
+      .nl li{width:100%;}
+      .nl>li>a{display:block;padding:14px 6px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.06);}
+      .nl a::after{display:none !important;}
+      .nl .has-drop>a span{float:right;}
+      .nav-drop{position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0;}
+      .nav-drop a{font-size:14px;padding:9px 8px;color:#555;}
+      .nl .nav-cta{display:block;text-align:center;margin-top:16px;}
+      .ft{grid-template-columns:1fr 1fr;}
+      .footer{padding:60px 24px;}
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="nav" id="nav">
+  <a href="../index.html" class="nav-logo">
+    <img src="../logo/Tech DataSeeders Logo.png" alt="TechDataSeeders">
+  </a>
+  <ul class="nl">
+    <li class="has-drop">
+      <a href="../index.html#services">Services <span>&#9662;</span></a>
+      <div class="nav-drop">
+        <a class="nav-menu" href="../services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a class="nav-menu" href="../services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a class="nav-menu" href="../services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+        <a class="nav-menu" href="../services/custom-data-api.html">Custom Data API Delivery</a>
+      </div>
+    </li>
+    <li class="has-drop">
+      <a href="../index.html#industries">Industries <span>&#9662;</span></a>
+      <div class="nav-drop">
+        <a class="nav-menu" href="../industries/ecomm.html">E-commerce</a>
+        <a class="nav-menu" href="../industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+        <a class="nav-menu" href="../industries/food-beverages.html">Food &amp; Beverages</a>
+        <a class="nav-menu" href="../industries/q-commerce.html">Quick Commerce</a>
+        <a class="nav-menu" href="../industries/real-estate.html">Real Estate</a>
+        <a class="nav-menu" href="../industries/retail.html">Retail</a>
+        <a class="nav-menu" href="../industries/social-media.html">Social Media</a>
+        <a class="nav-menu" href="../industries/travel-hotel.html">Travel &amp; Hotel</a>
+      </div>
+    </li>
+    <li><a href="../case-studies.html">Case Studies</a></li>
+    <li><a href="../about.html">About Us</a></li>
+    <li><a href="../index.html#contact" class="nav-cta">Get a Quote &#8594;</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+  <section class="ind-hero">
+    <div class="ind-hero-bg"></div>
+    <div class="ind-hero-overlay"></div>
+    <div class="crumb-bar">
+      <a href="../index.html" class="back-link"><svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6" />
+        </svg> Back</a>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="sep">/</span>
+        <a href="../index.html#services">Services</a>
+        <span class="sep">/</span>
+        <span class="current">Mobile App Scraping</span>
+      </nav>
+    </div>
+    <div class="ind-hero-content">
+      <div class="ind-hero-tag">Service 02</div>
+      <h1 class="ind-hero-h1">Mobile<br>App Scraping</h1>
+      <p class="ind-hero-sub">Unlock the hidden potential of mobile apps with our Mobile App Scraping Services. 
+        Extract structured insights from app stores, in-app content, user reviews, 
+        ratings, and competitor analytics, empowering you to make data-driven business decisions.</p>
+    </div>
+  </section>
+
+  <section class="sec-intro">
+    <div class="intro-inner">
+      <div class="intro-kicker">Precision Mobile Data</div>
+      <h2 class="intro-h">The Data Locked Inside<br><em>Mobile Apps — Unlocked</em></h2>
+      <p class="intro-p">A huge share of commerce now lives inside mobile apps that traditional web scrapers can't
+        reach. Our mobile scraping pipelines extract structured data directly from iOS and Android applications — app
+        stores, food-delivery platforms, ride-sharing, and retail catalogues — across 20+ countries. We handle the
+        protocols, certificates, and rate limits so you get clean, current app data without the engineering headache.
+      </p>
+    </div>
+  </section>
+
+  <section class="sec-main">
+    <div class="svc-layout">
+      <!-- MAIN COLUMN -->
+      <div class="svc-body">
+        <div class="svc-block">
+          <div class="blk-kicker">What We Offer</div>
+          <h2 class="blk-h">End-to-End Mobile<br><em>Scraping Capabilities</em></h2>
+          <p class="blk-p">From app-store intelligence to live menu and pricing feeds, we capture the signals that only
+            exist inside mobile experiences.</p>
+          <div class="offer-list">
+            <div class="offer-item">
+              <div class="offer-ico"><svg viewBox="0 0 24 24">
+                  <rect x="6" y="2" width="12" height="20" rx="2.5" />
+                  <line x1="11" y1="18" x2="13" y2="18" />
+                </svg></div>
+              <div class="offer-t">iOS & Android Coverage</div>
+              <div class="offer-d">Unified pipelines across both major platforms — App Store and Google Play — at
+                production scale.</div>
+            </div>
+            <div class="offer-item">
+              <div class="offer-ico"><svg viewBox="0 0 24 24">
+                  <rect x="3" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="3" width="7" height="7" rx="1.5" />
+                  <rect x="3" y="14" width="7" height="7" rx="1.5" />
+                  <rect x="14" y="14" width="7" height="7" rx="1.5" />
+                </svg></div>
+              <div class="offer-t">App Store Intelligence</div>
+              <div class="offer-d">Rankings, categories, install trends, descriptions, and version history for
+                competitive tracking.</div>
+            </div>
+            <div class="offer-item">
+              <div class="offer-ico"><svg viewBox="0 0 24 24">
+                  <path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8l-6.2 3.3L7 14.2l-5-4.9 6.9-1z" />
+                </svg></div>
+              <div class="offer-t">Review & Rating Extraction</div>
+              <div class="offer-d">Full review text, star ratings, dates, and sentiment signals from millions of app
+                users.</div>
+            </div>
+            <div class="offer-item">
+              <div class="offer-ico"><svg viewBox="0 0 24 24">
+                  <line x1="8" y1="6" x2="21" y2="6" />
+                  <line x1="8" y1="12" x2="21" y2="12" />
+                  <line x1="8" y1="18" x2="21" y2="18" />
+                  <line x1="3" y1="6" x2="3.01" y2="6" />
+                  <line x1="3" y1="12" x2="3.01" y2="12" />
+                  <line x1="3" y1="18" x2="3.01" y2="18" />
+                </svg></div>
+              <div class="offer-t">Menu & Catalogue Data</div>
+              <div class="offer-d">Items, modifiers, images, and availability from food-delivery and retail apps in real
+                time.</div>
+            </div>
+            <div class="offer-item">
+              <div class="offer-ico"><svg viewBox="0 0 24 24">
+                  <path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z" />
+                  <circle cx="7" cy="7" r="1.3" />
+                </svg></div>
+              <div class="offer-t">Pricing Monitoring</div>
+              <div class="offer-d">Track in-app prices, surge pricing, promos, and delivery fees as they change across
+                markets.</div>
+            </div>
+            <div class="offer-item">
+              <div class="offer-ico"><svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M2 12h20" />
+                  <path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z" />
+                </svg></div>
+              <div class="offer-t">20+ Country Coverage</div>
+              <div class="offer-d">Geo-distributed collection captures region-specific catalogues, pricing, and
+                availability.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="svc-block">
+          <div class="blk-kicker">Why Choose Us</div>
+          <h2 class="blk-h">Mobile Data You Can<br><em>Actually Trust</em></h2>
+          <div class="why-points">
+            <div class="why-point">
+              <div class="why-point-ico"><svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+              <div>
+                <div class="why-point-t">Scalable Architecture</div>
+                <div class="why-point-d">Our infrastructure is built to handle millions of app data points 
+                  daily while maintaining speed, uptime, and performance consistency. It grows effortlessly 
+                  with your business needs.</div>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point-ico"><svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+              <div>
+                <div class="why-point-t">Advanced Proxy & Anti-Bot Management</div>
+                <div class="why-point-d">We use rotating IPs, mobile emulators, and stealth browsing techniques to 
+                  bypass restrictions safely.
+                   This ensures uninterrupted, reliable, and compliant data extraction.</div>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point-ico"><svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+              <div>
+                <div class="why-point-t">App Store & API Expertise</div>
+                <div class="why-point-d">Our specialists are well-versed in Google Play and Apple App Store ecosystems. We extract structured data directly from apps and APIs with precision and efficiency.
+    
+                </div>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point-ico"><svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+              <div>
+                <div class="why-point-t">AI-Powered Review Analytics</div>
+                <div class="why-point-d">We leverage NLP and AI-driven sentiment analysis to interpret app reviews, helping you uncover patterns, customer sentiments, and product improvement opportunities.</div>
+              </div>
+            </div>
+            <div class="why-point">
+              <div class="why-point-ico"><svg viewBox="0 0 24 24">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg></div>
+              <div>
+                <div class="why-point-t">Clean, Secure & Compliant Data</div>
+                <div class="why-point-d">Every dataset is validated, encrypted, and delivered securely. 
+                  We adhere to global data protection regulations, ensuring complete compliance and data integrity.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside class="svc-side">
+        <div class="side-card">
+          <div class="side-h">Other Services</div>
+          <div class="side-sub">Explore the rest of our data stack</div>
+          <a href="./enterprise-web-scraping.html" class="side-link">
+            <span class="side-link-t">Enterprise Web Scraping</span>
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+          <a href="./data-analytics-intelligence.html" class="side-link">
+            <span class="side-link-t">Data Analytics & Intelligence</span>
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+          <a href="./custom-data-api.html" class="side-link">
+            <span class="side-link-t">Custom Data API Delivery</span>
+            <svg viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </a>
+        </div>
+        <div class="side-cta">
+          <div class="side-cta-h">Which apps do you need?</div>
+          <div class="side-cta-p">Share your target apps and data fields. You'll get a tailored proposal within 24
+            hours.</div>
+          <a href="../index.html#contact" class="side-cta-btn">Get a Quote →</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="sec-proc">
+    <div class="proc-head">
+      <div class="proc-kicker">Our Process</div>
+      <h2 class="proc-h">How We Deliver<br><em>Successful Projects</em></h2>
+    </div>
+    <div class="proc-grid">
+      <div class="proc-card">
+        <div class="proc-num">01</div>
+        <div class="proc-t">Interaction</div>
+        <div class="proc-d">We connect with your team to understand goals, target apps, and the data points that matter
+          most.</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">02</div>
+        <div class="proc-t">Evaluation</div>
+        <div class="proc-d">We assess technical complexity and compliance requirements, then scope the right collection
+          approach.</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">03</div>
+        <div class="proc-t">Consultation</div>
+        <div class="proc-d">Our experts recommend the optimal architecture, delivery format, and schedule for your use
+          case.</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">04</div>
+        <div class="proc-t">Execution</div>
+        <div class="proc-d">Engineering begins — custom mobile pipelines are built, tested, and deployed at scale.</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">05</div>
+        <div class="proc-t">Delivery</div>
+        <div class="proc-d">Validated, structured data lands in your systems on schedule, with monitoring and support
+          attached.</div>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">06</div>
+        <div class="proc-t">Exceed Expectations</div>
+        <div class="proc-d">We iterate, optimize, and scale alongside your business to build a long-term data
+          partnership.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="cta-kicker">Get Started</div>
+    <h2 class="cta-h">Ready to Tap Into<br><em>App Data?</em></h2>
+    <p class="cta-p">Tell us your target apps and data requirements. We'll send a proposal within 24 hours.</p>
+    <div class="cta-btns">
+      <a href="../index.html#contact" class="btn-p">Start Your Project →</a>
+      <a href="../index.html#services" class="btn-s">See All Services</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+  <div class="ft">
+    <div>
+      <img src="../logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="TechDataSeeders" style="height:34px;">
+      <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation &#8212; seeding intelligence from the web.</p>
+      <div class="socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">&#120143;</a>
+        <a href="mailto:sales@techdataseeders.in" class="soc">&#9993;</a>
+        <a href="#" class="soc">&#128247;</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Services</h4>
+      <div class="fl">
+        <a href="../services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a href="../services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a href="../services/data-analytics-intelligence.html">Data Analytics</a>
+        <a href="../services/custom-data-api.html">Custom Data API</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Industries</h4>
+      <div class="fl">
+        <a href="../industries/ecomm.html">E-commerce Data</a>
+        <a href="../industries/entertainment-ott.html">Entertainment &amp; OTT Data</a>
+        <a href="../industries/food-beverages.html">Food &amp; Beverages Data</a>
+        <a href="../industries/q-commerce.html">Quick Commerce Data</a>
+        <a href="../industries/real-estate.html">Real Estate Data</a>
+        <a href="../industries/retail.html">Retail Data</a>
+        <a href="../industries/social-media.html">Social Media Data</a>
+        <a href="../industries/travel-hotel.html">Travel &amp; Hotel Data</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Company</h4>
+      <div class="fl">
+        <a href="../about.html">About Us</a>
+        <a href="../blog/index.html">Blog</a>
+        <a href="../case-studies.html">Case Studies</a>
+        <a href="../index.html#testimonials">Testimonials</a>
+        <a href="../index.html#contact">Pricing</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Contact</h4>
+      <div class="fl">
+        <a href="mailto:sales@techdataseeders.in" style="word-break:break-all;">sales@techdataseeders.in</a>
+      </div>
+    </div>
+    <div class="fbot">
+      <p class="fcopy">&#169; 2025 TechDataSeeders. All rights reserved.</p>
+      <div class="fleg">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Data Security</a>
+      </div>
+    </div>
+    <p class="fdisclaim">TechDataSeeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
+  </div>
+</footer>
+
+
+  <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</div>
+  <script>
+  (function(){
+    var nav=document.getElementById('nav'),toggle=document.getElementById('navToggle');
+    if(!nav)return;
+    var drops=nav.querySelectorAll('.nl .has-drop');
+    function closeDrops(except){drops.forEach(function(li){if(li!==except)li.classList.remove('open');});}
+    drops.forEach(function(li){
+      var link=li.querySelector(':scope > a');
+      link.addEventListener('click',function(e){
+        e.preventDefault();
+        var willOpen=!li.classList.contains('open');
+        closeDrops(li);
+        li.classList.toggle('open',willOpen);
+      });
+    });
+    document.addEventListener('click',function(e){if(!e.target.closest('.has-drop'))closeDrops(null);});
+    if(toggle){
+      toggle.addEventListener('click',function(){
+        var open=nav.classList.toggle('nav-open');
+        toggle.setAttribute('aria-expanded',open?'true':'false');
+        if(!open)closeDrops(null);
+      });
+      nav.querySelectorAll('.nl a').forEach(function(a){
+        if(a.parentElement.classList.contains('has-drop'))return;
+        a.addEventListener('click',function(){nav.classList.remove('nav-open');toggle.setAttribute('aria-expanded','false');closeDrops(null);});
+      });
+      window.addEventListener('resize',function(){
+        if(window.innerWidth>768){nav.classList.remove('nav-open');toggle.setAttribute('aria-expanded','false');closeDrops(null);}
+      });
+    }
+    var stb=document.getElementById('stb');
+    if(stb)window.addEventListener('scroll',function(){stb.classList.toggle('on',window.scrollY>400);});
+  })();
+  </script>
+</body>
+
+</html>

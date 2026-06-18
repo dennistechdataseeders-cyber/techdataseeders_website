@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Streamlining Business Processes &amp; Boosting Profitability for a Pharma Company with Data Extraction Services — TechDataSeeders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
+    body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
+    a{text-decoration:none;color:inherit;}
+    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
+    .nav-logo img{height:32px;}
+    .nav-cta{background:var(--blue);color:#fff;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px);}
+    .bd-shell{max-width:1180px;margin:0 auto;padding:108px 40px 0;}
+    .bd-crumb{display:flex;align-items:center;gap:16px;margin-bottom:30px;flex-wrap:wrap;}
+    .bd-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#555;background:#fff;border:1px solid rgba(0,0,0,.12);padding:8px 16px;border-radius:100px;transition:all .25s;}
+    .bd-back:hover{border-color:var(--blue);color:var(--blue);transform:translateX(-2px);}
+    .bd-back svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .bd-bread{display:flex;align-items:center;gap:9px;font-size:13px;color:#aaa;flex-wrap:wrap;}
+    .bd-bread a{color:#777;}.bd-bread a:hover{color:var(--blue);}.bd-bread .sep{color:#ccc;}.bd-bread .current{color:#444;font-weight:600;}
+    .bd-head{max-width:880px;}
+    .bd-cat{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);background:rgba(37,99,255,.08);padding:6px 14px;border-radius:100px;margin-bottom:20px;}
+    .bd-title{font-family:var(--font-d);font-size:clamp(30px,4.2vw,52px);font-weight:800;line-height:1.1;letter-spacing:-.03em;color:var(--black);margin-bottom:18px;}
+    .bd-exc{font-size:18px;line-height:1.7;color:#666;margin-bottom:24px;}
+    .bd-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:14px;color:#888;}
+    .bd-meta strong{color:#333;font-weight:600;}
+    .bd-hero{width:100%;height:clamp(260px,42vw,460px);border-radius:24px;overflow:hidden;margin:36px 0;background-size:cover;background-position:center;}
+    .metband{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:0 0 12px;}
+    .metband .met{background:#f8f9fb;border:1px solid rgba(0,0,0,.07);border-radius:18px;padding:26px 24px;text-align:center;}
+    .metband .metv{font-family:var(--font-d);font-size:clamp(26px,3vw,38px);font-weight:800;color:var(--blue);line-height:1;letter-spacing:-.02em;}
+    .metband .metl{font-size:13px;color:#666;margin-top:9px;}
+    .bd-layout{display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:start;padding:50px 0 96px;}
+    .bd-article{min-width:0;}
+    .bd-article h2{font-family:var(--font-d);font-size:clamp(23px,2.3vw,28px);font-weight:700;letter-spacing:-.02em;color:var(--black);margin:34px 0 14px;}
+    .bd-article h3{font-family:var(--font-d);font-size:19px;font-weight:700;color:var(--black);margin:26px 0 12px;}
+    .bd-article p{font-size:16px;line-height:1.85;color:#444;margin-bottom:20px;}
+    .bd-article ul{margin:0 0 22px;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;}
+    .bd-article li{position:relative;padding-left:30px;font-size:15.5px;line-height:1.7;color:#444;}
+    .bd-article li::before{content:'';position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--blue);}
+    .bd-article strong{color:#1a1a1a;font-weight:700;}
+    .bd-quote{background:linear-gradient(135deg,#0d1840,#162050);color:#fff;border-radius:20px;padding:30px 34px;margin:30px 0;}
+    .bd-quote p{font-family:var(--font-d);font-size:20px;font-weight:600;line-height:1.5;color:#fff;margin:0;}
+    .bd-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(0,0,0,.07);}
+    .bd-tag{font-size:12.5px;font-weight:600;color:#555;border:1px solid rgba(0,0,0,.12);padding:7px 16px;border-radius:100px;}
+    .bd-side{position:sticky;top:90px;display:flex;flex-direction:column;gap:24px;}
+    .side-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:22px;padding:26px;}
+    .side-h{font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:6px;}
+    .pp{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(0,0,0,.06);}
+    .pp:last-child{border-bottom:none;padding-bottom:0;}
+    .pp-thumb{width:62px;height:62px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+    .pp-thumb svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+    .pp-cat{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+    .pp-t{font-family:var(--font-d);font-size:13.5px;font-weight:700;line-height:1.35;color:#1a1a1a;transition:color .2s;}
+    .pp:hover .pp-t{color:var(--blue);}
+    .side-cta{background:linear-gradient(140deg,#0d1840,#162050);border-radius:22px;padding:28px;color:#fff;}
+    .side-cta-h{font-family:var(--font-d);font-size:18px;font-weight:700;line-height:1.3;margin-bottom:10px;}
+    .side-cta-p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:20px;}
+    .side-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;padding:12px 24px;border-radius:100px;font-family:var(--font-d);font-size:13.5px;font-weight:700;transition:all .3s;}
+    .side-cta-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
+    .footer-mini{text-align:center;padding:28px;font-size:13px;color:#aaa;border-top:1px solid rgba(0,0,0,.06);}
+    @media(max-width:980px){.bd-layout{grid-template-columns:1fr;gap:48px;}.bd-side{position:static;}}
+    @media(max-width:900px){.nav{padding:0 24px;}.bd-shell{padding:96px 24px 0;}.metband{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="../index.html" class="nav-logo"><img src="../logo/Tech DataSeeders Logo.png" alt="TechDataSeeders"></a>
+  <a href="../index.html#contact" class="nav-cta">Get a Quote →</a>
+</nav>
+<div class="bd-shell">
+  <div class="bd-crumb">
+    <a href="../index.html#case-studies" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</a>
+    <nav class="bd-bread" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><a href="../index.html#case-studies">Case Studies</a><span class="sep">/</span><span class="current">Healthcare</span></nav>
+  </div>
+  <div class="bd-head">
+    <span class="bd-cat">Healthcare</span>
+    <h1 class="bd-title">Streamlining Business Processes &amp; Boosting Profitability for a Pharma Company with Data Extraction Services</h1>
+    <p class="bd-exc">A USA-based pharmaceutical manufacturer and distributor partnered with Dataseeders to extract real-time competitor pricing, regulatory, and product data — cutting manual research time by 90%.</p>
+    <div class="bd-meta"><span>Client: <strong>Pharmaceutical Manufacturer &amp; Distributor</strong></span></div>
+  </div>
+  <div class="bd-hero" style="background-image:url('../images/healthcare.jpg');"></div>
+  <div class="metband"><div class="met"><div class="metv">90%</div><div class="metl">Manual Research Time Reduced</div></div><div class="met"><div class="metv">5</div><div class="metl">Custom Solutions Delivered</div></div><div class="met"><div class="metv">Multi-Region</div><div class="metl">Pricing &amp; Stock Coverage</div></div></div>
+  <div class="bd-layout">
+    <article class="bd-article"><h2>Client Overview</h2><p>The client is a pharmaceutical manufacturer and distributor operational across multiple regions in the USA, including B2B and D2C channels. Their product range embraces prescription drugs, OTC products, and wellness supplements. They sell products via their own platform, third party marketplaces, and local pharmacy chains.</p><p>With increasing product lines and market presence, the client was struggling to apply effective decision-making process for product pricing, inventory management, demand planning, and monitoring competitive positions.</p><h2>Client Requirements</h2><p>The client approached us with the goal to:</p><ul><li>Extract real-time pricing and stock availability from competitor platforms and pharma marketplaces.</li></ul><ul><li>Monitor marketing tactics of combating brands and analyze seasonal trends.</li></ul><ul><li>Track product listings, packaging types, dosage info, and regulatory data across platforms.</li></ul><ul><li>Automate market research and regulatory content updates to save time and ensure compliance.</li></ul><ul><li>Get clean, structured data in a excel format or via APIs for internal use.</li></ul><h2>Challenges</h2><ul><li>Competitor data was outspread across various platforms (eCommerce, government registries, B2B portals), and behind login, authentication or with multifaceted layouts.</li></ul><ul><li>Recurrent changes in website structure and HTML made manual or static scraping ineffective.</li></ul><ul><li>Uneven data formats led to difficulty in integrating data insights into their existing analytics system.</li></ul><ul><li>Manual competitor monitoring and product matching process was time consuming and unreliable.</li></ul><ul><li>Client needs region specific data insights to make effective pricing and stock management decisions.</li></ul><h2>Dataseeders Solutions</h2><p>We provided a custom data extraction solution that is aligned with the client's business goals:</p><h3>Customized Data Scraping Pipelines</h3><p>Built scalable scripts to extract product pricing, availability, packaging info, and SKUs across competitors, marketplaces, and pharma platforms.</p><h3>Login and Location Based Data Extraction</h3><p>Secure login-based scraping with regional aiming to fetch precise location specific insights.</p><h3>Structured and Cleaned Data Delivery</h3><p>Processed and regularized data into consistent formats, delivered via secure API and downloadable files.</p><h3>Automated Monitoring System</h3><p>We arranged scheduled data collection process to monitor changes in pricing, promotions, stock availability, and new product launches.</p><h3>Regulatory and Product Data Intelligence</h3><p>Scraped and classified public domain regulatory documents to help them stay updated with compliance norms.</p><h2>Benefits to the Client</h2><ul><li>Manual research time reduced by 90% that allow internal teams to focus on strategic work.</li></ul><ul><li>Client is now able to make quick pricing decisions that is supported by real-time competitor monitoring across regions.</li></ul><ul><li>Improved stock management, by tracking out-of-stock patterns and seasonal demand.</li></ul><ul><li>Client can now build effective promotional campaign with aid of timely insights on discounts, combo offers, and bundling trends.</li></ul><ul><li>Enhanced cost-effectiveness, by identifying underpriced or overstocked SKUs and adjusting them competently.</li></ul><h2>Conclusion</h2><p>With our tailored data extraction services, the client transmuted their pharma business into a data-centric operation. From dynamic pricing to proficient stock management, our solution directly contributed to streamlining their internal processes and driving profitability at scale.</p><div class="bd-tags"><span class="bd-tag">Data Extraction</span><span class="bd-tag">Pharma</span><span class="bd-tag">Regulatory Intelligence</span><span class="bd-tag">Pricing Monitoring</span></div></article>
+    <aside class="bd-side">
+      <div class="side-card"><div class="side-h">More Case Studies</div><a href="./retail-automated-product-matching.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#7c2d12 0%,#ea580c 50%,#fb923c 100%);"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></div><div><span class="pp-cat">Retail</span><div class="pp-t">Enhancing Retail Efficiency with Automated Product Matching</div></div></a><a href="./food-delivery-competitive-intelligence.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%);"><svg viewBox="0 0 24 24"><path d="M3 2v7a3 3 0 0 0 6 0V2M6 9v13"/><path d="M16 2c-2 0-3 2-3 5s1 5 3 5v10"/></svg></div><div><span class="pp-cat">Food Delivery</span><div class="pp-t">Helping a Leading Food Delivery Business Outrank Competitors &amp; Expand Market Reach</div></div></a><a href="./finance-real-time-alternative-data-scraping.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#2e1065 0%,#5b21b6 50%,#7c3aed 100%);"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M7 21V10"/><path d="M12 21V4"/><path d="M17 21v-7"/></svg></div><div><span class="pp-cat">Finance</span><div class="pp-t">Helping Finance Organization with Real-Time &amp; Alternative Data Scraping for Market Dominance</div></div></a></div>
+      <div class="side-cta"><div class="side-cta-h">Want results like these?</div><div class="side-cta-p">Tell us your goals and target data. We'll send a tailored proposal within 24 hours.</div><a href="../index.html#contact" class="side-cta-btn">Get a Quote →</a></div>
+    </aside>
+  </div>
+</div>
+<div class="footer-mini">© 2025 TechDataSeeders. All rights reserved.</div>
+</body>
+</html>

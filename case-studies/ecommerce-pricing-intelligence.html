@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Empowering an eCommerce Marketplace with Real-Time Pricing Intelligence — TechDataSeeders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
+    body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
+    a{text-decoration:none;color:inherit;}
+    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
+    .nav-logo img{height:32px;}
+    .nav-cta{background:var(--blue);color:#fff;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px);}
+    .bd-shell{max-width:1180px;margin:0 auto;padding:108px 40px 0;}
+    .bd-crumb{display:flex;align-items:center;gap:16px;margin-bottom:30px;flex-wrap:wrap;}
+    .bd-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#555;background:#fff;border:1px solid rgba(0,0,0,.12);padding:8px 16px;border-radius:100px;transition:all .25s;}
+    .bd-back:hover{border-color:var(--blue);color:var(--blue);transform:translateX(-2px);}
+    .bd-back svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .bd-bread{display:flex;align-items:center;gap:9px;font-size:13px;color:#aaa;flex-wrap:wrap;}
+    .bd-bread a{color:#777;}.bd-bread a:hover{color:var(--blue);}.bd-bread .sep{color:#ccc;}.bd-bread .current{color:#444;font-weight:600;}
+    .bd-head{max-width:880px;}
+    .bd-cat{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);background:rgba(37,99,255,.08);padding:6px 14px;border-radius:100px;margin-bottom:20px;}
+    .bd-title{font-family:var(--font-d);font-size:clamp(30px,4.2vw,52px);font-weight:800;line-height:1.1;letter-spacing:-.03em;color:var(--black);margin-bottom:18px;}
+    .bd-exc{font-size:18px;line-height:1.7;color:#666;margin-bottom:24px;}
+    .bd-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:14px;color:#888;}
+    .bd-meta strong{color:#333;font-weight:600;}
+    .bd-hero{width:100%;height:clamp(260px,42vw,460px);border-radius:24px;overflow:hidden;margin:36px 0;background-size:cover;background-position:center;}
+    .metband{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:0 0 12px;}
+    .metband .met{background:#f8f9fb;border:1px solid rgba(0,0,0,.07);border-radius:18px;padding:26px 24px;text-align:center;}
+    .metband .metv{font-family:var(--font-d);font-size:clamp(26px,3vw,38px);font-weight:800;color:var(--blue);line-height:1;letter-spacing:-.02em;}
+    .metband .metl{font-size:13px;color:#666;margin-top:9px;}
+    .bd-layout{display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:start;padding:50px 0 96px;}
+    .bd-article{min-width:0;}
+    .bd-article h2{font-family:var(--font-d);font-size:clamp(23px,2.3vw,28px);font-weight:700;letter-spacing:-.02em;color:var(--black);margin:34px 0 14px;}
+    .bd-article h3{font-family:var(--font-d);font-size:19px;font-weight:700;color:var(--black);margin:26px 0 12px;}
+    .bd-article p{font-size:16px;line-height:1.85;color:#444;margin-bottom:20px;}
+    .bd-article ul{margin:0 0 22px;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;}
+    .bd-article li{position:relative;padding-left:30px;font-size:15.5px;line-height:1.7;color:#444;}
+    .bd-article li::before{content:'';position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--blue);}
+    .bd-article strong{color:#1a1a1a;font-weight:700;}
+    .bd-quote{background:linear-gradient(135deg,#0d1840,#162050);color:#fff;border-radius:20px;padding:30px 34px;margin:30px 0;}
+    .bd-quote p{font-family:var(--font-d);font-size:20px;font-weight:600;line-height:1.5;color:#fff;margin:0;}
+    .bd-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(0,0,0,.07);}
+    .bd-tag{font-size:12.5px;font-weight:600;color:#555;border:1px solid rgba(0,0,0,.12);padding:7px 16px;border-radius:100px;}
+    .bd-side{position:sticky;top:90px;display:flex;flex-direction:column;gap:24px;}
+    .side-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:22px;padding:26px;}
+    .side-h{font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:6px;}
+    .pp{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(0,0,0,.06);}
+    .pp:last-child{border-bottom:none;padding-bottom:0;}
+    .pp-thumb{width:62px;height:62px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+    .pp-thumb svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+    .pp-cat{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+    .pp-t{font-family:var(--font-d);font-size:13.5px;font-weight:700;line-height:1.35;color:#1a1a1a;transition:color .2s;}
+    .pp:hover .pp-t{color:var(--blue);}
+    .side-cta{background:linear-gradient(140deg,#0d1840,#162050);border-radius:22px;padding:28px;color:#fff;}
+    .side-cta-h{font-family:var(--font-d);font-size:18px;font-weight:700;line-height:1.3;margin-bottom:10px;}
+    .side-cta-p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:20px;}
+    .side-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;padding:12px 24px;border-radius:100px;font-family:var(--font-d);font-size:13.5px;font-weight:700;transition:all .3s;}
+    .side-cta-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
+    .footer-mini{text-align:center;padding:28px;font-size:13px;color:#aaa;border-top:1px solid rgba(0,0,0,.06);}
+    @media(max-width:980px){.bd-layout{grid-template-columns:1fr;gap:48px;}.bd-side{position:static;}}
+    @media(max-width:900px){.nav{padding:0 24px;}.bd-shell{padding:96px 24px 0;}.metband{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="../index.html" class="nav-logo"><img src="../logo/Tech DataSeeders Logo.png" alt="TechDataSeeders"></a>
+  <a href="../index.html#contact" class="nav-cta">Get a Quote →</a>
+</nav>
+<div class="bd-shell">
+  <div class="bd-crumb">
+    <a href="../index.html#case-studies" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</a>
+    <nav class="bd-bread" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><a href="../index.html#case-studies">Case Studies</a><span class="sep">/</span><span class="current">E-commerce</span></nav>
+  </div>
+  <div class="bd-head">
+    <span class="bd-cat">E-commerce</span>
+    <h1 class="bd-title">Empowering an eCommerce Marketplace with Real-Time Pricing Intelligence</h1>
+    <p class="bd-exc">A fast-growing Southeast Asian eCommerce marketplace used Dataseeders' real-time pricing intelligence to win 23% more Buy Box placements and cut pricing errors by 85%.</p>
+    <div class="bd-meta"><span>Client: <strong>Multi-Category eCommerce Platform</strong></span></div>
+  </div>
+  <div class="bd-hero" style="background-image:url('../images/ecommerce.jpg');"></div>
+  <div class="metband"><div class="met"><div class="metv">23%</div><div class="metl">Increase in Buy Box Wins</div></div><div class="met"><div class="metv">85%</div><div class="metl">Reduction in Pricing Errors</div></div><div class="met"><div class="metv">12%</div><div class="metl">Increase in Gross Margin</div></div></div>
+  <div class="bd-layout">
+    <article class="bd-article"><h2>Client Overview</h2><p>Our client is a swiftly rising multi-category eCommerce platform serving millions of customers across Southeast Asia. Having wide range catalog of electronics, fashion, home goods, and more, the client aims to offer competitive pricing, seamless shopping experiences, and vendor transparency.</p><h2>Client Requirements</h2><p>To sustain a competitive edge in an increasingly crowded marketplace, the client contacted us with the following requirement:</p><ul><li>A real-time pricing intelligence system to track and analyze competitor prices across thousands of SKUs.</li></ul><ul><li>Insights into dynamic pricing trends across categories and brands.</li></ul><ul><li>Get custom alerts for price drops or Minimum Advertised Price (MAP) policy violation.</li></ul><ul><li>Benchmarking tools to assess vendor pricing and regulate margins accordingly.</li></ul><h2>Challenges</h2><p>Before partnering with DataSeeders, the client confronted numerous functioning blockages:</p><ul><li>Manual competitor tracking across platforms was time-consuming and prone to errors.</li></ul><ul><li>Inconsistent product pricing increased cart abandonment rate and reduced consumer trust.</li></ul><ul><li>Due to delay in receiving price updates, client lost opportunities to more agile competitors.</li></ul><ul><li>Lack of centralized intelligence affect decisions making process across divisions (pricing, category, procurement).</li></ul><h2>Dataseeders Solutions</h2><p>To accomplish the client's pricing goals, we implemented a custom Real-Time Pricing Intelligence Platform:</p><h3>Automated Price Monitoring</h3><p>Scraped competitor prices across 17+ marketplaces and brand platforms every 30 minutes.</p><h3>Dynamic Dashboards</h3><p>Delivered real-time visualizations for category managers to track pricing trends and outliers.</p><h3>MAP Violation Alerts</h3><p>Recognized and flagged sellers violating pricing rules within minutes of exposure.</p><h3>AI Powered Insights</h3><p>Applied ML models to estimate optimal pricing based on historical data, seasonality, and competitor movements.</p><h3>API Integration</h3><p>Enabled real time synchronization with the internal pricing system for automated repricing and alerts.</p><h2>Benefits to the Client</h2><ul><li>23% Increase in Buy Box Wins across top-selling categories by making pricing competitive.</li></ul><ul><li>Reduced Pricing Errors by 85% through automation process and validation layers.</li></ul><ul><li>12% Upsurge in Gross Margin by finding overpriced and underpriced SKUs.</li></ul><ul><li>Saved 190+ man hours/month by removing manual monitoring.</li></ul><ul><li>Enhanced Vendor Compliance through transparent reporting and timely alerts.</li></ul><ul><li>Better Conversion Rates due to consistent and optimized pricing shown to end users.</li></ul><h2>Conclusion</h2><p>DataSeeders' real-time pricing intelligence solution allowed the client to stay alert, competitive, and customer focused in a dynamic marketplace environment. By transforming how they track, analyze, and react to market pricing, the client was able to find new growth opportunities and enhanced profitability at scale.</p><div class="bd-tags"><span class="bd-tag">E-commerce</span><span class="bd-tag">Pricing Intelligence</span><span class="bd-tag">MAP Monitoring</span><span class="bd-tag">Automation</span></div></article>
+    <aside class="bd-side">
+      <div class="side-card"><div class="side-h">More Case Studies</div><a href="./pharma-data-extraction-services.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%);"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg></div><div><span class="pp-cat">Healthcare</span><div class="pp-t">Streamlining Business Processes &amp; Boosting Profitability for a Pharma Company with Data Extraction Services</div></div></a><a href="./retail-automated-product-matching.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#7c2d12 0%,#ea580c 50%,#fb923c 100%);"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></div><div><span class="pp-cat">Retail</span><div class="pp-t">Enhancing Retail Efficiency with Automated Product Matching</div></div></a><a href="./food-delivery-competitive-intelligence.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%);"><svg viewBox="0 0 24 24"><path d="M3 2v7a3 3 0 0 0 6 0V2M6 9v13"/><path d="M16 2c-2 0-3 2-3 5s1 5 3 5v10"/></svg></div><div><span class="pp-cat">Food Delivery</span><div class="pp-t">Helping a Leading Food Delivery Business Outrank Competitors &amp; Expand Market Reach</div></div></a></div>
+      <div class="side-cta"><div class="side-cta-h">Want results like these?</div><div class="side-cta-p">Tell us your goals and target data. We'll send a tailored proposal within 24 hours.</div><a href="../index.html#contact" class="side-cta-btn">Get a Quote →</a></div>
+    </aside>
+  </div>
+</div>
+<div class="footer-mini">© 2025 TechDataSeeders. All rights reserved.</div>
+</body>
+</html>

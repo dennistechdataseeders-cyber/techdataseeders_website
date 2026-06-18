@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case Studies — TechDataSeeders</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,800;1,800&family=Syne:wght@400;700;800&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --blue: #2563FF;
+      --blue-dark: #1a4fd6;
+      --blue-light: #5b8fff;
+      --black: #080808;
+      --navy: #060e24;
+      --white: #fff;
+      --muted: #888;
+      --border-dark: rgba(255, 255, 255, 0.08);
+      --font-d: 'Plus Jakarta Sans', 'Syne', sans-serif;
+      --font-b: 'Inter', sans-serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: var(--font-b);
+      background: #fff;
+      color: #0a0a0a;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    ul {
+      list-style: none;
+    }
+
+    /* CURSOR */
+    .cur-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--blue);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width .15s, height .15s;
+    }
+
+    .cur-ring {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--blue);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: width .1s, height .1s, opacity .1s;
+    }
+
+    /* NAVBAR */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      height: 70px;
+      padding: 0 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, .96);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, .06);
+      transition: all .4s;
+    }
+
+    .nav.dark {
+      background: rgba(8, 8, 8, .96);
+      border-bottom-color: var(--border-dark);
+    }
+
+    .nav.dark .nl a {
+      color: rgba(255, 255, 255, .7);
+    }
+
+    .nav.dark .nl a:hover {
+      color: #fff;
+    }
+
+    .nav-logo img {
+      height: 36px;
+    }
+
+    .nl {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .nl a {
+      font-size: 14px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, .7);
+      transition: color .25s;
+      position: relative;
+    }
+
+    .nl a::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--blue);
+      transition: width .3s;
+    }
+
+    .nl a:hover::after {
+      width: 100%;
+    }
+
+    .nl a:hover {
+      color: var(--blue);
+    }
+
+    .nav-cta {
+      background: var(--blue);
+      color: #fff !important;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all .25s;
+    }
+
+    .nav-cta:hover {
+      background: var(--blue-dark);
+      box-shadow: 0 6px 20px rgba(37, 99, 255, .4);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta::after {
+      display: none !important;
+    }
+
+    .nl .has-drop {
+      position: relative;
+    }
+
+    .nl .has-drop>a::after {
+      display: none;
+    }
+
+    .nl .has-drop>a {
+      cursor: pointer;
+    }
+
+    .nl .has-drop>a span {
+      display: inline-block;
+      transition: transform .25s;
+    }
+
+    .nl .has-drop.open>a span {
+      transform: rotate(180deg);
+    }
+
+    .nav-drop {
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .12);
+      padding: 10px;
+      min-width: 230px;
+      z-index: 200;
+    }
+
+    .nav-menu {
+      color: #333 !important;
+    }
+
+    .has-drop.open>.nav-drop {
+      display: flex;
+    }
+
+    .nav-drop a {
+      display: block;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #333;
+      white-space: nowrap;
+      transition: background .18s, color .18s;
+    }
+
+    .nav-drop a:hover {
+      background: #f0f4ff;
+      color: var(--blue);
+    }
+
+    .nav-drop a::after {
+      display: none !important;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 42px;
+      height: 42px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      z-index: 1100;
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--black);
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+
+    .nav.dark .nav-toggle span {
+      background: #fff;
+    }
+
+    /* MAIN CONTENT */
+    main {
+      margin-top: 70px;
+      padding: 60px 60px;
+      max-width: 1360px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .bd-crumb{display:flex;align-items:center;gap:16px;margin-bottom:34px;flex-wrap:wrap;}
+    .bd-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#555;background:#fff;border:1px solid rgba(0,0,0,.12);padding:8px 16px;border-radius:100px;transition:all .25s;}
+    .bd-back:hover{border-color:var(--blue);color:var(--blue);transform:translateX(-2px);}
+    .bd-back svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .bd-bread{display:flex;align-items:center;gap:9px;font-size:13px;color:#aaa;flex-wrap:wrap;}
+    .bd-bread a{color:#777;}.bd-bread a:hover{color:var(--blue);}.bd-bread .sep{color:#ccc;}.bd-bread .current{color:#444;font-weight:600;}
+
+    .cs-header {
+      margin-bottom: 60px;
+    }
+
+    .cs-header h1 {
+      font-family: var(--font-d);
+      font-size: 48px;
+      font-weight: 800;
+      color: #0a0a0a;
+      margin-bottom: 12px;
+      letter-spacing: -.01em;
+    }
+
+    .cs-header p {
+      font-size: 16px;
+      color: #666;
+      max-width: 600px;
+    }
+
+    /* CATEGORY TABS */
+    .cs-filters {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+
+    .cs-filter-btn {
+      padding: 10px 20px;
+      border: 1px solid rgba(0, 0, 0, .12);
+      border-radius: 8px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      color: #0a0a0a;
+      cursor: pointer;
+      transition: all .25s;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+
+    .cs-filter-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+    }
+
+    .cs-filter-btn.active {
+      background: var(--blue);
+      color: #fff;
+      border-color: var(--blue);
+    }
+
+    /* GRID LAYOUT */
+    .cs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-bottom: 80px;
+    }
+
+    .cs-card {
+      background: #fff;
+      border: 1px solid rgba(0, 0, 0, .08);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all .35s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cs-card:hover {
+      border-color: rgba(37, 99, 255, .15);
+      box-shadow: 0 24px 64px rgba(0, 0, 0, .12);
+      transform: translateY(-4px);
+    }
+
+    .cs-card-image {
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cs-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s ease;
+    }
+
+    .cs-card:hover .cs-card-img {
+      transform: scale(1.05);
+    }
+
+    .cs-card-content {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 14px;
+    }
+
+    .cs-card-top {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cs-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--blue);
+      background: rgba(37, 99, 255, .08);
+      border: 1px solid rgba(37, 99, 255, .2);
+      padding: 6px 14px;
+      border-radius: 20px;
+      width: fit-content;
+    }
+
+    .cs-client {
+      font-size: 11px;
+      color: #999;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .12em;
+    }
+
+    .cs-card-title {
+      font-family: var(--font-d);
+      font-size: 16px;
+      font-weight: 800;
+      color: #0a0a0a;
+      line-height: 1.35;
+      margin: 0;
+      letter-spacing: -.01em;
+    }
+
+    .cs-card-desc {
+      font-size: 13px;
+      color: #666;
+      line-height: 1.55;
+      margin: 0;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .cs-card-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0, 0, 0, .06);
+    }
+
+    .cs-metric {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .cs-metric-value {
+      font-family: var(--font-d);
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--blue);
+      line-height: 1.2;
+    }
+
+    .cs-metric-label {
+      font-size: 8px;
+      color: #999;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: .04em;
+      line-height: 1.3;
+    }
+
+    .cs-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0a0a0a;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      width: fit-content;
+      background: #f0f0f0;
+      padding: 10px 16px;
+      border-radius: 6px;
+      transition: all .25s;
+    }
+
+    .cs-card-link:hover {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .cs-card-link svg {
+      width: 12px;
+      height: 12px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: var(--black);
+      color: #fff;
+      padding: 72px 80px 36px;
+    }
+
+    .ft {
+      display: grid;
+      grid-template-columns: 2.5fr 1fr 1.5fr 1fr 1fr;
+      gap: 44px;
+      padding-bottom: 56px;
+      border-bottom: 1px solid rgba(255, 255, 255, .06);
+    }
+
+    .fb-desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: rgba(255, 255, 255, .4);
+      max-width: 250px;
+      margin: 18px 0 26px;
+    }
+
+    .socials {
+      display: flex;
+      gap: 10px;
+    }
+
+    .soc {
+      width: 36px;
+      height: 36px;
+      border: 1px solid rgba(255, 255, 255, .1);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: rgba(255, 255, 255, .45);
+      transition: all .3s;
+    }
+
+    .soc:hover {
+      border-color: var(--blue);
+      background: rgba(37, 99, 255, .15);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .fc h4 {
+      font-family: var(--font-d);
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .4);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      margin-bottom: 18px;
+    }
+
+    .fl {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .fl a {
+      font-size: 14px;
+      color: rgba(255, 255, 255, .5);
+      transition: color .25s;
+    }
+
+    .fl a:hover {
+      color: #fff;
+    }
+
+    .fbot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 30px;
+    }
+
+    .fcopy {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .25);
+    }
+
+    .fleg {
+      display: flex;
+      gap: 22px;
+    }
+
+    .fleg a {
+      font-size: 13px;
+      color: rgba(255, 255, 255, .25);
+      transition: color .25s;
+    }
+
+    .fleg a:hover {
+      color: rgba(255, 255, 255, .6);
+    }
+
+    .fdisclaim {
+      font-size: 11px;
+      color: rgba(255, 255, 255, .14);
+      text-align: center;
+      margin-top: 22px;
+      line-height: 1.6;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* SCROLL TOP */
+    .stb {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      width: 46px;
+      height: 46px;
+      background: var(--blue);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      z-index: 500;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: all .3s;
+      box-shadow: 0 6px 20px rgba(37, 99, 255, .4);
+    }
+
+    .stb.on {
+      opacity: 1;
+      transform: none;
+    }
+
+    .stb:hover {
+      background: var(--blue-dark);
+      transform: translateY(-3px);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1280px) {
+      .cs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      main {
+        padding: 50px 40px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .cs-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        padding: 0 20px;
+      }
+
+      main {
+        padding: 40px 20px;
+      }
+
+      .cs-header h1 {
+        font-size: 32px;
+      }
+
+      .cs-grid {
+        gap: 24px;
+      }
+
+      .cs-card-image {
+        height: 240px;
+      }
+
+      .ft {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      footer {
+        padding: 40px 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nl {
+        gap: 16px;
+      }
+
+      .nl a {
+        font-size: 12px;
+      }
+
+      .cs-header h1 {
+        font-size: 24px;
+      }
+
+      .cs-filters {
+        gap: 8px;
+      }
+
+      .cs-filter-btn {
+        padding: 8px 12px;
+        font-size: 11px;
+      }
+
+      .cs-card-content {
+        padding: 16px;
+      }
+
+      .cs-card-title {
+        font-size: 16px;
+      }
+
+      .cs-card-desc {
+        font-size: 12px;
+      }
+
+      .cs-metric-value {
+        font-size: 14px;
+      }
+
+      .cs-metric-label {
+        font-size: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- CURSOR -->
+  <div class="cur-dot" id="cd"></div>
+  <div class="cur-ring" id="cr"></div>
+
+  <!-- NAVBAR -->
+  <nav class="nav" id="nav">
+    <a href="./index.html" class="nav-logo">
+      <img src="./logo/Tech DataSeeders Logo.png" alt="TechDataSeeders" id="navLogo">
+    </a>
+    <ul class="nl">
+      <li class="has-drop">
+        <a href="#services">Services <span>▾</span></a>
+        <div class="nav-drop">
+          <a class="nav-menu" href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+          <a class="nav-menu" href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
+          <a class="nav-menu" href="./services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+          <a class="nav-menu" href="./services/custom-data-api.html">Custom Data API Delivery</a>
+        </div>
+      </li>
+      <li class="has-drop">
+        <a href="#industries">Industries <span>▾</span></a>
+        <div class="nav-drop">
+        <a class="nav-menu" href="./industries/ecomm.html">E-commerce</a>
+        <a class="nav-menu" href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+        <a class="nav-menu" href="./industries/food-beverages.html">Food &amp; Beverages</a>
+        <a class="nav-menu" href="./industries/q-commerce.html">Quick Commerce</a>
+        <a class="nav-menu" href="./industries/real-estate.html">Real Estate</a>
+        <a class="nav-menu" href="./industries/retail.html">Retail</a>
+        <a class="nav-menu" href="./industries/social-media.html">Social Media</a>
+        <a class="nav-menu" href="./industries/travel-hotel.html">Travel &amp; Hotel</a>
+        </div>
+      </li>
+      <li><a href="./case-studies.html">Case Studies</a></li>
+      <li><a href="./about.html">About Us</a></li>
+      <li><a href="#contact" class="nav-cta">Get a Quote →</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="bd-crumb">
+      <a href="./index.html" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to Home</a>
+      <nav class="bd-bread"><a href="./index.html">Home</a><span class="sep">/</span><span class="current">Case Studies</span></nav>
+    </div>
+    <div class="cs-header">
+      <h1>Our Work</h1>
+      <p>Explore real client case studies across healthcare, retail, food delivery, finance, real estate, travel, events, and e-commerce industries.</p>
+    </div>
+
+    <!-- CATEGORY FILTERS -->
+    <div class="cs-filters">
+      <button class="cs-filter-btn active" onclick="filterCases('all')">All</button>
+      <button class="cs-filter-btn" onclick="filterCases('Healthcare')">Healthcare</button>
+      <button class="cs-filter-btn" onclick="filterCases('Retail')">Retail</button>
+      <button class="cs-filter-btn" onclick="filterCases('Food Delivery')">Food Delivery</button>
+      <button class="cs-filter-btn" onclick="filterCases('Finance')">Finance</button>
+      <button class="cs-filter-btn" onclick="filterCases('Real Estate')">Real Estate</button>
+      <button class="cs-filter-btn" onclick="filterCases('Travel')">Travel</button>
+      <button class="cs-filter-btn" onclick="filterCases('Events')">Events</button>
+      <button class="cs-filter-btn" onclick="filterCases('E-commerce')">E-commerce</button>
+    </div>
+
+    <!-- CASE STUDIES GRID -->
+    <div class="cs-grid" id="casesGrid">
+      <!-- Cards will be inserted here by JavaScript -->
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="ft">
+      <div>
+        <img src="./logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="TechDataSeeders" style="height:34px;">
+        <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation — seeding intelligence from the web.</p>
+        <div class="socials">
+          <a href="#" class="soc">in</a>
+          <a href="#" class="soc">𝕏</a>
+          <a href="mailto:sales@techdataseeders.in" class="soc">✉</a>
+          <a href="#" class="soc">📷</a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Services</h4>
+        <div class="fl">
+          <a href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+          <a href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
+          <a href="./services/data-analytics-intelligence.html">Data Analytics</a>
+          <a href="./services/custom-data-api.html">Custom Data API</a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Industries</h4>
+        <div class="fl">
+          <a href="#">E-Commerce Data</a>
+          <a href="#">Real Estate Data</a>
+          <a href="#">Finance Data</a>
+          <a href="#">Healthcare Data</a>
+          <a href="#">Food Delivery Data</a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Company</h4>
+        <div class="fl">
+          <a href="./about.html">About Us</a>
+          <a href="./blog/index.html">Blog</a>
+          <a href="./case-studies.html">Case Studies</a>
+          <a href="#testimonials">Testimonials</a>
+          <a href="#contact">Pricing</a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Contact</h4>
+        <div class="fl">
+          <a href="mailto:sales@techdataseeders.in" style="word-break:break-all;">sales@techdataseeders.in</a>
+        </div>
+      </div>
+      <div class="fbot">
+        <p class="fcopy">© 2024 TechDataSeeders. All rights reserved.</p>
+        <div class="fleg">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+          <a href="#">Data Security</a>
+        </div>
+      </div>
+      <p class="fdisclaim">TechDataSeeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
+  </footer>
+
+  <!-- Scroll to top -->
+  <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+
+  <script>
+    /* ==== CURSOR ==== */
+    const cd = document.getElementById('cd'), cr = document.getElementById('cr');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cd.style.left = mx + 'px'; cd.style.top = my + 'px';
+    });
+    (function loop() {
+      rx += (mx - rx) * .12; ry += (my - ry) * .12;
+      cr.style.left = rx + 'px'; cr.style.top = ry + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a,button').forEach(el => {
+      el.addEventListener('mouseenter', () => { cd.style.width = cd.style.height = '12px'; cr.style.width = cr.style.height = '52px'; cr.style.opacity = '.45'; });
+      el.addEventListener('mouseleave', () => { cd.style.width = cd.style.height = '8px'; cr.style.width = cr.style.height = '36px'; cr.style.opacity = '1'; });
+    });
+
+    /* ==== NAVBAR ==== */
+    const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
+    const stb = document.getElementById('stb');
+    window.addEventListener('scroll', () => {
+      const s = window.scrollY;
+      nav.classList.toggle('dark', s > 80);
+      navLogo.src = s > 80 ? './logo/TDS Logo Set/Tech DataSeeders Logo white.png' : './logo/Tech DataSeeders Logo.png';
+      stb.classList.toggle('on', s > 400);
+    });
+
+    /* ==== DROPDOWN MENU ==== */
+    document.querySelectorAll('.has-drop').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.has-drop').forEach(other => {
+          if (other !== item) other.classList.remove('open');
+        });
+        item.classList.toggle('open');
+      });
+    });
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.has-drop')) {
+        document.querySelectorAll('.has-drop').forEach(item => item.classList.remove('open'));
+      }
+    });
+
+    /* ==== CASE STUDIES DATA & GRID ==== */
+    const caseStudies = [
+      { category: 'Healthcare', href: './case-studies/pharma-data-extraction-services.html', client: 'Pharmaceutical Manufacturer & Distributor', title: 'Streamlining Business Processes & Boosting Profitability for a Pharma Company with Data Extraction Services', desc: 'A USA-based pharmaceutical manufacturer and distributor partnered with Dataseeders to extract real-time competitor pricing, regulatory, and product data — cutting manual research time by 90%.', gradient: 'linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%)', icon: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>', metrics: [{v: '90%', l: 'Manual Research Time Reduced'}, {v: '5', l: 'Custom Solutions Delivered'}, {v: 'Multi-Region', l: 'Pricing & Stock Coverage'}] },
+      { category: 'Retail', href: './case-studies/retail-automated-product-matching.html', client: 'Omnichannel Retail Company', title: 'Enhancing Retail Efficiency with Automated Product Matching', desc: 'An omnichannel US retailer turned to Dataseeders\' AI-driven product matching engine to unify a sprawling catalog — reaching 96% matching accuracy across 100,000+ SKUs.', gradient: 'linear-gradient(135deg,#7c2d12 0%,#ea580c 50%,#fb923c 100%)', icon: '<circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>', metrics: [{v: '96%', l: 'Product Matching Accuracy'}, {v: '83%', l: 'Reduction in Duplicate Listings'}, {v: '150+', l: 'Hours Saved per Month'}] },
+      { category: 'Food Delivery', href: './case-studies/food-delivery-competitive-intelligence.html', client: 'Food Delivery Aggregator', title: 'Helping a Leading Food Delivery Business Outrank Competitors & Expand Market Reach', desc: 'A leading food delivery aggregator partnered with Dataseeders for competitive menu monitoring and sentiment analysis, expanding its consumer base by 22% in underpenetrated regions.', gradient: 'linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%)', icon: '<path d="M3 2v7a3 3 0 0 0 6 0V2M6 9v13"/><path d="M16 2c-2 0-3 2-3 5s1 5 3 5v10"/>', metrics: [{v: '22%', l: 'Consumer Base Growth'}, {v: '5', l: 'Data-Driven Solutions Delivered'}, {v: 'Multi-Region', l: 'Competitive Intelligence Coverage'}] },
+      { category: 'Finance', href: './case-studies/finance-real-time-alternative-data-scraping.html', client: 'Financial Services Organization', title: 'Helping Finance Organization with Real-Time & Alternative Data Scraping for Market Dominance', desc: 'A mid-sized financial services firm used Dataseeders\' real-time and alternative data scraping to grow platform traffic by 45% and cut manual research hours by 80%.', gradient: 'linear-gradient(135deg,#2e1065 0%,#5b21b6 50%,#7c3aed 100%)', icon: '<path d="M3 21h18"/><path d="M7 21V10"/><path d="M12 21V4"/><path d="M17 21v-7"/>', metrics: [{v: '45%', l: 'Platform Traffic Growth'}, {v: '80%', l: 'Reduction in Manual Research Hours'}, {v: '210+', l: 'New Alternative Data Sources'}] },
+      { category: 'Real Estate', href: './case-studies/real-estate-aggregator-growth.html', client: 'Real Estate Aggregator Platform', title: 'Powering a Real Estate Aggregator\'s Growth with Data Scraping & Analytics Solutions', desc: 'An emerging real estate aggregator used Dataseeders\' listing scraping and analytics to grow active listings by 75% across 100+ cities and cut onboarding time by 70%.', gradient: 'linear-gradient(135deg,#064e3b 0%,#059669 50%,#10b981 100%)', icon: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>', metrics: [{v: '75%', l: 'Increase in Active Listings'}, {v: '70%', l: 'Reduction in Listing Onboarding Time'}, {v: '310+', l: 'New Realtor Partnerships'}] },
+      { category: 'Travel', href: './case-studies/car-rental-pricing-intelligence.html', client: 'Europe-Based Car Rental Company', title: 'Real-Time Competitor Pricing Intelligence Solution for Global Car Rental Company', desc: 'A Europe-based car rental company used Dataseeders\' weekly pricing intelligence to benchmark rates across 6 countries and cut manual tracking hours by 90%.', gradient: 'linear-gradient(135deg,#083344 0%,#0e7490 50%,#22d3ee 100%)', icon: '<path d="M17.8 19.2L16 11l5-5a2.1 2.1 0 0 0-3-3l-5 5-8.2-1.8a.5.5 0 0 0-.5.8l4.7 3.2-3 3H3l-1 1 4 2 2 4 1-1v-3l3-3 3.2 4.7a.5.5 0 0 0 .8-.5z"/>', metrics: [{v: '6', l: 'Countries Benchmarked'}, {v: '90%', l: 'Reduction in Manual Tracking Hours'}, {v: '24%', l: 'Growth in New Bookings'}] },
+      { category: 'Events', href: './case-studies/event-ticket-booking-data-extraction.html', client: 'Online Ticket Booking Platform', title: 'Real-Time Data Extraction for Event Ticket Booking Platform', desc: 'A growing North American ticket booking platform used Dataseeders\' real-time extraction to lift conversion rate by 27% and outrank 4 major competitors.', gradient: 'linear-gradient(135deg,#4d1a3d 0%,#9d4edd 50%,#c77dff 100%)', icon: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/>', metrics: [{v: '27%', l: 'Growth in Conversion Rate'}, {v: '18%', l: 'Increase in Organic Traffic'}, {v: '4', l: 'Major Competitors Outranked'}] },
+      { category: 'E-commerce', href: './case-studies/ecommerce-pricing-intelligence.html', client: 'Multi-Category eCommerce Platform', title: 'Empowering an eCommerce Marketplace with Real-Time Pricing Intelligence', desc: 'A fast-growing Southeast Asian eCommerce marketplace used Dataseeders\' real-time pricing intelligence to win 23% more Buy Box placements and cut pricing errors by 85%.', gradient: 'linear-gradient(135deg,#0d1b4b 0%,#1a4fd6 50%,#2563FF 100%)', icon: '<circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/>', metrics: [{v: '23%', l: 'Increase in Buy Box Wins'}, {v: '85%', l: 'Reduction in Pricing Errors'}, {v: '12%', l: 'Increase in Gross Margin'}] }
+    ];
+
+    const categoryImages = {
+      'Healthcare':    './images/healthcare.jpg',
+      'Retail':        './images/retails.jpg',
+      'Food Delivery': './images/food.jpg',
+      'Finance':       './images/advertised.jpg',
+      'Real Estate':   './images/realestate.jpg',
+      'Travel':        './images/travel.jpg',
+      'Events':        './images/social.jpg',
+      'E-commerce':    './images/ecommerce.jpg'
+    };
+
+    let currentFilter = 'all';
+
+    function renderCases() {
+      const grid = document.getElementById('casesGrid');
+      grid.innerHTML = '';
+      const filtered = currentFilter === 'all' ? caseStudies : caseStudies.filter(c => c.category === currentFilter);
+      filtered.forEach(c => {
+        const img = categoryImages[c.category] || './images/advertised.jpg';
+        const card = document.createElement('a');
+        card.href = c.href;
+        card.className = 'cs-card';
+        card.innerHTML = `
+          <div class="cs-card-image">
+            <img src="${img}" alt="${c.title}" class="cs-card-img">
+          </div>
+          <div class="cs-card-content">
+            <div class="cs-card-top">
+              <span class="cs-badge">${c.category}</span>
+              <div class="cs-client">${c.client}</div>
+            </div>
+            <h3 class="cs-card-title">${c.title}</h3>
+            <p class="cs-card-desc">${c.desc}</p>
+            <div class="cs-card-metrics">
+              ${c.metrics.map(m => `<div class="cs-metric"><div class="cs-metric-value">${m.v}</div><div class="cs-metric-label">${m.l}</div></div>`).join('')}
+            </div>
+            <div class="cs-card-link">
+              View case study
+              <svg viewBox="0 0 14 14">
+                <path d="M1 7h12M7 1l6 6-6 6" />
+              </svg>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCases(category) {
+      currentFilter = category;
+      document.querySelectorAll('.cs-filter-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderCases();
+    }
+
+    renderCases();
+  </script>
+</body>
+
+</html>

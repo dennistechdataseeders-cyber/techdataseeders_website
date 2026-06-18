@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Social Media Data Scraping — TechDataSeeders</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
+    body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
+    a{text-decoration:none;color:inherit;}
+    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
+    .nav-logo img{height:32px;}
+    .crumb-bar{position:absolute;top:92px;left:0;right:0;padding:0 80px;z-index:3;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+    .back-link{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);padding:8px 16px;border-radius:100px;transition:all .25s;backdrop-filter:blur(6px);}
+    .back-link:hover{background:rgba(255,255,255,.2);color:#fff;transform:translateX(-2px);}
+    .back-link svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .breadcrumb{display:flex;align-items:center;gap:9px;font-size:13px;color:rgba(255,255,255,.6);flex-wrap:wrap;}
+    .breadcrumb a{color:rgba(255,255,255,.72);transition:color .2s;}
+    .breadcrumb a:hover{color:#fff;}
+    .breadcrumb .sep{color:rgba(255,255,255,.35);}
+    .breadcrumb .current{color:#fff;font-weight:600;}
+    .ind-hero{min-height:560px;padding:180px 80px 100px;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+    .ind-hero-bg{position:absolute;inset:0;background-image:url('../images/social.jpg');background-size:cover;background-position:center;}
+    .ind-hero-overlay{position:absolute;inset:0;background:linear-gradient(150deg,rgba(6,6,18,.92) 0%,rgba(37,99,255,.5) 100%);}
+    .ind-hero-content{position:relative;z-index:2;max-width:700px;}
+    .ind-hero-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(37,99,255,.2);border:1px solid rgba(37,99,255,.45);color:rgba(255,255,255,.88);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:28px;}
+    .ind-hero-h1{font-family:var(--font-d);font-size:clamp(42px,6vw,72px);font-weight:800;color:#fff;line-height:1.04;letter-spacing:-.035em;margin-bottom:22px;}
+    .ind-hero-sub{font-size:18px;line-height:1.75;color:rgba(255,255,255,.68);max-width:520px;}
+    .sec-overview{padding:64px 80px 0;max-width:1180px;margin:0 auto;}
+    .ov-quote{position:relative;background:linear-gradient(135deg,#f3f6ff,#fafbff);border:1px solid rgba(37,99,255,.14);border-left:4px solid var(--blue);border-radius:18px;padding:36px 44px 32px;margin-bottom:28px;}
+    .ov-mark{position:absolute;top:14px;left:20px;font-family:var(--font-d);font-size:46px;line-height:1;color:rgba(37,99,255,.22);font-weight:800;}
+    .ov-lead{position:relative;font-size:19px;line-height:1.8;color:#222;font-weight:600;font-style:italic;max-width:840px;padding-left:28px;}
+    .ov-content{padding:0 4px;}
+    .ov-h2{font-family:var(--font-d);font-size:clamp(19px,2.1vw,25px);font-weight:700;letter-spacing:-.01em;color:var(--blue-dark);margin-bottom:18px;line-height:1.3;}
+    .ov-p{font-size:15.5px;line-height:1.9;color:#555;margin-bottom:16px;max-width:840px;}
+    .ov-p:last-child{margin-bottom:0;}
+    .sec-wws{padding:72px 80px 100px;background:#f8f9fb;border-top:1px solid rgba(0,0,0,.06);}
+    .wws-shell{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:230px 1fr;gap:56px;align-items:start;}
+    .wws-toc{position:sticky;top:96px;}
+    .toc-label{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(0,0,0,.35);margin-bottom:16px;}
+    .toc-list{display:flex;flex-direction:column;gap:4px;}
+    .toc-list a{display:flex;align-items:baseline;gap:10px;font-size:13.5px;font-weight:600;color:#555;padding:9px 12px;border-radius:10px;line-height:1.4;transition:all .2s;}
+    .toc-list a:hover{background:#fff;color:var(--blue);box-shadow:0 1px 3px rgba(0,0,0,.06);}
+    .toc-num{font-family:var(--font-d);font-size:11px;font-weight:800;color:rgba(37,99,255,.45);flex-shrink:0;}
+    .wws-main{min-width:0;}
+    .wws-head{margin-bottom:36px;}
+    .wws-count{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);background:rgba(37,99,255,.08);border:1px solid rgba(37,99,255,.18);padding:6px 14px;border-radius:100px;margin-bottom:18px;}
+    .wws-h{font-family:var(--font-d);font-size:clamp(26px,3vw,40px);font-weight:700;line-height:1.14;letter-spacing:-.025em;color:var(--black);}
+    .wws-h em{font-style:italic;color:var(--blue);}
+    .wws-topic{display:flex;gap:24px;padding:34px;margin-bottom:20px;background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:18px;box-shadow:0 1px 3px rgba(0,0,0,.03);scroll-margin-top:96px;}
+    .wws-topic:last-child{margin-bottom:0;}
+    .wws-topic-num{flex-shrink:0;width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,rgba(37,99,255,.14),rgba(37,99,255,.05));color:var(--blue);font-family:var(--font-d);font-size:14px;font-weight:800;letter-spacing:.02em;display:flex;align-items:center;justify-content:center;}
+    .wws-topic-body{flex:1;min-width:0;max-width:100%;}
+    .wws-topic-quote{position:relative;background:#f6f8ff;border-left:3px solid var(--blue);border-radius:12px;padding:18px 22px 16px 30px;margin-bottom:20px;}
+    .wws-mark{position:absolute;top:6px;left:10px;font-family:var(--font-d);font-size:30px;line-height:1;color:rgba(37,99,255,.28);font-weight:800;}
+    .wws-topic-lead{position:relative;font-size:15.5px;line-height:1.8;color:#333;font-weight:500;font-style:italic;}
+    .wws-topic-t{font-family:var(--font-d);font-size:clamp(19px,2.1vw,23px);font-weight:700;color:var(--black);margin-bottom:12px;line-height:1.3;}
+    .wws-topic-h2{display:inline-block;font-family:var(--font-d);font-size:12.5px;font-weight:700;color:var(--blue-dark);background:rgba(37,99,255,.07);text-transform:uppercase;letter-spacing:.03em;line-height:1.4;padding:6px 12px;border-radius:8px;margin-bottom:16px;}
+    .wws-topic-p{font-size:15px;line-height:1.9;color:#5a5a5a;margin-bottom:14px;}
+    .wws-topic-p:last-child{margin-bottom:0;}
+    .cta-band{padding:100px 80px;background:linear-gradient(140deg,#06091a 0%,#0d1840 55%,#162050 100%);position:relative;overflow:hidden;text-align:center;}
+    .cta-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 70% at 50% 110%,rgba(37,99,255,.3),transparent);}
+    .cta-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(96,165,250,.85);margin-bottom:18px;position:relative;}
+    .cta-kicker::before{content:'';width:20px;height:2px;background:rgba(96,165,250,.85);border-radius:2px;}
+    .cta-h{font-family:var(--font-d);font-size:clamp(30px,4vw,50px);font-weight:800;color:#fff;line-height:1.08;letter-spacing:-.03em;margin-bottom:18px;position:relative;}
+    .cta-h em{font-style:italic;color:rgba(96,165,250,.9);}
+    .cta-p{font-size:17px;line-height:1.75;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto 40px;position:relative;}
+    .cta-btns{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;position:relative;}
+    .btn-p{background:var(--blue);color:#fff;padding:16px 38px;border-radius:100px;font-family:var(--font-d);font-size:15px;font-weight:700;display:inline-flex;align-items:center;gap:8px;transition:all .3s;}
+    .btn-p:hover{background:var(--blue-dark);transform:translateY(-2px);box-shadow:0 14px 40px rgba(37,99,255,.5);}
+    .btn-s{color:rgba(255,255,255,.7);padding:16px 38px;border-radius:100px;font-family:var(--font-d);font-size:15px;font-weight:600;border:1px solid rgba(255,255,255,.2);transition:all .3s;}
+    .btn-s:hover{color:#fff;border-color:rgba(255,255,255,.4);transform:translateY(-2px);}
+    .footer-mini{text-align:center;padding:28px;font-size:13px;color:#aaa;border-top:1px solid rgba(0,0,0,.06);}
+    @media(max-width:900px){
+      .nav{padding:0 24px;}
+      .ind-hero{padding:120px 24px 72px;}
+      .crumb-bar{padding:0 24px;top:84px;}
+      .sec-wws,.sec-overview{padding:40px 20px;}
+      .ov-quote{padding:28px 22px 24px;}
+      .ov-mark{font-size:36px;}
+      .ov-lead{padding-left:18px;}
+      .wws-shell{grid-template-columns:1fr;gap:0;}
+      .wws-toc{display:none;}
+      .wws-topic{flex-direction:column;gap:14px;padding:24px;border-radius:14px;}
+      .cta-band{padding:72px 24px;}
+    }
+    /* ---- FULL NAV OVERRIDE ---- */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:70px;padding:0 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:all .4s;}
+    .nav-logo img{height:36px;}
+    .nl{display:flex;align-items:center;gap:36px;list-style:none;margin:0;padding:0;}
+    .nl a{font-size:14px;font-weight:500;color:rgba(0,0,0,.7);transition:color .25s;position:relative;}
+    .nl a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:var(--blue);transition:width .3s;}
+    .nl a:hover::after{width:100%;}
+    .nl a:hover{color:var(--blue);}
+    .nav-cta{background:var(--blue);color:#fff !important;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);box-shadow:0 6px 20px rgba(37,99,255,.4);transform:translateY(-1px);}
+    .nav-cta::after{display:none !important;}
+    .nl .has-drop{position:relative;}
+    .nl .has-drop>a::after{display:none;}
+    .nl .has-drop>a{cursor:pointer;}
+    .nl .has-drop>a span{display:inline-block;transition:transform .25s;}
+    .nl .has-drop.open>a span{transform:rotate(180deg);}
+    .nav-drop{display:none;flex-direction:column;gap:2px;position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.12);padding:10px;min-width:230px;z-index:200;}
+    .nav-menu{color:#333 !important;}
+    .has-drop.open>.nav-drop{display:flex;}
+    .nav-drop a{display:block;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#333;white-space:nowrap;transition:background .18s,color .18s;}
+    .nav-drop a:hover{background:#f0f4ff;color:var(--blue);}
+    .nav-drop a::after{display:none !important;}
+    .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;background:none;border:none;cursor:pointer;padding:0;z-index:1100;}
+    .nav-toggle span{display:block;width:24px;height:2px;background:var(--black);border-radius:2px;transition:transform .3s,opacity .3s;}
+    .nav-open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    .nav-open .nav-toggle span:nth-child(2){opacity:0;}
+    .nav-open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    /* ---- FOOTER ---- */
+    .footer{background:var(--black);color:#fff;padding:72px 80px 36px;}
+    .ft{display:grid;grid-template-columns:2.5fr 1fr 1.5fr 1fr 1fr;gap:44px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.06);}
+    .fb-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.4);max-width:250px;margin:18px 0 26px;}
+    .socials{display:flex;gap:10px;}
+    .soc{width:36px;height:36px;border:1px solid rgba(255,255,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.45);transition:all .3s;}
+    .soc:hover{border-color:var(--blue);background:rgba(37,99,255,.15);color:#fff;transform:translateY(-2px);}
+    .fc h4{font-family:var(--font-d);font-size:12px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;}
+    .fl{display:flex;flex-direction:column;gap:11px;}
+    .fl a{font-size:14px;color:rgba(255,255,255,.5);transition:color .25s;}
+    .fl a:hover{color:#fff;}
+    .fbot{display:flex;align-items:center;justify-content:space-between;padding-top:30px;}
+    .fcopy{font-size:13px;color:rgba(255,255,255,.25);}
+    .fleg{display:flex;gap:22px;}
+    .fleg a{font-size:13px;color:rgba(255,255,255,.25);transition:color .25s;}
+    .fleg a:hover{color:rgba(255,255,255,.6);}
+    .fdisclaim{font-size:11px;color:rgba(255,255,255,.14);text-align:center;margin-top:20px;}
+    .stb{position:fixed;bottom:32px;right:32px;width:46px;height:46px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;box-shadow:0 6px 20px rgba(37,99,255,.4);}
+    .stb.on{opacity:1;transform:none;}
+    .stb:hover{background:var(--blue-dark);transform:translateY(-3px);}
+    @media(max-width:768px){
+      .nav{padding:0 22px;}
+      .nav-toggle{display:flex;}
+      .nl{position:fixed;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;padding:10px 22px 22px;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 24px 44px rgba(0,0,0,.13);max-height:calc(100vh - 70px);overflow-y:auto;transform:translateY(-14px);opacity:0;visibility:hidden;transition:transform .3s,opacity .3s,visibility .3s;}
+      .nav-open .nl{transform:translateY(0);opacity:1;visibility:visible;}
+      .nl li{width:100%;}
+      .nl>li>a{display:block;padding:14px 6px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.06);}
+      .nl a::after{display:none !important;}
+      .nl .has-drop>a span{float:right;}
+      .nav-drop{position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0;}
+      .nav-drop a{font-size:14px;padding:9px 8px;color:#555;}
+      .nl .nav-cta{display:block;text-align:center;margin-top:16px;}
+      .ft{grid-template-columns:1fr 1fr;}
+      .footer{padding:60px 24px;}
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav" id="nav">
+  <a href="../index.html" class="nav-logo">
+    <img src="../logo/Tech DataSeeders Logo.png" alt="TechDataSeeders">
+  </a>
+  <ul class="nl">
+    <li class="has-drop">
+      <a href="../index.html#services">Services <span>&#9662;</span></a>
+      <div class="nav-drop">
+        <a class="nav-menu" href="../services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a class="nav-menu" href="../services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a class="nav-menu" href="../services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+        <a class="nav-menu" href="../services/custom-data-api.html">Custom Data API Delivery</a>
+      </div>
+    </li>
+    <li class="has-drop">
+      <a href="../index.html#industries">Industries <span>&#9662;</span></a>
+      <div class="nav-drop">
+        <a class="nav-menu" href="../industries/ecomm.html">E-commerce</a>
+        <a class="nav-menu" href="../industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+        <a class="nav-menu" href="../industries/food-beverages.html">Food &amp; Beverages</a>
+        <a class="nav-menu" href="../industries/q-commerce.html">Quick Commerce</a>
+        <a class="nav-menu" href="../industries/real-estate.html">Real Estate</a>
+        <a class="nav-menu" href="../industries/retail.html">Retail</a>
+        <a class="nav-menu" href="../industries/social-media.html">Social Media</a>
+        <a class="nav-menu" href="../industries/travel-hotel.html">Travel &amp; Hotel</a>
+      </div>
+    </li>
+    <li><a href="../case-studies.html">Case Studies</a></li>
+    <li><a href="../about.html">About Us</a></li>
+    <li><a href="../index.html#contact" class="nav-cta">Get a Quote &#8594;</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+  <section class="ind-hero">
+    <div class="ind-hero-bg"></div>
+    <div class="ind-hero-overlay"></div>
+    <div class="crumb-bar">
+      <a href="../index.html" class="back-link"><svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6" />
+        </svg> Back</a>
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../index.html">Home</a>
+        <span class="sep">/</span>
+        <a href="../index.html#industries">Industries</a>
+        <span class="sep">/</span>
+        <span class="current">Social Media</span>
+      </nav>
+    </div>
+    <div class="ind-hero-content">
+      <div class="ind-hero-tag">Industry Solutions</div>
+      <h1 class="ind-hero-h1">Social Media<br>Data</h1>
+      <p class="ind-hero-sub">Public posts, comments, hashtags, and influencer data extracted across every major platform.</p>
+    </div>
+  </section>
+
+
+  <section class="sec-overview">
+    <div class="ov-quote">
+      <span class="ov-mark">&#8220;</span>
+      <p class="ov-lead">Extract public posts, comments, user profiles, hashtags, engagement metrics, and conversation threads from social media platforms to power sentiment analysis, trend detection, and competitive intelligence.</p>
+    </div>
+    <div class="ov-content">
+      <h3 class="ov-h2">How Businesses Use Extracted Social Media Data to Understand Public Conversation</h3>
+      <p class="ov-p">Social media platforms host billions of public conversations every day. Customers praise brands, complain about products, ask questions, share experiences, and influence each other. This data is unstructured, massive in volume, and spread across multiple platforms with different structures and access patterns. We help businesses extract public social media data at scale from any platform including microblogging sites, discussion forums, video platforms, professional networks, and photo sharing apps. Our web extraction pipelines are platform agnostic and respect each platform's structure and public access boundaries.</p>
+      <p class="ov-p">Our social media extraction solutions capture posts and their metadata including author username, post timestamp, content text, images, videos, and links. We extract engagement metrics such as likes, reactions, shares, retweets, comments, and view counts. We capture conversation threads including comment replies, nested discussions, and original post context. We also extract user profile information including bio, follower counts, following counts, account age, and location where publicly available. For example, we can extract all posts containing specific keywords or hashtags across multiple platforms over a defined time period. We can capture comment threads under competitor announcement posts to analyze public reaction. We can also extract historical conversation data to track how sentiment around a topic has evolved over months or years.</p>
+      <p class="ov-p">We build custom social media extraction pipelines based on your target platforms, keywords, hashtags, user handles, date ranges, engagement thresholds, and extraction frequency from hourly to weekly. Delivery options include structured datasets of posts and comments, engagement metric reports, conversation thread exports, user profile data, and API feeds into your social listening or analytics platforms. With our extracted data, brands track public perception of their products. Marketing teams measure campaign reach and sentiment. Researchers analyze online discourse patterns. And competitive intelligence teams monitor how audiences react to competitor announcements.</p>
+    </div>
+  </section>
+  <section class="sec-wws">
+    <div class="wws-shell">
+      <aside class="wws-toc">
+        <div class="toc-label">On This Page</div>
+        <nav class="toc-list">
+        <a href="#topic-1"><span class="toc-num">01</span>Post &amp; Comment Extraction</a>
+        <a href="#topic-2"><span class="toc-num">02</span>Hashtag &amp; Keyword Tracking</a>
+        <a href="#topic-3"><span class="toc-num">03</span>User Profile Data Extraction</a>
+        <a href="#topic-4"><span class="toc-num">04</span>Conversation Thread &amp; Reply Extraction</a>
+        <a href="#topic-5"><span class="toc-num">05</span>Influencer &amp; Creator Data Collection</a>
+        </nav>
+      </aside>
+      <div class="wws-main">
+        <div class="wws-head">
+          <span class="wws-count">5 Data Solutions</span>
+          <h2 class="wws-h">What We Scrape in<br><em>Social Media</em></h2>
+        </div>
+      <div class="wws-topic" id="topic-1">
+        <div class="wws-topic-num">01</div>
+        <div class="wws-topic-body">
+       
+          <div class="wws-topic-content">
+            <h3 class="wws-topic-t">Post &amp; Comment Extraction</h3>
+            <span class="wws-topic-h2">How Businesses Use Extracted Social Media Content to Understand Public Conversation</span>
+            <p class="wws-topic-p">Social media platforms generate massive volumes of public content every second. Posts announce news, share opinions, ask questions, and showcase products. Comments add context, agreement, disagreement, and further discussion. This content is valuable for brands, researchers, and analysts but impossible to collect manually at scale. We help businesses extract public posts and comments from any social media platform. Our web extraction pipelines capture the full content and metadata of each post and comment regardless of platform structure or volume.</p>
+            <p class="wws-topic-p">Our post and comment extraction solutions capture the primary content of each post including text, captions, image URLs, video URLs, and link attachments. We extract metadata such as author username, author display name, post timestamp, platform specific post ID, and post URL. For comments, we capture comment text, comment author, timestamp, parent post reference, and reply depth. We also extract engagement data attached to each post and comment including like counts, reaction breakdowns, share counts, and view counts where available. For example, we can extract all posts from a specific set of public accounts or pages over a defined date range. We can capture every comment under a specific post including nested replies to analyze discussion flow. We can also extract posts containing target keywords across multiple platforms for market research or brand monitoring.</p>
+            <p class="wws-topic-p">We build custom post and comment extraction pipelines based on your target platforms, target accounts or pages, keywords, hashtags, date ranges, comment depth, and extraction frequency from hourly to weekly. Delivery options include structured datasets of posts and comments, CSV or JSON exports, conversation thread exports with parent child relationships, and API feeds into your social listening or content analysis platforms. With our extracted data, brands track what is being said about their products. Researchers analyze public discourse on specific topics. Marketing teams collect user generated content for campaigns. And competitive intelligence teams monitor competitor announcement discussions at scale.</p>
+          </div>
+        </div>
+      </div>
+      <div class="wws-topic" id="topic-2">
+        <div class="wws-topic-num">02</div>
+        <div class="wws-topic-body">
+          
+          <div class="wws-topic-content">
+            <h3 class="wws-topic-t">Hashtag &amp; Keyword Tracking</h3>
+            <span class="wws-topic-h2">How Businesses Use Hashtag and Keyword Data to Monitor Trends and Campaigns</span>
+            <p class="wws-topic-p">Hashtags and keywords are the entry points to public conversation. A branded hashtag reveals campaign reach. An industry keyword shows market discussion volume. A trending hashtag signals emerging topics before they go mainstream. Without systematic extraction, businesses miss these signals or see them too late. We help businesses extract public posts and comments filtered by hashtags or keywords from any social media platform. Our web extraction pipelines capture every relevant post across multiple platforms, languages, and time zones.</p>
+            <p class="wws-topic-p">Our hashtag and keyword tracking solutions extract posts containing target hashtags, exact keywords, or keyword patterns including partial matches and phrase variations. We capture the full post content, post timestamp, author username, author profile information, and post URL. We also extract engagement metrics including likes, reactions, shares, retweets, comments, and view counts for each post. For hashtag tracking, we capture the full set of hashtags used in each post, not just the target ones, to reveal associated topics. For keyword tracking, we capture surrounding text context to understand how the keyword is being used. For example, we can extract every post containing a brand specific campaign hashtag across multiple platforms over a campaign period. We can track weekly volume for an industry keyword like &quot;electric vehicle&quot; to measure growing or declining conversation. We can also extract posts containing competitor brand names to monitor public sentiment and mention frequency.</p>
+            <p class="wws-topic-p">We build custom hashtag and keyword tracking pipelines based on your target platforms, target hashtags or keywords, languages, date ranges, minimum engagement thresholds, and extraction frequency from hourly to weekly. Delivery options include structured datasets of matching posts, volume trend reports, hashtag co occurrence matrices, keyword context excerpts, and API feeds into your social listening or trend analysis platforms. With our extracted data, marketing teams measure campaign hashtag reach and sentiment. Product teams track emerging industry keywords to identify new feature opportunities. Competitive intelligence teams monitor brand mention volume against competitors. And trend analysts detect rising topics before they peak.</p>
+          </div>
+        </div>
+      </div>
+      <div class="wws-topic" id="topic-3">
+        <div class="wws-topic-num">03</div>
+        <div class="wws-topic-body">
+       
+          <div class="wws-topic-content">
+            <h3 class="wws-topic-t">User Profile Data Extraction</h3>
+            <span class="wws-topic-h2">How Businesses Use Extracted Profile Data to Identify Influencers and Understand Audiences</span>
+            <p class="wws-topic-p">Behind every social media post is a user. That user has a profile with valuable metadata. Their bio describes who they are. Their follower count indicates reach. Their location reveals geographic relevance. Their posting frequency shows activity level. This profile data helps businesses identify potential influencers, segment audiences, and assess account credibility. We help businesses extract public user profile data from any social media platform. Our web extraction pipelines capture profile information at scale across thousands or millions of accounts.</p>
+            <p class="wws-topic-p">Our user profile data extraction solutions capture basic profile information including username, display name, bio or description, profile image URL, header image URL, and external link if provided. We extract engagement metrics such as follower count, following count, post count, and for some platforms like counts, view counts, or connection counts. We capture account metadata including account creation date or account age, verification status, location if publicly shared, language preference, and privacy status such as public or private. We also extract posting history summaries including average posts per day, peak posting times, and content type distribution. For example, we can extract profile data for all users who posted with a specific hashtag to identify potential influencers based on follower count and engagement rates. We can extract competitor follower profiles to understand audience demographics and interests. We can also extract profile data for a list of target accounts to track follower growth over time.</p>
+            <p class="wws-topic-p">We build custom profile extraction pipelines based on your target platforms, target usernames or account IDs, profile fields needed, and extraction frequency from daily to monthly. Delivery options include structured profile datasets, follower growth trend reports, audience demographic summaries, influencer identification lists, and API feeds into your CRM or influencer marketing platforms. With our extracted data, brands identify high value influencers based on real follower counts and engagement. Marketing teams understand competitor audience composition. Sales teams find decision makers with public professional profiles. And researchers analyze account behavior patterns across platforms.</p>
+          </div>
+        </div>
+      </div>
+      <div class="wws-topic" id="topic-4">
+        <div class="wws-topic-num">04</div>
+        <div class="wws-topic-body">
+         
+          <div class="wws-topic-content">
+            <h3 class="wws-topic-t">Conversation Thread &amp; Reply Extraction</h3>
+            <span class="wws-topic-h2">How Businesses Use Extracted Thread Data to Understand Full Discussions</span>
+            <p class="wws-topic-p">A single post can generate hundreds or thousands of comments. Those comments often include nested replies, side conversations, and threaded debates. Looking at individual comments without their parent context loses meaning. A reply that seems aggressive may be a response to a provocative earlier comment. A question may have been answered three replies deep. Businesses need the complete thread structure to understand discussion flow. We help businesses extract full conversation threads from any social media platform. Our web extraction pipelines preserve parent child relationships, reply order, and hierarchical depth.</p>
+            <p class="wws-topic-p">Our conversation thread extraction solutions capture the original root post including its content, author, timestamp, and engagement metrics. We then extract every direct reply to that post. For each reply, we capture the comment text, author, timestamp, engagement metrics like likes or replies to that comment, and a reference to its parent. For platforms with nested replies, we extract the full reply tree with depth indicators. We also preserve the chronological or popularity based ordering as shown on the original platform. For example, we can extract an entire thread from a brand announcement post including every customer question and every brand response. We can capture a Reddit style nested discussion with multiple levels of replies to replies to preserve the full argument chain. We can also extract threads that have grown over time, capturing new replies added days or weeks after the original post.</p>
+            <p class="wws-topic-p">We build custom thread extraction pipelines based on your target platforms, target post URLs or post IDs, maximum reply depth, inclusion of deleted or removed comments where available, and extraction frequency from single snapshot to ongoing monitoring. Delivery options include structured thread datasets with parent child mappings, nested JSON exports, conversation flow visualizations, reply timeline reports, and API feeds into your community management or discussion analysis platforms. With our extracted data, brands analyze customer support conversations within threads. Researchers study how discussions evolve across reply levels. Community managers identify toxic reply chains that need intervention. And product teams find feature requests buried in nested comment threads.</p>
+          </div>
+        </div>
+      </div>
+      <div class="wws-topic" id="topic-5">
+        <div class="wws-topic-num">05</div>
+        <div class="wws-topic-body">
+         
+          <div class="wws-topic-content">
+            <h3 class="wws-topic-t">Influencer &amp; Creator Data Collection</h3>
+            <span class="wws-topic-h2">How Businesses Use Extracted Influencer Data to Identify Partnership Opportunities</span>
+            <p class="wws-topic-p">Influencers and creators drive purchasing decisions across every major social media platform. But finding the right influencer requires more than follower count. Brands need to see posting frequency, engagement rates, audience growth trends, content themes, and past brand collaborations. Collecting this data manually across hundreds or thousands of potential influencers is not feasible. We help businesses extract public influencer data from any social media platform. Our web extraction pipelines capture profile metadata, content history, engagement metrics, and collaboration signals at scale.</p>
+            <p class="wws-topic-p">Our influencer data extraction solutions capture profile information including username, display name, bio, follower count, following count, total post count, and verification status. We extract posting history for a defined lookback period including post content, post timestamps, post type such as image, video, or carousel, and engagement metrics per post including likes, comments, shares, and views. We calculate derived metrics such as average engagement rate per post, engagement rate relative to follower count, posting frequency, and follower growth over time. We also capture brand collaboration signals including sponsored post tags, paid partnership disclosures, branded hashtags, and mentions of commercial brands. For example, we can extract data for 500 influencers in a specific niche such as fitness or beauty to compare engagement rates and identify high performing creators. We can track follower growth trends for a shortlist of influencers over six months to identify rising stars before their rates increase. We can also extract branded post history to see which commercial brands each influencer has worked with previously.</p>
+            <p class="wws-topic-p">We build custom influencer extraction pipelines based on your target platforms, target influencer usernames or account IDs, niche or category filters, minimum follower thresholds, lookback period for post history, and extraction frequency from weekly to monthly. Delivery options include influencer profile datasets, engagement rate scorecards, follower growth trend reports, branded post history exports, and API feeds into your influencer marketing or CRM platforms. With our extracted data, brand teams identify influencers with genuine engagement not just high follower counts. Marketing managers compare potential partners side by side using real performance data. Agencies vet influencers before pitching to clients. And researchers track creator economy trends across platforms and niches.</p>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band">
+    <div class="cta-kicker">Get Started</div>
+    <h2 class="cta-h">Ready to Scrape<br><em>Social Media Data?</em></h2>
+    <p class="cta-p">Tell us your target platforms and geographies. We'll send a proposal within 24 hours.</p>
+    <div class="cta-btns">
+      <a href="../index.html#contact" class="btn-p">Start Your Project →</a>
+      <a href="../index.html" class="btn-s">See All Industries</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+  <div class="ft">
+    <div>
+      <img src="../logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="TechDataSeeders" style="height:34px;">
+      <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation &#8212; seeding intelligence from the web.</p>
+      <div class="socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">&#120143;</a>
+        <a href="mailto:sales@techdataseeders.in" class="soc">&#9993;</a>
+        <a href="#" class="soc">&#128247;</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Services</h4>
+      <div class="fl">
+        <a href="../services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a href="../services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a href="../services/data-analytics-intelligence.html">Data Analytics</a>
+        <a href="../services/custom-data-api.html">Custom Data API</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Industries</h4>
+      <div class="fl">
+        <a href="../industries/ecomm.html">E-commerce Data</a>
+        <a href="../industries/entertainment-ott.html">Entertainment &amp; OTT Data</a>
+        <a href="../industries/food-beverages.html">Food &amp; Beverages Data</a>
+        <a href="../industries/q-commerce.html">Quick Commerce Data</a>
+        <a href="../industries/real-estate.html">Real Estate Data</a>
+        <a href="../industries/retail.html">Retail Data</a>
+        <a href="../industries/social-media.html">Social Media Data</a>
+        <a href="../industries/travel-hotel.html">Travel &amp; Hotel Data</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Company</h4>
+      <div class="fl">
+        <a href="../about.html">About Us</a>
+        <a href="../blog/index.html">Blog</a>
+        <a href="../case-studies.html">Case Studies</a>
+        <a href="../index.html#testimonials">Testimonials</a>
+        <a href="../index.html#contact">Pricing</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Contact</h4>
+      <div class="fl">
+        <a href="mailto:sales@techdataseeders.in" style="word-break:break-all;">sales@techdataseeders.in</a>
+      </div>
+    </div>
+    <div class="fbot">
+      <p class="fcopy">&#169; 2025 TechDataSeeders. All rights reserved.</p>
+      <div class="fleg">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Data Security</a>
+      </div>
+    </div>
+    <p class="fdisclaim">TechDataSeeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
+  </div>
+</footer>
+
+  <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</div>
+  <script>
+  (function(){
+    var nav=document.getElementById('nav'),toggle=document.getElementById('navToggle');
+    if(!nav)return;
+    var drops=nav.querySelectorAll('.nl .has-drop');
+    function closeDrops(except){drops.forEach(function(li){if(li!==except)li.classList.remove('open');});}
+    drops.forEach(function(li){
+      var link=li.querySelector(':scope > a');
+      link.addEventListener('click',function(e){
+        e.preventDefault();
+        var willOpen=!li.classList.contains('open');
+        closeDrops(li);
+        li.classList.toggle('open',willOpen);
+      });
+    });
+    document.addEventListener('click',function(e){if(!e.target.closest('.has-drop'))closeDrops(null);});
+    if(toggle){
+      toggle.addEventListener('click',function(){
+        var open=nav.classList.toggle('nav-open');
+        toggle.setAttribute('aria-expanded',open?'true':'false');
+        if(!open)closeDrops(null);
+      });
+      nav.querySelectorAll('.nl a').forEach(function(a){
+        if(a.parentElement.classList.contains('has-drop'))return;
+        a.addEventListener('click',function(){nav.classList.remove('nav-open');toggle.setAttribute('aria-expanded','false');closeDrops(null);});
+      });
+      window.addEventListener('resize',function(){
+        if(window.innerWidth>768){nav.classList.remove('nav-open');toggle.setAttribute('aria-expanded','false');closeDrops(null);}
+      });
+    }
+    var stb=document.getElementById('stb');
+    if(stb)window.addEventListener('scroll',function(){stb.classList.toggle('on',window.scrollY>400);});
+  })();
+  </script>
+</body>
+
+</html>

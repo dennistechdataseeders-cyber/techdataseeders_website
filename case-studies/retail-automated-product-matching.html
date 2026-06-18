@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Enhancing Retail Efficiency with Automated Product Matching — TechDataSeeders</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
+    body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
+    a{text-decoration:none;color:inherit;}
+    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
+    .nav-logo img{height:32px;}
+    .nav-cta{background:var(--blue);color:#fff;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px);}
+    .bd-shell{max-width:1180px;margin:0 auto;padding:108px 40px 0;}
+    .bd-crumb{display:flex;align-items:center;gap:16px;margin-bottom:30px;flex-wrap:wrap;}
+    .bd-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#555;background:#fff;border:1px solid rgba(0,0,0,.12);padding:8px 16px;border-radius:100px;transition:all .25s;}
+    .bd-back:hover{border-color:var(--blue);color:var(--blue);transform:translateX(-2px);}
+    .bd-back svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .bd-bread{display:flex;align-items:center;gap:9px;font-size:13px;color:#aaa;flex-wrap:wrap;}
+    .bd-bread a{color:#777;}.bd-bread a:hover{color:var(--blue);}.bd-bread .sep{color:#ccc;}.bd-bread .current{color:#444;font-weight:600;}
+    .bd-head{max-width:880px;}
+    .bd-cat{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);background:rgba(37,99,255,.08);padding:6px 14px;border-radius:100px;margin-bottom:20px;}
+    .bd-title{font-family:var(--font-d);font-size:clamp(30px,4.2vw,52px);font-weight:800;line-height:1.1;letter-spacing:-.03em;color:var(--black);margin-bottom:18px;}
+    .bd-exc{font-size:18px;line-height:1.7;color:#666;margin-bottom:24px;}
+    .bd-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:14px;color:#888;}
+    .bd-meta strong{color:#333;font-weight:600;}
+    .bd-hero{width:100%;height:clamp(260px,42vw,460px);border-radius:24px;overflow:hidden;margin:36px 0;background-size:cover;background-position:center;}
+    .metband{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:0 0 12px;}
+    .metband .met{background:#f8f9fb;border:1px solid rgba(0,0,0,.07);border-radius:18px;padding:26px 24px;text-align:center;}
+    .metband .metv{font-family:var(--font-d);font-size:clamp(26px,3vw,38px);font-weight:800;color:var(--blue);line-height:1;letter-spacing:-.02em;}
+    .metband .metl{font-size:13px;color:#666;margin-top:9px;}
+    .bd-layout{display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:start;padding:50px 0 96px;}
+    .bd-article{min-width:0;}
+    .bd-article h2{font-family:var(--font-d);font-size:clamp(23px,2.3vw,28px);font-weight:700;letter-spacing:-.02em;color:var(--black);margin:34px 0 14px;}
+    .bd-article h3{font-family:var(--font-d);font-size:19px;font-weight:700;color:var(--black);margin:26px 0 12px;}
+    .bd-article p{font-size:16px;line-height:1.85;color:#444;margin-bottom:20px;}
+    .bd-article ul{margin:0 0 22px;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px;}
+    .bd-article li{position:relative;padding-left:30px;font-size:15.5px;line-height:1.7;color:#444;}
+    .bd-article li::before{content:'';position:absolute;left:4px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--blue);}
+    .bd-article strong{color:#1a1a1a;font-weight:700;}
+    .bd-quote{background:linear-gradient(135deg,#0d1840,#162050);color:#fff;border-radius:20px;padding:30px 34px;margin:30px 0;}
+    .bd-quote p{font-family:var(--font-d);font-size:20px;font-weight:600;line-height:1.5;color:#fff;margin:0;}
+    .bd-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px;padding-top:28px;border-top:1px solid rgba(0,0,0,.07);}
+    .bd-tag{font-size:12.5px;font-weight:600;color:#555;border:1px solid rgba(0,0,0,.12);padding:7px 16px;border-radius:100px;}
+    .bd-side{position:sticky;top:90px;display:flex;flex-direction:column;gap:24px;}
+    .side-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:22px;padding:26px;}
+    .side-h{font-family:var(--font-d);font-size:16px;font-weight:700;margin-bottom:6px;}
+    .pp{display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(0,0,0,.06);}
+    .pp:last-child{border-bottom:none;padding-bottom:0;}
+    .pp-thumb{width:62px;height:62px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+    .pp-thumb svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+    .pp-cat{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:5px;display:block;}
+    .pp-t{font-family:var(--font-d);font-size:13.5px;font-weight:700;line-height:1.35;color:#1a1a1a;transition:color .2s;}
+    .pp:hover .pp-t{color:var(--blue);}
+    .side-cta{background:linear-gradient(140deg,#0d1840,#162050);border-radius:22px;padding:28px;color:#fff;}
+    .side-cta-h{font-family:var(--font-d);font-size:18px;font-weight:700;line-height:1.3;margin-bottom:10px;}
+    .side-cta-p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:20px;}
+    .side-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;padding:12px 24px;border-radius:100px;font-family:var(--font-d);font-size:13.5px;font-weight:700;transition:all .3s;}
+    .side-cta-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
+    .footer-mini{text-align:center;padding:28px;font-size:13px;color:#aaa;border-top:1px solid rgba(0,0,0,.06);}
+    @media(max-width:980px){.bd-layout{grid-template-columns:1fr;gap:48px;}.bd-side{position:static;}}
+    @media(max-width:900px){.nav{padding:0 24px;}.bd-shell{padding:96px 24px 0;}.metband{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<nav class="nav">
+  <a href="../index.html" class="nav-logo"><img src="../logo/Tech DataSeeders Logo.png" alt="TechDataSeeders"></a>
+  <a href="../index.html#contact" class="nav-cta">Get a Quote →</a>
+</nav>
+<div class="bd-shell">
+  <div class="bd-crumb">
+    <a href="../index.html#case-studies" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</a>
+    <nav class="bd-bread" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="sep">/</span><a href="../index.html#case-studies">Case Studies</a><span class="sep">/</span><span class="current">Retail</span></nav>
+  </div>
+  <div class="bd-head">
+    <span class="bd-cat">Retail</span>
+    <h1 class="bd-title">Enhancing Retail Efficiency with Automated Product Matching</h1>
+    <p class="bd-exc">An omnichannel US retailer turned to Dataseeders' AI-driven product matching engine to unify a sprawling catalog — reaching 96% matching accuracy across 100,000+ SKUs.</p>
+    <div class="bd-meta"><span>Client: <strong>Omnichannel Retail Company</strong></span></div>
+  </div>
+  <div class="bd-hero" style="background-image:url('../images/retails.jpg');"></div>
+  <div class="metband"><div class="met"><div class="metv">96%</div><div class="metl">Product Matching Accuracy</div></div><div class="met"><div class="metv">83%</div><div class="metl">Reduction in Duplicate Listings</div></div><div class="met"><div class="metv">150+</div><div class="metl">Hours Saved per Month</div></div></div>
+  <div class="bd-layout">
+    <article class="bd-article"><h2>Client Overview</h2><p>Client is USA based eminent omnichannel retail company having a strong presence in both local stores and online marketplaces. Their catalog covers consumer goods, accessories, sports equipment, and home essentials. They sell products on their own website, third-party platforms, and vendor portals.</p><h2>Client Requirements</h2><p>The client approached DataSeeders with a need to:</p><ul><li>Match identical and near-identical products listed across various marketplaces and internal catalogs.</li></ul><ul><li>Combine product listings to evade duplication and confusion.</li></ul><ul><li>Improve search accuracy and product recommendation on their platform.</li></ul><ul><li>Gain a competitive edge through faster and more precise product comparisons.</li></ul><ul><li>Improve vendor onboarding and catalog management with nominal manual involvement.</li></ul><h2>Challenges</h2><p>Despite being a known brand, the client was struggling with:</p><ul><li>Duplicate product entries which are making difficult for consumers to compare or find the right product.</li></ul><ul><li>Uneven product naming conventions and missing metadata, which hindered automated catalog syncing.</li></ul><ul><li>Time consuming manual matching results in human error and inadequacy.</li></ul><ul><li>Inaccurate competitor mapping, limiting pricing intelligence and assortment decisions.</li></ul><ul><li>Poor product discoverability, especially for similar or substitute items.</li></ul><h2>Dataseeders Solutions</h2><p>We implemented a tailored Product Matching Solution built with AI and NLP-based models to resolve their pain points:</p><h3>Automated Matching Engine</h3><p>Detected exact and approximate matches using product titles, attributes (brand, size, SKU), pricing, and visuals.</p><h3>Machine Learning Models</h3><p>Skilled over the client catalog to improve matching precision over time using similarity scoring, fuzzy logic, and attribute mining.</p><h3>Centralized Product Repository</h3><p>Formed a single source of fact for product data across all channels.</p><h3>Visual Recognition Module</h3><p>Integrated image matching algorithms to compare product images and detect duplicates even with different branding.</p><h3>API Integration</h3><p>Connected with their ERP, PIM, and eCommerce CMS to ensure continuous product synchronization and real-time updates.</p><h2>Benefits to the Client</h2><p>The process transformation was both tactical and operational which provided measurable benefits to their business.</p><ul><li>More than 96% product matching accuracy acquired across over 100,000 SKUs.</li></ul><ul><li>Reduced duplicate listings by 83% which results in improved catalog quality and search results.</li></ul><ul><li>Improved product recommendations led to a 21% increase in upsell and cross-sell conversions.</li></ul><ul><li>Enhanced competitive benchmarking assisted them respond faster to market trends.</li></ul><ul><li>Saved 150+ hours/month by abolishing manual product comparison tasks.</li></ul><ul><li>Boosted customer satisfaction with easy product search and cleaner navigation.</li></ul><h2>Conclusion</h2><p>With our automated product matching capabilities, our retail client transmuted their uneven catalog into a cohesive, high performing product ecology. The result was a significant boost in operational proficiency, product visibility, and sales performance, all driven by intelligent data alignment.</p><div class="bd-tags"><span class="bd-tag">Product Matching</span><span class="bd-tag">Retail</span><span class="bd-tag">AI &amp; NLP</span><span class="bd-tag">Catalog Management</span></div></article>
+    <aside class="bd-side">
+      <div class="side-card"><div class="side-h">More Case Studies</div><a href="./pharma-data-extraction-services.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%);"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg></div><div><span class="pp-cat">Healthcare</span><div class="pp-t">Streamlining Business Processes &amp; Boosting Profitability for a Pharma Company with Data Extraction Services</div></div></a><a href="./food-delivery-competitive-intelligence.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%);"><svg viewBox="0 0 24 24"><path d="M3 2v7a3 3 0 0 0 6 0V2M6 9v13"/><path d="M16 2c-2 0-3 2-3 5s1 5 3 5v10"/></svg></div><div><span class="pp-cat">Food Delivery</span><div class="pp-t">Helping a Leading Food Delivery Business Outrank Competitors &amp; Expand Market Reach</div></div></a><a href="./finance-real-time-alternative-data-scraping.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#2e1065 0%,#5b21b6 50%,#7c3aed 100%);"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M7 21V10"/><path d="M12 21V4"/><path d="M17 21v-7"/></svg></div><div><span class="pp-cat">Finance</span><div class="pp-t">Helping Finance Organization with Real-Time &amp; Alternative Data Scraping for Market Dominance</div></div></a></div>
+      <div class="side-cta"><div class="side-cta-h">Want results like these?</div><div class="side-cta-p">Tell us your goals and target data. We'll send a tailored proposal within 24 hours.</div><a href="../index.html#contact" class="side-cta-btn">Get a Quote →</a></div>
+    </aside>
+  </div>
+</div>
+<div class="footer-mini">© 2025 TechDataSeeders. All rights reserved.</div>
+</body>
+</html>
