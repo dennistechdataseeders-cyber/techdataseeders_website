@@ -1,5 +1,5 @@
 /* ============================================================
-   TechDataSeeders — Blog Store
+   Techdataseeders — Blog Store
    Shared data + render helpers for the dynamic blog system.
    - Public pages read the PUBLISHED data (data/blogs.json).
    - The admin panel keeps a working copy in localStorage and
