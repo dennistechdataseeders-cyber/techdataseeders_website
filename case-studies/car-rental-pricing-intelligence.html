@@ -4,16 +4,44 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Real-Time Competitor Pricing Intelligence Solution for Global Car Rental Company — Techdataseeders</title>
+  <link rel="icon" href="../images/tds-icon.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
     body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
     a{text-decoration:none;color:inherit;}
-    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
-    .nav-logo img{height:32px;}
-    .nav-cta{background:var(--blue);color:#fff;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
-    .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px);}
+    /* CURSOR */
+    .cur-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+    .cur-ring{width:36px;height:36px;border:1.5px solid var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .1s,height .1s,opacity .1s;}
+    /* NAVBAR */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:70px;padding:0 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:all .4s;}
+    .nav.dark{background:rgba(8,8,8,.96);border-bottom-color:rgba(255,255,255,.08);}
+    .nav.dark .nl a{color:rgba(255,255,255,.7);}
+    .nav.dark .nl a:hover{color:#fff;}
+    .nav-logo img{height:36px;}
+    .nl{display:flex;align-items:center;gap:36px; list-style:none;}
+    .nl a{font-size:14px;font-weight:500;color:rgba(0,0,0,.7);transition:color .25s;position:relative;}
+    .nl a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:var(--blue);transition:width .3s;}
+    .nl a:hover::after{width:100%;}
+    .nl a:hover{color:var(--blue);}
+    .nav-cta{background:var(--blue);color:#fff !important;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);box-shadow:0 6px 20px rgba(37,99,255,.4);transform:translateY(-1px);}
+    .nav-cta::after{display:none !important;}
+    .nl .has-drop{position:relative;}
+    .nl .has-drop>a::after{display:none;}
+    .nl .has-drop>a{cursor:pointer;}
+    .nl .has-drop>a span{display:inline-block;transition:transform .25s;}
+    .nl .has-drop.open>a span{transform:rotate(180deg);}
+    .nav-drop{display:none;flex-direction:column;gap:2px;position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.12);padding:10px;min-width:230px;z-index:200;}
+    .nav-menu{color:#333 !important;}
+    .has-drop.open>.nav-drop{display:flex;}
+    .nav-drop a{display:block;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#333;white-space:nowrap;transition:background .18s,color .18s;}
+    .nav-drop a:hover{background:#f0f4ff;color:var(--blue);}
+    .nav-drop a::after{display:none !important;}
+    .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;background:none;border:none;cursor:pointer;padding:0;z-index:1100;}
+    .nav-toggle span{display:block;width:24px;height:2px;background:var(--black);border-radius:2px;transition:transform .3s,opacity .3s;}
+    .nav.dark .nav-toggle span{background:#fff;}
     .bd-shell{max-width:1180px;margin:0 auto;padding:108px 40px 0;}
     .bd-crumb{display:flex;align-items:center;gap:16px;margin-bottom:30px;flex-wrap:wrap;}
     .bd-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#555;background:#fff;border:1px solid rgba(0,0,0,.12);padding:8px 16px;border-radius:100px;transition:all .25s;}
@@ -60,15 +88,86 @@
     .side-cta-p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.7;margin-bottom:20px;}
     .side-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;padding:12px 24px;border-radius:100px;font-family:var(--font-d);font-size:13.5px;font-weight:700;transition:all .3s;}
     .side-cta-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
-    .footer-mini{text-align:center;padding:28px;font-size:13px;color:#aaa;border-top:1px solid rgba(0,0,0,.06);}
+    /* FOOTER */
+    .footer{background:var(--black);color:#fff;padding:72px 80px 36px;}
+    .ft{display:grid;grid-template-columns:2.5fr 1fr 1.5fr 1fr 1fr;gap:44px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.06);}
+    .fb-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.4);max-width:250px;margin:18px 0 26px;}
+    .socials{display:flex;gap:10px;}
+    .soc{width:36px;height:36px;border:1px solid rgba(255,255,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;color:rgba(255,255,255,.45);transition:all .3s;}
+    .soc:hover{border-color:var(--blue);background:rgba(37,99,255,.15);color:#fff;transform:translateY(-2px);}
+    .fc h4{font-family:var(--font-d);font-size:12px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;}
+    .fl{display:flex;flex-direction:column;gap:11px;}
+    .fl a{font-size:14px;color:rgba(255,255,255,.5);transition:color .25s;}
+    .fl a:hover{color:#fff;}
+    .fbot{display:flex;align-items:center;justify-content:space-between;padding-top:30px;}
+    .fcopy{font-size:13px;color:rgba(255,255,255,.25);}
+    .fleg{display:flex;gap:22px;}
+    .fleg a{font-size:13px;color:rgba(255,255,255,.25);transition:color .25s;}
+    .fleg a:hover{color:rgba(255,255,255,.6);}
+    .fdisclaim{font-size:11px;color:rgba(255,255,255,.14);text-align:center;margin-top:22px;line-height:1.6;max-width:700px;margin-left:auto;margin-right:auto;}
+    /* SCROLL TOP */
+    .stb{position:fixed;bottom:32px;right:32px;width:46px;height:46px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;box-shadow:0 6px 20px rgba(37,99,255,.4);}
+    .stb.on{opacity:1;transform:none;}
+    .stb:hover{background:var(--blue-dark);transform:translateY(-3px);}
     @media(max-width:980px){.bd-layout{grid-template-columns:1fr;gap:48px;}.bd-side{position:static;}}
-    @media(max-width:900px){.nav{padding:0 24px;}.bd-shell{padding:96px 24px 0;}.metband{grid-template-columns:1fr;}}
+    @media(max-width:900px){.bd-shell{padding:96px 24px 0;}.metband{grid-template-columns:1fr;}}
+    @media(max-width:768px){
+      .nav{padding:0 20px;}
+      .nav-toggle{display:flex;}
+      .nl{position:fixed;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;padding:10px 22px 22px;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 24px 44px rgba(0,0,0,.13);max-height:calc(100vh - 70px);overflow-y:auto;transform:translateY(-14px);opacity:0;visibility:hidden;transition:transform .3s,opacity .3s,visibility .3s;}
+      .nav-open .nl{transform:translateY(0);opacity:1;visibility:visible;}
+      .nl li{width:100%;}
+      .nl>li>a{display:block;padding:14px 6px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.06);color:#0a0a0a !important;}
+      .nl a::after{display:none !important;}
+      .nl .has-drop>a span{float:right;}
+      .nav-drop{position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0;}
+      .nav-drop a{font-size:14px;padding:9px 8px;color:#555;}
+      .nl .nav-cta{display:block;text-align:center;margin-top:16px;}
+      .nav-open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+      .nav-open .nav-toggle span:nth-child(2){opacity:0;}
+      .nav-open .nav-toggle span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+      .footer{padding:40px 20px;}
+      .ft{grid-template-columns:1fr;gap:30px;}
+    }
   </style>
 </head>
 <body>
-<nav class="nav">
-  <a href="../index.html" class="nav-logo"><img src="../logo/Tech DataSeeders Logo.png" alt="Techdataseeders"></a>
-  <a href="../index.html#contact" class="nav-cta">Get a Quote →</a>
+<div class="cur-dot" id="cd"></div>
+<div class="cur-ring" id="cr"></div>
+<nav class="nav" id="nav">
+  <a href="../index.html" class="nav-logo">
+    <img src="../logo/Tech DataSeeders Logo.png" alt="Techdataseeders" id="navLogo">
+  </a>
+  <ul class="nl">
+    <li class="has-drop">
+      <a href="../index.html#services">Services <span>▾</span></a>
+      <div class="nav-drop">
+        <a class="nav-menu" href="../services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a class="nav-menu" href="../services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a class="nav-menu" href="../services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+        <a class="nav-menu" href="../services/custom-data-api.html">Custom Data API Delivery</a>
+      </div>
+    </li>
+    <li class="has-drop">
+      <a href="../index.html#industries">Industries <span>▾</span></a>
+      <div class="nav-drop">
+        <a class="nav-menu" href="../industries/ecomm.html">E-commerce</a>
+        <a class="nav-menu" href="../industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+        <a class="nav-menu" href="../industries/food-beverages.html">Food &amp; Beverages</a>
+        <a class="nav-menu" href="../industries/q-commerce.html">Quick Commerce</a>
+        <a class="nav-menu" href="../industries/real-estate.html">Real Estate</a>
+        <a class="nav-menu" href="../industries/retail.html">Retail</a>
+        <a class="nav-menu" href="../industries/social-media.html">Social Media</a>
+        <a class="nav-menu" href="../industries/travel-hotel.html">Travel &amp; Hospitality</a>
+      </div>
+    </li>
+    <li><a href="../case-studies.html">Case Studies</a></li>
+    <li><a href="../about.html">About Us</a></li>
+    <li><a href="../index.html#contact" class="nav-cta">Get a Quote →</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 <div class="bd-shell">
   <div class="bd-crumb">
@@ -84,13 +183,132 @@
   <div class="bd-hero" style="background-image:url('../images/travel.jpg');"></div>
   <div class="metband"><div class="met"><div class="metv">6</div><div class="metl">Countries Benchmarked</div></div><div class="met"><div class="metv">90%</div><div class="metl">Reduction in Manual Tracking Hours</div></div><div class="met"><div class="metv">24%</div><div class="metl">Growth in New Bookings</div></div></div>
   <div class="bd-layout">
-    <article class="bd-article"><h2>Client Overview</h2><p>The client is well known Europe based car rental company operating across multiple countries. They offer a wide range of vehicles of various categories, from economy cars to luxury SUVs. As competition growing in global and local markets, they required a pricing intelligence solution and optimize their offerings by keeping profit margin intact.</p><h2>Client Requirements</h2><p>The client come up to the Dataseeders with the following requirements:</p><ul><li>Monitor real-time car rental prices from key competitors across different geographies.</li></ul><ul><li>Extract complete rental details, including car types, fuel policies, pickup/drop locations, and extra charges.</li></ul><ul><li>Capture terms and conditions like mileage limits, insurance policies, deposits, and cancellation rules.</li></ul><ul><li>Get structured data on weekly basis for integration into their internal pricing analysis tool.</li></ul><ul><li>Use competitor insights to adjust their rental prices strategically while protecting profit margins.</li></ul><ul><li>Grab attention of price sensitive consumers by offering better deals.</li></ul><h2>Challenges</h2><p>The client faced several operational and strategic roadblocks:</p><ul><li>Regional Pricing Discrepancies: Competing in diverse countries with variable pricing norms made manual tracking incompetent.</li></ul><ul><li>Dynamic Rate Changes: Competitors alter pricing and offers frequently that makes static research undependable.</li></ul><ul><li>Complex Rental Terms: Extracting nuanced terms &amp; conditions like insurance coverage or location-based fees was time taking and error prone.</li></ul><ul><li>Data Standardization Issues: Comparing listings from different platforms was difficult due to uneven data formats.</li></ul><ul><li>Absence of Integration: The client needed data that could integrated directly into their existing system and BI tools.</li></ul><h2>Dataseeders Solutions</h2><p>DataSeeders designed a customized weekly data scraping and intelligence solution with seamless integration abilities.</p><h3>Real-Time Competitor Monitoring</h3><p>Tracked rental prices across leading local and global platforms by location, car type, and rental duration.</p><h3>Complete Rental Info Extraction</h3><p>Collected organized data on vehicle specifications, availability, taxes, fees, insurance, mileage, and more.</p><h3>Terms &amp; Conditions Parsing</h3><p>Used progressive NLP to extract and standardize complex rental terms for accurate analysis.</p><h3>Weekly Data Delivery</h3><p>Delivered data in XML files on a as per schedule, optimized for direct ingestion into their pricing system.</p><h3>Custom Dashboard</h3><p>Provided optional BI dashboards to visualize price changes, competitor trends, and category-level benchmarks.</p><h2>Benefits to the Client</h2><ul><li>Enabled price benchmarking across 6 countries and over 150 car categories.</li></ul><ul><li>Better competitiveness by adjusting pricing to outrank key rivals without affecting margins.</li></ul><ul><li>Reduced manual tracking hours by 90%, freeing up operational resources to focus on other important strategies.</li></ul><ul><li>Improved pricing decision precision with constant weekly insights.</li></ul><ul><li>Boosted new customer bookings by 24% within the first quarter of implementation.</li></ul><ul><li>Strategic clarity in running promotions, flash sales, and bundle offers based on data insights.</li></ul><h2>Conclusion</h2><p>With our weekly real-time data scraping solution, the client gained a influential competitive edge in the global car rental market. Our solution not only improved pricing accuracy and quickness, but also empowered smarter margin control which helping them to win more bookings while staying profitable in every region they served.</p><div class="bd-tags"><span class="bd-tag">Travel</span><span class="bd-tag">Pricing Intelligence</span><span class="bd-tag">Car Rental</span><span class="bd-tag">Competitor Monitoring</span></div></article>
+    <article class="bd-article"><h2>Client Overview</h2><p>The client is well known Europe based car rental company operating across multiple countries. They offer a wide range of vehicles of various categories, from economy cars to luxury SUVs. As competition growing in global and local markets, they required a pricing intelligence solution and optimize their offerings by keeping profit margin intact.</p><h2>Client Requirements</h2><p>The client come up to the Dataseeders with the following requirements:</p><ul><li>Monitor real-time car rental prices from key competitors across different geographies.</li></ul><ul><li>Extract complete rental details, including car types, fuel policies, pickup/drop locations, and extra charges.</li></ul><ul><li>Capture terms and conditions like mileage limits, insurance policies, deposits, and cancellation rules.</li></ul><ul><li>Get structured data on weekly basis for integration into their internal pricing analysis tool.</li></ul><ul><li>Use competitor insights to adjust their rental prices strategically while protecting profit margins.</li></ul><ul><li>Grab attention of price sensitive consumers by offering better deals.</li></ul><h2>Challenges</h2><p>The client faced several operational and strategic roadblocks:</p><ul><li>Regional Pricing Discrepancies: Competing in diverse countries with variable pricing norms made manual tracking incompetent.</li></ul><ul><li>Dynamic Rate Changes: Competitors alter pricing and offers frequently that makes static research undependable.</li></ul><ul><li>Complex Rental Terms: Extracting nuanced terms &amp; conditions like insurance coverage or location-based fees was time taking and error prone.</li></ul><ul><li>Data Standardization Issues: Comparing listings from different platforms was difficult due to uneven data formats.</li></ul><ul><li>Absence of Integration: The client needed data that could integrated directly into their existing system and BI tools.</li></ul><h2>Techdataseeders Solutions</h2><p>Techdataseeders designed a customized weekly data scraping and intelligence solution with seamless integration abilities.</p><h3>Real-Time Competitor Monitoring</h3><p>Tracked rental prices across leading local and global platforms by location, car type, and rental duration.</p><h3>Complete Rental Info Extraction</h3><p>Collected organized data on vehicle specifications, availability, taxes, fees, insurance, mileage, and more.</p><h3>Terms &amp; Conditions Parsing</h3><p>Used progressive NLP to extract and standardize complex rental terms for accurate analysis.</p><h3>Weekly Data Delivery</h3><p>Delivered data in XML files on a as per schedule, optimized for direct ingestion into their pricing system.</p><h3>Custom Dashboard</h3><p>Provided optional BI dashboards to visualize price changes, competitor trends, and category-level benchmarks.</p><h2>Benefits to the Client</h2><ul><li>Enabled price benchmarking across 6 countries and over 150 car categories.</li></ul><ul><li>Better competitiveness by adjusting pricing to outrank key rivals without affecting margins.</li></ul><ul><li>Reduced manual tracking hours by 90%, freeing up operational resources to focus on other important strategies.</li></ul><ul><li>Improved pricing decision precision with constant weekly insights.</li></ul><ul><li>Boosted new customer bookings by 24% within the first quarter of implementation.</li></ul><ul><li>Strategic clarity in running promotions, flash sales, and bundle offers based on data insights.</li></ul><h2>Conclusion</h2><p>With our weekly real-time data scraping solution, the client gained a influential competitive edge in the global car rental market. Our solution not only improved pricing accuracy and quickness, but also empowered smarter margin control which helping them to win more bookings while staying profitable in every region they served.</p><div class="bd-tags"><span class="bd-tag">Travel</span><span class="bd-tag">Pricing Intelligence</span><span class="bd-tag">Car Rental</span><span class="bd-tag">Competitor Monitoring</span></div></article>
     <aside class="bd-side">
       <div class="side-card"><div class="side-h">More Case Studies</div><a href="./pharma-data-extraction-services.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%);"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/></svg></div><div><span class="pp-cat">Healthcare</span><div class="pp-t">Streamlining Business Processes &amp; Boosting Profitability for a Pharma Company with Data Extraction Services</div></div></a><a href="./retail-automated-product-matching.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#7c2d12 0%,#ea580c 50%,#fb923c 100%);"><svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1.5"/><circle cx="19" cy="21" r="1.5"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></div><div><span class="pp-cat">Retail</span><div class="pp-t">Enhancing Retail Efficiency with Automated Product Matching</div></div></a><a href="./food-delivery-competitive-intelligence.html" class="pp"><div class="pp-thumb" style="background:linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%);"><svg viewBox="0 0 24 24"><path d="M3 2v7a3 3 0 0 0 6 0V2M6 9v13"/><path d="M16 2c-2 0-3 2-3 5s1 5 3 5v10"/></svg></div><div><span class="pp-cat">Food Delivery</span><div class="pp-t">Helping a Leading Food Delivery Business Outrank Competitors &amp; Expand Market Reach</div></div></a></div>
       <div class="side-cta"><div class="side-cta-h">Want results like these?</div><div class="side-cta-p">Tell us your goals and target data. We'll send a tailored proposal within 24 hours.</div><a href="../index.html#contact" class="side-cta-btn">Get a Quote →</a></div>
     </aside>
   </div>
 </div>
-<div class="footer-mini">© 2025 Techdataseeders. All rights reserved.</div>
+<footer class="footer">
+  <div class="ft">
+    <div>
+      <img src="../logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Techdataseeders" style="height:34px;">
+      <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation — seeding intelligence from the web.</p>
+      <div class="socials">
+        <a href="#" class="soc">in</a>
+        <a href="#" class="soc">𝕏</a>
+        <a href="mailto:sales@techdataseeders.in" class="soc">✉</a>
+        <a href="#" class="soc">📷</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Services</h4>
+      <div class="fl">
+        <a href="../services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a href="../services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a href="../services/data-analytics-intelligence.html">Data Analytics</a>
+        <a href="../services/custom-data-api.html">Custom Data API</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Industries</h4>
+      <div class="fl">
+        <a href="../industries/ecomm.html">E-Commerce Data</a>
+        <a href="../industries/entertainment-ott.html">Entertainment &amp; OTT Data</a>
+        <a href="../industries/food-beverages.html">Food &amp; Beverages Data</a>
+        <a href="../industries/q-commerce.html">Quick Commerce Data</a>
+        <a href="../industries/real-estate.html">Real Estate Data</a>
+        <a href="../industries/retail.html">Retail Data</a>
+        <a href="../industries/social-media.html">Social Media Data</a>
+        <a href="../industries/travel-hotel.html">Travel &amp; Hospitality Data</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Company</h4>
+      <div class="fl">
+        <a href="../about.html">About Us</a>
+        <a href="../blog/index.html">Blog</a>
+        <a href="../case-studies.html">Case Studies</a>
+        <a href="../index.html#testimonials">Testimonials</a>
+        <a href="../index.html#contact">Pricing</a>
+      </div>
+    </div>
+    <div class="fc">
+      <h4>Contact</h4>
+      <div class="fl">
+        <a href="mailto:sales@techdataseeders.in">sales@techdataseeders.in</a>
+      </div>
+    </div>
+  </div>
+  <div class="fbot">
+    <p class="fcopy">© 2025 Techdataseeders. All rights reserved.</p>
+    <div class="fleg">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms &amp; Conditions</a>
+      <a href="#">Data Security</a>
+    </div>
+  </div>
+  <p class="fdisclaim">Techdataseeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
+</footer>
+<div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
+<script>
+  const cd = document.getElementById('cd'), cr = document.getElementById('cr');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cd.style.left = mx + 'px'; cd.style.top = my + 'px';
+  });
+  (function loop() {
+    rx += (mx - rx) * .12; ry += (my - ry) * .12;
+    cr.style.left = rx + 'px'; cr.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button').forEach(el => {
+    el.addEventListener('mouseenter', () => { cd.style.width = cd.style.height = '12px'; cr.style.width = cr.style.height = '52px'; cr.style.opacity = '.45'; });
+    el.addEventListener('mouseleave', () => { cd.style.width = cd.style.height = '8px'; cr.style.width = cr.style.height = '36px'; cr.style.opacity = '1'; });
+  });
+  const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
+  const stb = document.getElementById('stb');
+  window.addEventListener('scroll', () => {
+    const s = window.scrollY;
+    nav.classList.toggle('dark', s > 80);
+    navLogo.src = s > 80 ? '../logo/TDS Logo Set/Tech DataSeeders Logo white.png' : '../logo/Tech DataSeeders Logo.png';
+    stb.classList.toggle('on', s > 400);
+  });
+  const navToggle = document.getElementById('navToggle');
+  if (navToggle) {
+    navToggle.addEventListener('click', () => {
+      const open = nav.classList.toggle('nav-open');
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (!open) document.querySelectorAll('.has-drop').forEach(i => i.classList.remove('open'));
+    });
+    nav.querySelectorAll('.nl a').forEach(a => {
+      if (a.parentElement.classList.contains('has-drop')) return;
+      a.addEventListener('click', () => { nav.classList.remove('nav-open'); navToggle.setAttribute('aria-expanded','false'); });
+    });
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) { nav.classList.remove('nav-open'); navToggle.setAttribute('aria-expanded','false'); }
+    });
+  }
+  (function () {
+    var drops = nav.querySelectorAll('.nl .has-drop');
+    function closeDrops(except) {
+      drops.forEach(function (li) { if (li !== except) li.classList.remove('open'); });
+    }
+    drops.forEach(function (li) {
+      var link = li.querySelector(':scope > a');
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        var willOpen = !li.classList.contains('open');
+        closeDrops(li);
+        li.classList.toggle('open', willOpen);
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.has-drop')) closeDrops(null);
+    });
+  })();
+</script>
 </body>
 </html>

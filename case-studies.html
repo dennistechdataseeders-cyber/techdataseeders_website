@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Case Studies — Techdataseeders</title>
+  <link rel="icon" href="./images/tds-icon.png" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -666,6 +667,19 @@
       .nav {
         padding: 0 20px;
       }
+      .nav-toggle { display: flex; }
+      .nl { position:fixed;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;padding:10px 22px 22px;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 24px 44px rgba(0,0,0,.13);max-height:calc(100vh - 70px);overflow-y:auto;transform:translateY(-14px);opacity:0;visibility:hidden;transition:transform .3s,opacity .3s,visibility .3s; }
+      .nav-open .nl { transform:translateY(0);opacity:1;visibility:visible; }
+      .nl li { width:100%; }
+      .nl>li>a { display:block;padding:14px 6px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.06);color:#0a0a0a !important; }
+      .nl a::after { display:none !important; }
+      .nl .has-drop>a span { float:right; }
+      .nav-drop { position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0; }
+      .nav-drop a { font-size:14px;padding:9px 8px;color:#555; }
+      .nl .nav-cta { display:block;text-align:center;margin-top:16px; }
+      .nav-open .nav-toggle span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+      .nav-open .nav-toggle span:nth-child(2) { opacity:0; }
+      .nav-open .nav-toggle span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
 
       main {
         padding: 40px 20px;
@@ -750,7 +764,7 @@
     </a>
     <ul class="nl">
       <li class="has-drop">
-        <a href="#services">Services <span>▾</span></a>
+        <a href="./index.html#services">Services <span>▾</span></a>
         <div class="nav-drop">
           <a class="nav-menu" href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
           <a class="nav-menu" href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
@@ -759,7 +773,7 @@
         </div>
       </li>
       <li class="has-drop">
-        <a href="#industries">Industries <span>▾</span></a>
+        <a href="./index.html#industries">Industries <span>▾</span></a>
         <div class="nav-drop">
         <a class="nav-menu" href="./industries/ecomm.html">E-commerce</a>
         <a class="nav-menu" href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
@@ -768,12 +782,12 @@
         <a class="nav-menu" href="./industries/real-estate.html">Real Estate</a>
         <a class="nav-menu" href="./industries/retail.html">Retail</a>
         <a class="nav-menu" href="./industries/social-media.html">Social Media</a>
-        <a class="nav-menu" href="./industries/travel-hotel.html">Travel &amp; Hotel</a>
+        <a class="nav-menu" href="./industries/travel-hotel.html">Travel &amp; Hospitality</a>
         </div>
       </li>
       <li><a href="./case-studies.html">Case Studies</a></li>
       <li><a href="./about.html">About Us</a></li>
-      <li><a href="#contact" class="nav-cta">Get a Quote →</a></li>
+      <li><a href="./index.html#contact" class="nav-cta">Get a Quote →</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
@@ -819,7 +833,7 @@
         <div class="socials">
           <a href="#" class="soc">in</a>
           <a href="#" class="soc">𝕏</a>
-          <a href="mailto:sales@Techdataseeders.in" class="soc">✉</a>
+          <a href="mailto:sales@techdataseeders.in" class="soc">✉</a>
           <a href="#" class="soc">📷</a>
         </div>
       </div>
@@ -835,11 +849,14 @@
       <div class="fc">
         <h4>Industries</h4>
         <div class="fl">
-          <a href="#">E-Commerce Data</a>
-          <a href="#">Real Estate Data</a>
-          <a href="#">Finance Data</a>
-          <a href="#">Healthcare Data</a>
-          <a href="#">Food Delivery Data</a>
+          <a href="./industries/ecomm.html">E-Commerce Data</a>
+          <a href="./industries/entertainment-ott.html">Entertainment &amp; OTT Data</a>
+          <a href="./industries/food-beverages.html">Food &amp; Beverages Data</a>
+          <a href="./industries/q-commerce.html">Quick Commerce Data</a>
+          <a href="./industries/real-estate.html">Real Estate Data</a>
+          <a href="./industries/retail.html">Retail Data</a>
+          <a href="./industries/social-media.html">Social Media Data</a>
+          <a href="./industries/travel-hotel.html">Travel &amp; Hospitality Data</a>
         </div>
       </div>
       <div class="fc">
@@ -848,25 +865,26 @@
           <a href="./about.html">About Us</a>
           <a href="./blog/index.html">Blog</a>
           <a href="./case-studies.html">Case Studies</a>
-          <a href="#testimonials">Testimonials</a>
-          <a href="#contact">Pricing</a>
+          <a href="./index.html#testimonials">Testimonials</a>
+          <a href="./index.html#contact">Pricing</a>
         </div>
       </div>
       <div class="fc">
         <h4>Contact</h4>
         <div class="fl">
-          <a href="mailto:sales@Techdataseeders.in" style="word-break:break-all;">sales@Techdataseeders.in</a>
+          <a href="mailto:sales@techdataseeders.in">sales@techdataseeders.in</a>
         </div>
       </div>
-      <div class="fbot">
-        <p class="fcopy">© 2024 Techdataseeders. All rights reserved.</p>
-        <div class="fleg">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms & Conditions</a>
-          <a href="#">Data Security</a>
-        </div>
+    </div>
+    <div class="fbot">
+      <p class="fcopy">© 2025 Techdataseeders. All rights reserved.</p>
+      <div class="fleg">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Data Security</a>
       </div>
-      <p class="fdisclaim">Techdataseeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
+    </div>
+    <p class="fdisclaim">Techdataseeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
   </footer>
 
   <!-- Scroll to top -->
@@ -900,21 +918,42 @@
       stb.classList.toggle('on', s > 400);
     });
 
-    /* ==== DROPDOWN MENU ==== */
-    document.querySelectorAll('.has-drop').forEach(item => {
-      item.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll('.has-drop').forEach(other => {
-          if (other !== item) other.classList.remove('open');
-        });
-        item.classList.toggle('open');
+    /* ==== MOBILE TOGGLE ==== */
+    const navToggle = document.getElementById('navToggle');
+    if (navToggle) {
+      navToggle.addEventListener('click', () => {
+        const open = nav.classList.toggle('nav-open');
+        navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        if (!open) document.querySelectorAll('.has-drop').forEach(i => i.classList.remove('open'));
       });
-    });
-    document.addEventListener('click', (e) => {
-      if (!e.target.closest('.has-drop')) {
-        document.querySelectorAll('.has-drop').forEach(item => item.classList.remove('open'));
+      nav.querySelectorAll('.nl a').forEach(a => {
+        if (a.parentElement.classList.contains('has-drop')) return;
+        a.addEventListener('click', () => { nav.classList.remove('nav-open'); navToggle.setAttribute('aria-expanded','false'); });
+      });
+      window.addEventListener('resize', () => {
+        if (window.innerWidth > 768) { nav.classList.remove('nav-open'); navToggle.setAttribute('aria-expanded','false'); }
+      });
+    }
+
+    /* ==== DROPDOWN MENU ==== */
+    (function () {
+      var drops = nav.querySelectorAll('.nl .has-drop');
+      function closeDrops(except) {
+        drops.forEach(function (li) { if (li !== except) li.classList.remove('open'); });
       }
-    });
+      drops.forEach(function (li) {
+        var link = li.querySelector(':scope > a');
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var willOpen = !li.classList.contains('open');
+          closeDrops(li);
+          li.classList.toggle('open', willOpen);
+        });
+      });
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.has-drop')) closeDrops(null);
+      });
+    })();
 
     /* ==== CASE STUDIES DATA & GRID ==== */
     const caseStudies = [
@@ -929,14 +968,14 @@
     ];
 
     const categoryImages = {
-      'Healthcare':    './images/healthcare.jpg',
-      'Retail':        './images/retails.jpg',
+      'Healthcare':    './images/healthcare_under700kb.jpg',
+      'Retail':        './images/ecommerce_under700kb.jpg',
       'Food Delivery': './images/food.jpg',
       'Finance':       './images/advertised.jpg',
-      'Real Estate':   './images/realestate.jpg',
+      'Real Estate':   './images/realestate_under700kb.jpg',
       'Travel':        './images/travel.jpg',
       'Events':        './images/social.jpg',
-      'E-commerce':    './images/ecommerce.jpg'
+      'E-commerce':    './images/ecommerce_under700kb.jpg'
     };
 
     let currentFilter = 'all';
