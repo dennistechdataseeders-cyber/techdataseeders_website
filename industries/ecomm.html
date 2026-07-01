@@ -551,7 +551,7 @@
     }
 
     .btn-s {
-      color: rgba(255, 255, 255, .7);
+      color: rgba(255, 255, 255, .85);
       padding: 16px 38px;
       border-radius: 100px;
       font-family: var(--font-d);
@@ -910,7 +910,7 @@
 
     .fdisclaim {
       font-size: 11px;
-      color: rgba(255, 255, 255, .14);
+      color: rgba(255, 255, 255, .5);
       text-align: center;
       margin-top: 20px;
     }
@@ -1045,6 +1045,12 @@
       pointer-events: none; z-index: 9998;
       transform: translate(-50%, -50%); transition: width .1s, height .1s, opacity .1s;
     }
+  
+    .nav.dark {
+      background: rgba(10, 10, 10, .97) !important;
+      border-bottom-color: rgba(255,255,255,.07) !important;
+    }
+    .nav.dark .nav-logo img { content: url('../logo/TDS Logo Set/Tech DataSeeders Logo white.png'); }
   </style>
 </head>
 
@@ -1470,6 +1476,12 @@
         el.addEventListener('mouseleave', function() { cd.style.width = cd.style.height = '8px'; cr.style.width = cr.style.height = '36px'; cr.style.opacity = '1'; });
       });
     })();
+  
+      /* ==== NAV SCROLL DARK ==== */
+      window.addEventListener('scroll', function() {
+        var nav = document.getElementById('nav');
+        if (nav) nav.classList.toggle('dark', window.scrollY > 80);
+      });
   </script>
 </body>
 
