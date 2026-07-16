@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Terms &amp; Conditions — TechDataSeeders</title>
+  <link rel="icon" href="./images/tds-icon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
+    body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
+    a{text-decoration:none;color:inherit;}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
+    .nav-logo img{height:36px;}
+    .nl{display:flex;align-items:center;gap:6px;list-style:none;}
+    .nl a{font-size:14px;font-weight:500;color:#444;padding:8px 14px;border-radius:8px;transition:color .2s,background .2s;}
+    .nl a:hover{color:var(--blue);}
+    .has-drop{position:relative;}
+    .has-drop>a span{font-size:10px;margin-left:3px;display:inline-block;transition:transform .25s;}
+    .has-drop.open>a span{transform:rotate(180deg);}
+    .nav-drop{position:absolute;top:calc(100% + 10px);left:0;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:14px;box-shadow:0 18px 48px rgba(0,0,0,.12);padding:8px;min-width:220px;opacity:0;visibility:hidden;transform:translateY(8px);transition:all .22s;}
+    .has-drop.open>.nav-drop{opacity:1;visibility:visible;transform:translateY(0);}
+    .nav-drop a{display:block;padding:10px 14px;font-size:14px;color:#444;border-radius:8px;transition:background .15s,color .15s;}
+    .nav-drop a:hover{background:#f4f6ff;color:var(--blue);}
+    .nav-cta{background:var(--blue);color:#fff !important;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;white-space:nowrap;}
+    .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px);}
+    .nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
+    .nav-toggle span{display:block;width:22px;height:2px;background:#222;border-radius:2px;transition:all .3s;}
+
+    /* HERO */
+    .page-hero{background:linear-gradient(150deg,#06091a 0%,#0d1840 60%,#162050 100%);padding:140px 80px 80px;position:relative;overflow:hidden;}
+    .page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 70% at 80% 120%,rgba(37,99,255,.28),transparent);}
+    .page-hero-inner{position:relative;z-index:1;max-width:760px;}
+    .page-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(37,99,255,.2);border:1px solid rgba(37,99,255,.4);color:rgba(255,255,255,.88);font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:6px 16px;border-radius:100px;margin-bottom:24px;}
+    .page-h1{font-family:var(--font-d);font-size:clamp(36px,5vw,58px);font-weight:800;color:#fff;line-height:1.06;letter-spacing:-.035em;margin-bottom:18px;}
+    .page-meta{font-size:14px;color:rgba(255,255,255,.45);}
+
+    /* CONTENT */
+    .doc-wrap{max-width:800px;margin:0 auto;padding:72px 40px 96px;}
+    .doc-section{margin-bottom:48px;}
+    .doc-section:last-child{margin-bottom:0;}
+    .doc-h2{font-family:var(--font-d);font-size:22px;font-weight:700;color:var(--black);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(0,0,0,.07);}
+    .doc-p{font-size:15.5px;line-height:1.85;color:#4a4a4a;margin-bottom:16px;}
+    .doc-p:last-child{margin-bottom:0;}
+    .doc-ul{margin:12px 0 16px 20px;display:flex;flex-direction:column;gap:9px;}
+    .doc-ul li{font-size:15px;line-height:1.75;color:#4a4a4a;list-style:disc;}
+    .doc-link{color:var(--blue);font-weight:500;}
+    .doc-link:hover{text-decoration:underline;}
+    .doc-highlight{background:#f4f7ff;border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:18px 22px;margin:20px 0;}
+    .doc-highlight p{font-size:14.5px;line-height:1.75;color:#444;}
+
+    /* FOOTER */
+    .footer{background:#050508;color:#fff;padding:72px 80px 36px;}
+    .ft{display:grid;grid-template-columns:2.5fr 1fr 1.5fr 1fr 1fr;gap:44px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.06);}
+    .fb-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.65);max-width:250px;margin:18px 0 26px;}
+    .socials{display:flex;gap:10px;}
+    .soc{width:36px;height:36px;border:1px solid rgba(255,255,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.45);transition:all .3s;}
+    .soc:hover{border-color:var(--blue);background:rgba(37,99,255,.15);color:#fff;transform:translateY(-2px);}
+    .fc h4{font-family:var(--font-d);font-size:12px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;}
+    .fl{display:flex;flex-direction:column;gap:11px;}
+    .fl a{font-size:14px;color:rgba(255,255,255,.85);transition:color .25s;}
+    .fl a:hover{color:#fff;}
+    .fbot{display:flex;align-items:center;justify-content:space-between;padding-top:30px;flex-wrap:wrap;gap:12px;}
+    .fcopy{font-size:13px;color:rgba(255,255,255,.5);}
+    .fleg{display:flex;gap:22px;flex-wrap:wrap;}
+    .fleg a{font-size:13px;color:rgba(255,255,255,.5);transition:color .25s;}
+    .fleg a:hover{color:rgba(255,255,255,.75);}
+    .fdisclaim{font-size:11px;color:rgba(255,255,255,.35);text-align:center;margin-top:22px;line-height:1.6;max-width:700px;margin-left:auto;margin-right:auto;}
+
+    /* MOBILE */
+    @media(max-width:960px){
+      .nav{padding:0 24px;}
+      .nav-toggle{display:flex;}
+      .nl{position:fixed;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;padding:10px 22px 22px;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 24px 44px rgba(0,0,0,.13);max-height:calc(100vh - 68px);overflow-y:auto;transform:translateY(-14px);opacity:0;visibility:hidden;transition:transform .3s,opacity .3s,visibility .3s;}
+      .nav-open .nl{transform:translateY(0);opacity:1;visibility:visible;}
+      .nl li{width:100%;}
+      .nl>li>a{display:block;padding:14px 6px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.06);}
+      .nav-drop{position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0;opacity:1;visibility:visible;}
+      .has-drop .nav-drop{display:none;}
+      .has-drop.open .nav-drop{display:block;}
+      .nav-drop a{font-size:14px;padding:9px 8px;color:#555;}
+      .nl .nav-cta{display:block;text-align:center;margin-top:16px;}
+      .page-hero{padding:120px 24px 60px;}
+      .doc-wrap{padding:48px 24px 72px;}
+      .footer{padding:56px 24px 28px;}
+      .ft{grid-template-columns:1fr 1fr;gap:32px;}
+    }
+    @media(max-width:600px){.ft{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a href="./index.html" class="nav-logo">
+    <img src="./logo/Tech DataSeeders Logo.png" alt="TechDataSeeders">
+  </a>
+  <ul class="nl">
+    <li class="has-drop">
+      <a href="./index.html#services">Services <span>▾</span></a>
+      <div class="nav-drop">
+        <a href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a href="./services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+        <a href="./services/custom-data-api.html">Custom Data API Delivery</a>
+      </div>
+    </li>
+    <li class="has-drop">
+      <a href="./index.html#industries">Industries <span>▾</span></a>
+      <div class="nav-drop">
+        <a href="./industries/ecomm.html">E-Commerce</a>
+        <a href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+        <a href="./industries/food-beverages.html">Food &amp; Beverages</a>
+        <a href="./industries/q-commerce.html">Quick Commerce</a>
+        <a href="./industries/real-estate.html">Real Estate</a>
+        <a href="./industries/retail.html">Retail</a>
+        <a href="./industries/social-media.html">Social Media</a>
+        <a href="./industries/travel-hotel.html">Travel &amp; Hospitality</a>
+      </div>
+    </li>
+    <li><a href="./case-studies.html">Case Studies</a></li>
+    <li><a href="./about.html">About Us</a></li>
+    <li><a href="./index.html#contact" class="nav-cta">Get a Quote →</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-tag">Legal</div>
+    <h1 class="page-h1">Terms &amp; Conditions</h1>
+    <p class="page-meta">Last updated: July 2025</p>
+  </div>
+</section>
+
+<div class="doc-wrap">
+
+  <div class="doc-highlight">
+    <p>By accessing this website or engaging TechDataSeeders for services, you agree to these Terms &amp; Conditions. Please read them carefully. If you do not agree, please discontinue use of this website.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">1. About TechDataSeeders</h2>
+    <p class="doc-p">TechDataSeeders ("we", "us", "our") is a data engineering company providing enterprise web scraping, data extraction, data analytics, and custom data delivery services to businesses globally. Our registered business email is <a href="mailto:sales@techdataseeders.in" class="doc-link">sales@techdataseeders.in</a>.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">2. Use of the Website</h2>
+    <p class="doc-p">You may use this website for lawful purposes only. You agree not to:</p>
+    <ul class="doc-ul">
+      <li>Use the website in any way that violates applicable local, national, or international laws or regulations.</li>
+      <li>Transmit unsolicited or unauthorised advertising material or spam.</li>
+      <li>Attempt to gain unauthorised access to any part of the website, servers, or databases connected to the website.</li>
+      <li>Reproduce, duplicate, copy, or resell any part of this website without prior written consent.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">3. Services &amp; Engagements</h2>
+    <p class="doc-p">All service engagements with TechDataSeeders are governed by a separate Service Agreement or Statement of Work (SOW) agreed upon between TechDataSeeders and the client. In the absence of a formal agreement, our standard project terms apply:</p>
+    <ul class="doc-ul">
+      <li>Services commence upon written confirmation and receipt of agreed payment terms.</li>
+      <li>Deliverables, timelines, and pricing are defined per project scope agreed in writing.</li>
+      <li>We reserve the right to decline any project that conflicts with applicable laws or ethical data practices.</li>
+      <li>All extracted data is delivered solely to the commissioning client and is not shared with third parties.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">4. Ethical Data Practices</h2>
+    <p class="doc-p">TechDataSeeders is committed to responsible data extraction. Our services operate under the following principles:</p>
+    <ul class="doc-ul">
+      <li>We only extract <strong>publicly available information</strong> from the open web.</li>
+      <li>We do not extract, collect, or process private, personal, or identity-related data.</li>
+      <li>We respect rate limits, robots.txt guidelines, and the fair use of web resources.</li>
+      <li>Clients are responsible for ensuring their use of delivered data complies with applicable laws in their jurisdiction.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">5. Intellectual Property</h2>
+    <p class="doc-p">All content on this website — including text, graphics, logos, icons, and design — is the property of TechDataSeeders or its content suppliers and is protected by applicable intellectual property laws.</p>
+    <p class="doc-p">Data deliverables produced under a paid engagement become the property of the commissioning client upon full payment, unless otherwise agreed in writing.</p>
+    <p class="doc-p">You may not reproduce, distribute, or create derivative works from website content without prior written permission.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">6. Confidentiality</h2>
+    <p class="doc-p">Any proprietary information, project briefs, or business data shared with TechDataSeeders during a client engagement will be treated as confidential and will not be disclosed to third parties without your consent, except as required by law.</p>
+    <p class="doc-p">We may sign a Non-Disclosure Agreement (NDA) upon client request prior to project commencement.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">7. Disclaimers &amp; Limitation of Liability</h2>
+    <p class="doc-p">This website and its content are provided "as is" without warranties of any kind, express or implied. TechDataSeeders does not warrant that:</p>
+    <ul class="doc-ul">
+      <li>The website will be uninterrupted, error-free, or free of viruses or other harmful components.</li>
+      <li>Information on the website is complete, accurate, or current at all times.</li>
+    </ul>
+    <p class="doc-p">To the fullest extent permitted by law, TechDataSeeders shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of this website or our services.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">8. Third-Party Links</h2>
+    <p class="doc-p">This website may contain links to third-party websites for your convenience. TechDataSeeders has no control over the content or practices of these sites and accepts no responsibility for them. Linking does not imply endorsement.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">9. Payment Terms</h2>
+    <p class="doc-p">Payment terms for services are outlined in the project proposal or SOW. General terms:</p>
+    <ul class="doc-ul">
+      <li>Invoices are due within the period specified in the agreement.</li>
+      <li>Late payments may result in service suspension until the outstanding balance is cleared.</li>
+      <li>All fees are exclusive of applicable taxes unless stated otherwise.</li>
+    </ul>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">10. Termination</h2>
+    <p class="doc-p">Either party may terminate an ongoing engagement with written notice as specified in the project agreement. TechDataSeeders reserves the right to terminate access to our website or services immediately if these Terms are violated.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">11. Governing Law</h2>
+    <p class="doc-p">These Terms &amp; Conditions shall be governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts located in Ahmedabad, Gujarat, India.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">12. Changes to These Terms</h2>
+    <p class="doc-p">We may revise these Terms &amp; Conditions at any time. Changes take effect immediately upon posting to this page. Continued use of the website following any revisions constitutes acceptance of the updated Terms.</p>
+  </div>
+
+  <div class="doc-section">
+    <h2 class="doc-h2">13. Contact Us</h2>
+    <p class="doc-p">For any questions regarding these Terms &amp; Conditions, please reach out:</p>
+    <ul class="doc-ul">
+      <li>Email: <a href="mailto:sales@techdataseeders.in" class="doc-link">sales@techdataseeders.in</a></li>
+      <li>Website: <a href="./index.html" class="doc-link">www.techdataseeders.in</a></li>
+    </ul>
+  </div>
+
+</div>
+
+<footer class="footer">
+    <div class="ft">
+      <div>
+        <img src="./logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Techdataseeders" style="height:34px;">
+        <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation — seeding intelligence from the web.</p>
+        <div class="socials">
+          <a href="https://linkedin.com/company/techdataseeders" class="soc" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+          <a href="https://twitter.com/techdataseeders" class="soc" aria-label="Twitter"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg></a>
+          <a href="mailto:sales@techdataseeders.in" class="soc" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Services</h4>
+        <div class="fl">
+          <a href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+          <a href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
+          <a href="./services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+          <a href="./services/custom-data-api.html">Custom Data API Delivery</a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Industries</h4>
+        <div class="fl">
+          <a href="./industries/ecomm.html">E-Commerce</a>
+          <a href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+          <a href="./industries/food-beverages.html">Food &amp; Beverages</a>
+          <a href="./industries/q-commerce.html">Quick Commerce</a>
+          <a href="./industries/real-estate.html">Real Estate</a>
+          <a href="./industries/retail.html">Retail</a>
+          <a href="./industries/social-media.html">Social Media</a>
+          <a href="./industries/travel-hotel.html">Travel &amp; Hospitality</a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Company</h4>
+        <div class="fl">
+          <a href="./about.html">About Us</a>
+          <a href="./blog/index.html">Blog</a>
+          <a href="./case-studies.html">Case Studies</a>
+          <a href="./index.html#testimonials">Testimonials</a>
+          <a href="./index.html#contact">Pricing</a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Contact</h4>
+        <div class="fl">
+          <a href="mailto:sales@techdataseeders.in" style="word-break:break-all;">sales@techdataseeders.in</a>
+        </div>
+      </div>
+    </div>
+    <div class="fbot">
+      <p class="fcopy">&copy; 2025 TechDataSeeders. All rights reserved.</p>
+      <div class="fleg">
+        <a href="./privacy.html">Privacy Policy</a>
+        <a href="./terms.html">Terms &amp; Conditions</a>
+      </div>
+    </div>
+    <p class="fdisclaim">TechDataSeeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
+  </footer>
+
+<script>
+  const navToggle = document.getElementById('navToggle');
+  const nav = document.getElementById('nav');
+  navToggle.addEventListener('click', () => {
+    nav.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', nav.classList.contains('nav-open'));
+  });
+  document.querySelectorAll('.has-drop > a').forEach(link => {
+    link.addEventListener('click', e => {
+      if(window.innerWidth <= 960) {
+        e.preventDefault();
+        link.parentElement.classList.toggle('open');
+      }
+    });
+  });
+  document.querySelectorAll('.has-drop').forEach(drop => {
+    drop.addEventListener('mouseenter', () => { if(window.innerWidth > 960) drop.classList.add('open'); });
+    drop.addEventListener('mouseleave', () => { if(window.innerWidth > 960) drop.classList.remove('open'); });
+  });
+</script>
+</body>
+</html>
