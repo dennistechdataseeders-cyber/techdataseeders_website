@@ -5899,14 +5899,11 @@
       <div class="cta-form rv">
         <h3>Got the Data Need?<br>We've Got the Expertise.</h3>
         <p>Tell us about your data requirements.</p>
-        <div id="formSuccess" style="display:none;padding:24px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);border-radius:12px;text-align:center;">
-          <p style="color:#4ade80;font-size:16px;font-weight:600;margin-bottom:6px;">Message Sent!</p>
-          <p style="color:rgba(255,255,255,.65);font-size:14px;">We'll get back to you shortly.</p>
-        </div>
-        <div id="formError" style="display:none;padding:24px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:12px;text-align:center;">
-          <p style="color:#f87171;font-size:15px;">Something went wrong. Please try again or email us directly at ceo@techdataseeders.in</p>
-        </div>
-        <form id="contactForm" action="send.php" method="POST">
+        <form id="contactForm" action="https://formsubmit.co/kavita@dcycle.design" method="POST">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_subject" value="Data Inquiry from TechDataSeeders">
+          <input type="hidden" name="_next" value="https://www.techdataseeders.in/?form=success">
+          <input type="hidden" name="_template" value="table">
           <div class="fg"><input type="text" name="name" class="fi" placeholder="Your full name" required></div>
           <div class="fg"><input type="email" name="email" class="fi" placeholder="Your email address" required></div>
           <div class="fg"><input type="tel" name="phone" class="fi" placeholder="Your phone number"></div>
@@ -6084,12 +6081,10 @@
     (function() {
       var p = new URLSearchParams(window.location.search);
       if (p.get('form') === 'success') {
-        document.getElementById('formSuccess').style.display = 'block';
-        document.getElementById('contactForm').style.display = 'none';
+        var form = document.getElementById('contactForm');
+        form.innerHTML = '<div style="padding:28px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);border-radius:12px;text-align:center;"><p style="color:#4ade80;font-size:17px;font-weight:600;margin-bottom:6px;">Message Sent!</p><p style="color:rgba(255,255,255,.65);font-size:14px;">We\'ll get back to you shortly.</p></div>';
         history.replaceState(null, '', window.location.pathname + '#contact');
-      } else if (p.get('form') === 'error') {
-        document.getElementById('formError').style.display = 'block';
-        history.replaceState(null, '', window.location.pathname + '#contact');
+        setTimeout(function(){ document.getElementById('contactForm').scrollIntoView({behavior:'smooth'}); }, 200);
       }
     })();
 
