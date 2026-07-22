@@ -1,6 +1,11 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
     exit;
 }
 
@@ -9,10 +14,7 @@ $email   = strip_tags(trim($_POST['email'] ?? ''));
 $phone   = strip_tags(trim($_POST['phone'] ?? ''));
 $message = strip_tags(trim($_POST['message'] ?? ''));
 
-header('Content-Type: application/json');
-
 if (!$name || !$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Please fill in your name and a valid email.']);
     exit;
 }
@@ -20,12 +22,7 @@ if (!$name || !$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
 $to      = 'ceo@techdataseeders.in';
 $subject = 'Data Inquiry from ' . $name;
 $body    = "Name: $name\nEmail: $email\nPhone: $phone\n\nMessage:\n$message";
-$headers = implode("\r\n", [
-    'From: noreply@techdataseeders.in',
-    'Reply-To: ' . $email,
-    'Content-Type: text/plain; charset=UTF-8',
-    'X-Mailer: PHP/' . PHP_VERSION,
-]);
+$headers = "From: noreply@techdataseeders.in\r\nReply-To: $email\r\nX-Mailer: PHP/" . PHP_VERSION;
 
 $sent = mail($to, $subject, $body, $headers);
 

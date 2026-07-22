@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>Blog Admin — Techdataseeders</title>
+  <title>Blog Admin   Techdataseeders</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@0,400;0,600;0,700;0,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -114,10 +114,10 @@
 
   <div class="wrap">
     <div class="note">
-      <strong>How to publish:</strong> Add, edit, or delete posts below — changes save automatically in this browser.
+      <strong>How to publish:</strong> Add, edit, or delete posts below   changes save automatically in this browser.
       When you're ready to make them live for everyone, click <strong>Publish (Download)</strong> to get an updated
       <strong>blogs.json</strong> file, then upload it to your website's <strong>/data/</strong> folder (replacing the old one).
-      That's it — no developer needed.
+      That's it   no developer needed.
     </div>
     <div class="count" id="count"></div>
     <div class="plist" id="plist"></div>
@@ -254,7 +254,7 @@
       return '<div class="pitem">'+
         '<div class="pthumb" style="background:'+BlogStore.gradientOf(p)+'"><svg viewBox="0 0 24 24">'+BlogStore.iconOf(p)+'</svg></div>'+
         '<div class="pmeta">'+
-          '<div class="pcat">'+BlogStore.esc(p.category||'—')+'</div>'+
+          '<div class="pcat">'+BlogStore.esc(p.category||' ')+'</div>'+
           '<div class="ptitle">'+BlogStore.esc(p.title)+'</div>'+
           '<div class="psub">'+BlogStore.esc(p.author||'')+(p.date?' • '+BlogStore.esc(p.date):'')+' • '+BlogStore.esc(p.slug)+'</div>'+
         '</div>'+
@@ -362,7 +362,7 @@
   }
   document.getElementById('publishBtn').addEventListener('click', function(){
     download('blogs.json', JSON.stringify(posts, null, 2));
-    toast('blogs.json downloaded — upload it to /data/');
+    toast('blogs.json downloaded   upload it to /data/');
   });
   document.getElementById('importBtn').addEventListener('click', function(){ document.getElementById('importFile').click(); });
   document.getElementById('importFile').addEventListener('change', function(e){
@@ -373,7 +373,7 @@
         var data=JSON.parse(reader.result);
         if(!Array.isArray(data)) throw new Error('not an array');
         posts=data; save(); toast('Imported '+data.length+' posts');
-      }catch(err){ alert('Could not read that file — make sure it is a valid blogs.json.'); }
+      }catch(err){ alert('Could not read that file   make sure it is a valid blogs.json.'); }
     };
     reader.readAsText(file); e.target.value='';
   });
