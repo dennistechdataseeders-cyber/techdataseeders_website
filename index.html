@@ -5899,12 +5899,13 @@
       <div class="cta-form rv">
         <h3>Got the Data Need?<br>We've Got the Expertise.</h3>
         <p>Tell us about your data requirements.</p>
-        <form action="mailto:ceo@techdataseeders.in" method="post" enctype="text/plain" onsubmit="return handleFormSubmit(this)">
+        <form id="contactForm" onsubmit="return handleFormSubmit(event)">
           <div class="fg"><input type="text" name="name" class="fi" placeholder="Your full name" required></div>
           <div class="fg"><input type="email" name="email" class="fi" placeholder="Your email address" required></div>
           <div class="fg"><input type="tel" name="phone" class="fi" placeholder="Your phone number"></div>
           <div class="fg"><textarea name="message" class="fi" placeholder="Tell us about your data needs..." maxlength="300" rows="4"></textarea></div>
-          <button type="submit" class="fsub">Submit Request ↗</button>
+          <button type="submit" class="fsub" id="formBtn">Submit Request ↗</button>
+          <p id="formMsg" style="margin-top:14px;font-size:14px;display:none;"></p>
         </form>
       </div>
     </div>
@@ -6074,16 +6075,37 @@
     });
 
     /* ==== FORM SUBMIT ==== */
-    function handleFormSubmit(form) {
-      var name = form.name.value.trim();
-      var email = form.email.value.trim();
-      var phone = form.phone.value.trim();
-      var message = form.message.value.trim();
-      if (!name || !email) return false;
-      var subject = encodeURIComponent('Data Inquiry from ' + name);
-      var body = encodeURIComponent('Name: ' + name + '\nEmail: ' + email + '\nPhone: ' + phone + '\nMessage: ' + message);
-      window.location.href = 'mailto:ceo@techdataseeders.in?subject=' + subject + '&body=' + body;
-      form.reset();
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      var form = document.getElementById('contactForm');
+      var btn  = document.getElementById('formBtn');
+      var msg  = document.getElementById('formMsg');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      msg.style.display = 'none';
+      var data = new FormData(form);
+      fetch('send.php', { method: 'POST', body: data })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.success) {
+            msg.style.color = '#4ade80';
+            msg.textContent = 'Message sent! We\'ll get back to you shortly.';
+            form.reset();
+          } else {
+            msg.style.color = '#f87171';
+            msg.textContent = res.message || 'Something went wrong. Please try again.';
+          }
+          msg.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit Request ↗';
+        })
+        .catch(function() {
+          msg.style.color = '#f87171';
+          msg.textContent = 'Network error. Please try again.';
+          msg.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit Request ↗';
+        });
       return false;
     }
 
