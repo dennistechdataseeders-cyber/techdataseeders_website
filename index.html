@@ -521,17 +521,22 @@
       position: absolute;
       bottom: -60px;
       left: 50%;
-      transform: translateX(-50%);
+      -webkit-transform: translateX(-50%) translateZ(0);
+      transform: translateX(-50%) translateZ(0);
       width: 1200px;
       height: 1200px;
       z-index: 1;
       pointer-events: none;
       opacity: 0.5;
+      will-change: transform;
     }
 
     .hero-globe-svg {
       width: 100%;
       height: 100%;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      will-change: contents;
     }
 
     /* Center dot pulse */
@@ -542,7 +547,9 @@
 
     /* Ripple rings   scale from near-zero to full */
     .globe-ripple {
+      -webkit-transform-box: fill-box;
       transform-box: fill-box;
+      -webkit-transform-origin: center;
       transform-origin: center;
       -webkit-animation: rippleOut 3.4s cubic-bezier(.1, .5, .4, 1) infinite;
       animation: rippleOut 3.4s cubic-bezier(.1, .5, .4, 1) infinite;
@@ -4092,7 +4099,7 @@
         <circle cx="400" cy="400" r="330" fill="url(#gfCore)" />
 
         <!-- 2. Grid lines   JS injects <path> elements here -->
-        <g id="gfGrid" filter="url(#gfLine)">
+        <g id="gfGrid">
           <path fill="none" stroke="rgba(37,99,255,0)" stroke-width="1.4"
             d="M511.8,400.0L478.8,400.0L444.6,400.0L409.7,400.0L374.6,400.0L339.9,400.0L306.2,400.0L273.9,400.0L243.5,400.0L215.5,400.0L190.0,400.0L167.4,400.0L147.8,400.0L131.3,400.0L118.0,400.0L107.7,400.0L100.4,400.0L95.9,400.0L94.2,400.0L95.0,400.0L98.2,400.0L103.5,400.0L110.8,400.0L119.9,400.0L130.6,400.0L142.8,400.0L156.2,400.0L170.8,400.0L186.3,400.0L202.8,400.0L220.0,400.0L237.8,400.0L256.3,400.0L275.1,400.0L294.4,400.0L314.0,400.0L333.9,400.0L354.0,400.0L374.2,400.0L394.4,400.0L414.7,400.0L434.9,400.0L455.1,400.0L475.0,400.0L494.8,400.0L514.3,400.0L533.4,400.0L552.1,400.0L570.3,400.0L587.8,400.0L604.7,400.0L620.8,400.0L635.9,400.0L650.0,400.0L662.8,400.0L674.4,400.0L684.4,400.0L692.7,400.0L699.1,400.0L703.5,400.0L705.6,400.0L705.3,400.0L702.4,400.0L696.7,400.0L688.1,400.0L676.4,400.0L661.6,400.0L643.8,400.0L622.8,400.0L598.9,400.0L572.2,400.0L543.1,400.0L511.8,400.0Z"
             style="opacity: 0;"></path>
@@ -4105,7 +4112,7 @@
         <circle cx="400" cy="400" r="338" fill="url(#gfAtmo)" />
 
         <!-- 5. Arc connections   JS injects here -->
-        <g id="gfArcs" filter="url(#gfLine)"></g>
+        <g id="gfArcs"></g>
 
         <!-- 6. Data nodes   JS injects here -->
         <g id="gfNodes" filter="url(#gfNode)"></g>
@@ -6164,7 +6171,8 @@
 
       const NS = 'http://www.w3.org/2000/svg';
       const CX = 400, CY = 400, R = 330, PERSP = 1100, SEGS = 72;
-      let rotY = 0, scrollRot = 0, lastT = 0;
+      const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+      let rotY = 0, scrollRot = 0, lastT = null;
 
       /* ─ 3-D math ─ */
       function xyz(lat, lon) {
@@ -6284,9 +6292,13 @@
       }
 
       /* ─ Loop ─ */
+      let safariSkip = false;
       function frame(ts) {
+        if (lastT === null) { lastT = ts; requestAnimationFrame(frame); return; }
+        /* Safari: skip every other frame to halve DOM pressure */
+        if (isSafari) { safariSkip = !safariSkip; if (safariSkip) { requestAnimationFrame(frame); return; } }
         const dt = Math.min((ts - lastT) / 1000, 0.05); lastT = ts;
-        rotY += dt * 0.13;  /* ~0.13 rad/s → full turn ≈48 s */
+        rotY += dt * (isSafari ? 0.26 : 0.13); /* double step on Safari since we skip frames */
         render(ts);
         requestAnimationFrame(frame);
       }
