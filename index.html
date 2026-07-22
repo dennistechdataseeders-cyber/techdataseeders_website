@@ -5899,16 +5899,14 @@
       <div class="cta-form rv">
         <h3>Got the Data Need?<br>We've Got the Expertise.</h3>
         <p>Tell us about your data requirements.</p>
-        <form id="contactForm" action="https://formsubmit.co/kavita@dcycle.design" method="POST">
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_subject" value="Data Inquiry from TechDataSeeders">
-          <input type="hidden" name="_next" value="https://www.techdataseeders.in/?form=success">
-          <input type="hidden" name="_template" value="table">
+        <form id="contactForm">
+          <input type="hidden" name="access_key" value="1d06e0c3-ce6c-44a3-8f5b-29be531300f9">
           <div class="fg"><input type="text" name="name" class="fi" placeholder="Your full name" required></div>
           <div class="fg"><input type="email" name="email" class="fi" placeholder="Your email address" required></div>
           <div class="fg"><input type="tel" name="phone" class="fi" placeholder="Your phone number"></div>
           <div class="fg"><textarea name="message" class="fi" placeholder="Tell us about your data needs..." maxlength="300" rows="4"></textarea></div>
-          <button type="submit" class="fsub">Submit Request ↗</button>
+          <button type="submit" class="fsub" id="formBtn">Submit Request ↗</button>
+          <p id="formMsg" style="margin-top:14px;font-size:14px;display:none;"></p>
         </form>
       </div>
     </div>
@@ -6078,15 +6076,36 @@
     });
 
     /* ==== FORM SUBMIT ==== */
-    (function() {
-      var p = new URLSearchParams(window.location.search);
-      if (p.get('form') === 'success') {
-        var form = document.getElementById('contactForm');
-        form.innerHTML = '<div style="padding:28px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);border-radius:12px;text-align:center;"><p style="color:#4ade80;font-size:17px;font-weight:600;margin-bottom:6px;">Message Sent!</p><p style="color:rgba(255,255,255,.65);font-size:14px;">We\'ll get back to you shortly.</p></div>';
-        history.replaceState(null, '', window.location.pathname + '#contact');
-        setTimeout(function(){ document.getElementById('contactForm').scrollIntoView({behavior:'smooth'}); }, 200);
-      }
-    })();
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var btn = document.getElementById('formBtn');
+      var msg = document.getElementById('formMsg');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      var data = new FormData(this);
+      fetch('https://api.web3forms.com/submit', { method: 'POST', body: data })
+        .then(function(r) { return r.json(); })
+        .then(function(res) {
+          if (res.success) {
+            msg.style.color = '#4ade80';
+            msg.textContent = 'Message sent! We\'ll get back to you shortly.';
+            document.getElementById('contactForm').reset();
+          } else {
+            msg.style.color = '#f87171';
+            msg.textContent = 'Something went wrong. Please try again.';
+          }
+          msg.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit Request ↗';
+        })
+        .catch(function() {
+          msg.style.color = '#f87171';
+          msg.textContent = 'Network error. Please try again.';
+          msg.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit Request ↗';
+        });
+    });
 
     /* ==== NAVBAR ==== */
     const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
