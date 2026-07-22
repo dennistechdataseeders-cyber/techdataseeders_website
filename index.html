@@ -5899,13 +5899,19 @@
       <div class="cta-form rv">
         <h3>Got the Data Need?<br>We've Got the Expertise.</h3>
         <p>Tell us about your data requirements.</p>
-        <form id="contactForm" onsubmit="return handleFormSubmit(event)">
+        <div id="formSuccess" style="display:none;padding:24px;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.25);border-radius:12px;text-align:center;">
+          <p style="color:#4ade80;font-size:16px;font-weight:600;margin-bottom:6px;">Message Sent!</p>
+          <p style="color:rgba(255,255,255,.65);font-size:14px;">We'll get back to you shortly.</p>
+        </div>
+        <div id="formError" style="display:none;padding:24px;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.25);border-radius:12px;text-align:center;">
+          <p style="color:#f87171;font-size:15px;">Something went wrong. Please try again or email us directly at ceo@techdataseeders.in</p>
+        </div>
+        <form id="contactForm" action="send.php" method="POST">
           <div class="fg"><input type="text" name="name" class="fi" placeholder="Your full name" required></div>
           <div class="fg"><input type="email" name="email" class="fi" placeholder="Your email address" required></div>
           <div class="fg"><input type="tel" name="phone" class="fi" placeholder="Your phone number"></div>
           <div class="fg"><textarea name="message" class="fi" placeholder="Tell us about your data needs..." maxlength="300" rows="4"></textarea></div>
-          <button type="submit" class="fsub" id="formBtn">Submit Request ↗</button>
-          <p id="formMsg" style="margin-top:14px;font-size:14px;display:none;"></p>
+          <button type="submit" class="fsub">Submit Request ↗</button>
         </form>
       </div>
     </div>
@@ -6075,39 +6081,17 @@
     });
 
     /* ==== FORM SUBMIT ==== */
-    function handleFormSubmit(e) {
-      e.preventDefault();
-      var form = document.getElementById('contactForm');
-      var btn  = document.getElementById('formBtn');
-      var msg  = document.getElementById('formMsg');
-      btn.disabled = true;
-      btn.textContent = 'Sending…';
-      msg.style.display = 'none';
-      var data = new FormData(form);
-      fetch('send.php', { method: 'POST', body: data })
-        .then(function(r) { return r.json(); })
-        .then(function(res) {
-          if (res.success) {
-            msg.style.color = '#4ade80';
-            msg.textContent = 'Message sent! We\'ll get back to you shortly.';
-            form.reset();
-          } else {
-            msg.style.color = '#f87171';
-            msg.textContent = res.message || 'Something went wrong. Please try again.';
-          }
-          msg.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Submit Request ↗';
-        })
-        .catch(function() {
-          msg.style.color = '#f87171';
-          msg.textContent = 'Network error. Please try again.';
-          msg.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Submit Request ↗';
-        });
-      return false;
-    }
+    (function() {
+      var p = new URLSearchParams(window.location.search);
+      if (p.get('form') === 'success') {
+        document.getElementById('formSuccess').style.display = 'block';
+        document.getElementById('contactForm').style.display = 'none';
+        history.replaceState(null, '', window.location.pathname + '#contact');
+      } else if (p.get('form') === 'error') {
+        document.getElementById('formError').style.display = 'block';
+        history.replaceState(null, '', window.location.pathname + '#contact');
+      }
+    })();
 
     /* ==== NAVBAR ==== */
     const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
