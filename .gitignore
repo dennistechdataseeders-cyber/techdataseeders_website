@@ -3,17 +3,16 @@
 .AppleDouble
 .LSOverride
 
+# Windows
+Thumbs.db
+desktop.ini
+
 # Editor
 .vscode/
 .idea/
 *.swp
 *.swo
-
-# Logs
-*.log
-
-# OS
-Thumbs.db
+*.sublime-*
 
 # Node.js
 node_modules/
@@ -47,17 +46,13 @@ build/
 *.min.js
 *.min.css
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# OS
-Thumbs.db
-desktop.ini
-
 # PM2
 .pm2/
+logs/
+
+# Test files
+scripts/test-*.js
+scripts/debug-*.js
+
+# Repomix (temporary files)
+repomix-output.xml
