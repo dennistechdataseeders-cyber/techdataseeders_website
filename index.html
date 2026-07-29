@@ -5910,7 +5910,9 @@
           <input type="hidden" name="access_key" value="1d06e0c3-ce6c-44a3-8f5b-29be531300f9">
           <div class="fg"><input type="text" name="name" class="fi" placeholder="Your full name" required></div>
           <div class="fg"><input type="email" name="email" class="fi" placeholder="Your email address" required></div>
-          <div class="fg"><input type="tel" name="phone" class="fi" placeholder="Your phone number"></div>
+          <div class="fg">
+            <input type="tel" name="phone" class="fi" placeholder="Phone (e.g., +1 555 123 4567 or 555-123-4567)">
+          </div>
           <div class="fg"><textarea name="message" class="fi" placeholder="Tell us about your data needs..." maxlength="300" rows="4"></textarea></div>
           <button type="submit" class="fsub" id="formBtn">Submit Request ↗</button>
           <p id="formMsg" style="margin-top:14px;font-size:14px;display:none;"></p>
@@ -6036,7 +6038,7 @@
       <div class="fc">
         <h4>Contact</h4>
         <div class="fl">
-          <a href="mailto:ceo@techdataseeders.in" style="word-break:break-all;">ceo@techdataseeders.in</a>
+          <a href="mailto:sales@techdataseeders.in" style="word-break:break-all;">sales@techdataseeders.in</a>
         </div>
       </div>
     </div>
@@ -6083,37 +6085,128 @@
     });
 
     /* ==== FORM SUBMIT ==== */
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var btn = document.getElementById('formBtn');
-      var msg = document.getElementById('formMsg');
-      btn.disabled = true;
-      btn.textContent = 'Sending…';
-      var data = new FormData(this);
-      fetch('https://api.web3forms.com/submit', { method: 'POST', body: data })
-        .then(function(r) { return r.json(); })
-        .then(function(res) {
-          if (res.success) {
-            msg.style.color = '#4ade80';
-            msg.textContent = 'Message sent! We\'ll get back to you shortly.';
-            document.getElementById('contactForm').reset();
-          } else {
-            msg.style.color = '#f87171';
-            msg.textContent = 'Something went wrong. Please try again.';
-          }
-          msg.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Submit Request ↗';
-        })
-        .catch(function() {
-          msg.style.color = '#f87171';
-          msg.textContent = 'Network error. Please try again.';
-          msg.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Submit Request ↗';
-        });
-    });
-
+    document.getElementById('contactForm').addEventListener('submit', function(e) {/* ==== FORM SUBMIT (Node.js Backend) ==== */
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  var btn = document.getElementById('formBtn');
+  var msg = document.getElementById('formMsg');
+  
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  msg.style.display = 'none';
+  
+  var formData = new FormData(this);
+  var phone = formData.get('phone') || '';
+  
+  // Client-side phone validation (optional - shows error faster)
+  if (phone) {
+    // Remove all non-digit characters for validation
+    var cleaned = phone.replace(/[\s\-\.\(\)\+]/g, '');
+    if (cleaned.length < 9 || cleaned.length > 15) {
+      msg.style.color = '#f87171';
+      msg.textContent = '❌ Please enter a valid phone number (minimum 7 digits)';
+      msg.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Submit Request ↗';
+      return;
+    }
+  }
+  
+  var data = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    phone: phone,
+    message: formData.get('message')
+  };
+  
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(function(response) {
+    if (!response.ok) {
+      return response.json().then(function(errData) {
+        throw new Error(errData.message || 'Server error');
+      });
+    }
+    return response.json();
+  })
+  .then(function(data) {
+    if (data.success) {
+      msg.style.color = '#4ade80';
+      msg.textContent = '✅ Message sent! We\'ll get back to you shortly.';
+      document.getElementById('contactForm').reset();
+    } else {
+      msg.style.color = '#f87171';
+      msg.textContent = '❌ ' + (data.message || 'Something went wrong. Please try again.');
+    }
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Submit Request ↗';
+  })
+  .catch(function(error) {
+    console.error('❌ Form error:', error);
+    msg.style.color = '#f87171';
+    msg.textContent = '❌ ' + error.message;
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Submit Request ↗';
+  });
+});
+  e.preventDefault();
+  
+  var btn = document.getElementById('formBtn');
+  var msg = document.getElementById('formMsg');
+  
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  msg.style.display = 'none';
+  
+  var formData = new FormData(this);
+  var data = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    phone: formData.get('phone'),
+    message: formData.get('message')
+  };
+  
+  fetch('/api/contact', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(data) {
+    if (data.success) {
+      msg.style.color = '#4ade80';
+      msg.textContent = '✅ Message sent! We\'ll get back to you shortly.';
+      document.getElementById('contactForm').reset();
+    } else {
+      msg.style.color = '#f87171';
+      msg.textContent = '❌ ' + (data.message || 'Something went wrong.');
+    }
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Submit Request ↗';
+  })
+  .catch(function(error) {
+    console.error('Form error:', error);
+    msg.style.color = '#f87171';
+    msg.textContent = '❌ Network error. Please try again.';
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Submit Request ↗';
+  });
+});
     /* ==== NAVBAR ==== */
     const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
     const stb = document.getElementById('stb');

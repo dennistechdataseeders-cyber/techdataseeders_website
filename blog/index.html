@@ -269,27 +269,144 @@
     <p class="fdisclaim">TechDataSeeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
   </footer>
 
-<script>window.BLOGS_PATH='../data/blogs.json';window.POST_BASE='./';</script>
-<script src="../data/blogs-data.js"></script>
-<script src="../assets/sanity-client.js"></script>
-<script src="../assets/blog-store.js"></script>
 <script>
-  BlogStore.fetchPublished().then(function(list){
-    var grid = document.getElementById('blogGrid');
-    if(!list.length){ grid.innerHTML = '<div class="bl-empty">No articles published yet.</div>'; return; }
-    grid.innerHTML = list.map(BlogStore.cardHTML).join('');
-    document.querySelectorAll('.blog-filter-btn').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        document.querySelectorAll('.blog-filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  // ============================================================
+  // BLOG PAGE - FETCHES FROM NODE.JS API / MONGODB
+  // ============================================================
+  
+  const API_URL = window.location.origin + '/api';
+  
+  // Icon mapping for blog cards
+  const ICONS = {
+    database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>',
+    activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    chart: '<path d="M3 21h18"/><path d="M7 21V10"/><path d="M12 21V4"/><path d="M17 21v-7"/>',
+    doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+    globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+    star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8l-6.2 3.3L7 14.2l-5-4.9 6.9-1z"/>',
+    bulb: '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2v.3h6v-.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    bar: '<rect x="4" y="4" width="4" height="16"/><rect x="12" y="10" width="4" height="10"/>'
+  };
+
+  // Gradient mapping
+  const GRADIENTS = {
+    blue: 'linear-gradient(135deg,#0d1b4b 0%,#1a4fd6 50%,#2563FF 100%)',
+    green: 'linear-gradient(135deg,#064e3b 0%,#059669 50%,#10b981 100%)',
+    purple: 'linear-gradient(135deg,#2e1065 0%,#5b21b6 50%,#7c3aed 100%)',
+    magenta: 'linear-gradient(135deg,#4d1a3d 0%,#9d4edd 50%,#c77dff 100%)',
+    teal: 'linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%)',
+    navy: 'linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%)'
+  };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function getGradient(post) {
+    return GRADIENTS[post.gradient] || GRADIENTS.blue;
+  }
+
+  function getIcon(post) {
+    return ICONS[post.icon] || ICONS.database;
+  }
+
+  function getPostUrl(slug) {
+    return './post.html?slug=' + encodeURIComponent(slug);
+  }
+
+  function createCardHTML(post) {
+    const artContent = post.heroImage
+      ? '<img src="' + escapeHtml(post.heroImage) + '" alt="' + escapeHtml(post.title) + '" class="blog-art-img" loading="lazy">'
+      : '<div class="blog-art-ico"><svg viewBox="0 0 24 24">' + getIcon(post) + '</svg></div>';
+    
+    const artStyle = post.heroImage ? '' : ' style="background:' + getGradient(post) + ';"';
+    
+    return '<a href="' + getPostUrl(post.slug) + '" class="blog-card">' +
+      '<div class="blog-art"' + artStyle + '>' +
+        artContent +
+      '</div>' +
+      '<div class="blog-body">' +
+        '<span class="blog-cat">' + escapeHtml(post.category) + '</span>' +
+        '<h3 class="blog-title">' + escapeHtml(post.title) + '</h3>' +
+        '<p class="blog-exc">' + escapeHtml(post.excerpt) + '</p>' +
+        '<div class="blog-foot">' +
+          '<span class="blog-date">' + escapeHtml(post.date) + '</span>' +
+          '<span class="blog-read">Read more <svg viewBox="0 0 14 14"><path d="M1 7h12M7 1l6 6-6 6"/></svg></span>' +
+        '</div>' +
+      '</div>' +
+    '</a>';
+  }
+
+  async function fetchPosts() {
+    try {
+      const response = await fetch(API_URL + '/blog');
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.length > 0) {
+        return data.data;
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching posts from API:', error);
+      return [];
+    }
+  }
+
+  function renderPosts(list) {
+    const grid = document.getElementById('blogGrid');
+    
+    if (!list || !list.length) {
+      grid.innerHTML = '<div class="bl-empty">No articles published yet.</div>';
+      return;
+    }
+
+    // Sort by date (newest first)
+    const sorted = list.slice().sort((a, b) => {
+      return new Date(b.date) - new Date(a.date);
+    });
+
+    grid.innerHTML = sorted.map(createCardHTML).join('');
+  }
+
+  function setupFilters(posts) {
+    document.querySelectorAll('.blog-filter-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.blog-filter-btn').forEach(function(b) {
+          b.classList.remove('active');
+        });
         btn.classList.add('active');
-        var cat = btn.getAttribute('data-cat');
-        document.querySelectorAll('#blogGrid .blog-card').forEach(function(card){
-          var catEl = card.querySelector('.blog-cat');
-          card.style.display = (cat === 'all' || (catEl && catEl.textContent.trim() === cat)) ? '' : 'none';
+        
+        const cat = btn.getAttribute('data-cat');
+        const cards = document.querySelectorAll('#blogGrid .blog-card');
+        
+        cards.forEach(function(card) {
+          const catEl = card.querySelector('.blog-cat');
+          if (cat === 'all' || (catEl && catEl.textContent.trim() === cat)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
         });
       });
     });
-  });
+  }
+
+  // ============================================================
+  // MAIN EXECUTION - Fetch from API and render
+  // ============================================================
+  (async function() {
+    const posts = await fetchPosts();
+    renderPosts(posts);
+    setupFilters(posts);
+  })();
 </script>
 
   <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">&#8593;</div>

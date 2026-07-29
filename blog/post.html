@@ -291,81 +291,204 @@
     <p class="fdisclaim">TechDataSeeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
   </footer>
 
-<script>window.BLOGS_PATH='../data/blogs.json';window.POST_BASE='./';</script>
-<script src="../data/blogs-data.js"></script>
-<script src="../assets/sanity-client.js"></script>
-<script src="../assets/blog-store.js"></script>
 <script>
-(function(){
+// ============================================================
+// BLOG POST PAGE - FETCHES FROM NODE.JS API / MONGODB
+// ============================================================
+
+const API_URL = window.location.origin + '/api';
+
+// Icon mapping for blog cards
+const ICONS = {
+  database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>',
+  activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  chart: '<path d="M3 21h18"/><path d="M7 21V10"/><path d="M12 21V4"/><path d="M17 21v-7"/>',
+  doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+  star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8l-6.2 3.3L7 14.2l-5-4.9 6.9-1z"/>',
+  bulb: '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2v.3h6v-.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/>',
+  zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  bar: '<rect x="4" y="4" width="4" height="16"/><rect x="12" y="10" width="4" height="10"/>'
+};
+
+// Gradient mapping
+const GRADIENTS = {
+  blue: 'linear-gradient(135deg,#0d1b4b 0%,#1a4fd6 50%,#2563FF 100%)',
+  green: 'linear-gradient(135deg,#064e3b 0%,#059669 50%,#10b981 100%)',
+  purple: 'linear-gradient(135deg,#2e1065 0%,#5b21b6 50%,#7c3aed 100%)',
+  magenta: 'linear-gradient(135deg,#4d1a3d 0%,#9d4edd 50%,#c77dff 100%)',
+  teal: 'linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%)',
+  navy: 'linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%)'
+};
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function getGradient(post) {
+  return GRADIENTS[post.gradient] || GRADIENTS.blue;
+}
+
+function getIcon(post) {
+  return ICONS[post.icon] || ICONS.database;
+}
+
+function getPostUrl(slug) {
+  return './post.html?slug=' + encodeURIComponent(slug);
+}
+
+function renderBody(md) {
+  var lines = String(md || '').split(/\r?\n/);
+  var html = '', listOpen = false;
+  function closeList() { if (listOpen) { html += '</ul>'; listOpen = false; } }
+  for (var i = 0; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) { closeList(); continue; }
+    if (line.indexOf('## ') === 0) { closeList(); html += '<h2>' + escapeHtml(line.slice(3)) + '</h2>'; }
+    else if (line.indexOf('### ') === 0) { closeList(); html += '<h3>' + escapeHtml(line.slice(4)) + '</h3>'; }
+    else if (line.indexOf('> ') === 0) { closeList(); html += '<blockquote class="bd-quote"><p>' + escapeHtml(line.slice(2)) + '</p></blockquote>'; }
+    else if (line.indexOf('- ') === 0) { if (!listOpen) { html += '<ul>'; listOpen = true; } html += '<li>' + escapeHtml(line.slice(2)) + '</li>'; }
+    else { closeList(); html += '<p>' + escapeHtml(line) + '</p>'; }
+  }
+  closeList();
+  return html;
+}
+
+function createCardHTML(post) {
+  var artContent = post.heroImage
+    ? '<div class="blog-art" style="background-image:url(\'' + escapeHtml(post.heroImage) + '\');background-size:cover;background-position:center;"></div>'
+    : '<div class="blog-art" style="background:' + getGradient(post) + ';"><div class="blog-art-ico"><svg viewBox="0 0 24 24">' + getIcon(post) + '</svg></div></div>';
+  
+  return '<a href="' + getPostUrl(post.slug) + '" class="blog-card">' +
+    artContent +
+    '<div class="blog-body">' +
+      '<span class="blog-cat">' + escapeHtml(post.category) + '</span>' +
+      '<h3 class="blog-title">' + escapeHtml(post.title) + '</h3>' +
+      '<p class="blog-exc">' + escapeHtml(post.excerpt) + '</p>' +
+      '<div class="blog-foot">' +
+        '<span class="blog-date">' + escapeHtml(post.date) + '</span>' +
+        '<span class="blog-read">Read more <svg viewBox="0 0 14 14"><path d="M1 7h12M7 1l6 6-6 6"/></svg></span>' +
+      '</div>' +
+    '</div>' +
+  '</a>';
+}
+
+function popHTML(p) {
+  return '' +
+    '<a href="' + getPostUrl(p.slug) + '" class="pp">' +
+      '<div class="pp-thumb" style="background:' + getGradient(p) + ';"><svg viewBox="0 0 24 24">' + getIcon(p) + '</svg></div>' +
+      '<div><span class="pp-cat">' + escapeHtml(p.category) + '</span><div class="pp-t">' + escapeHtml(p.title) + '</div></div>' +
+    '</a>';
+}
+
+async function fetchPost(slug) {
+  try {
+    const response = await fetch(API_URL + '/blog/' + slug);
+    const data = await response.json();
+    
+    if (data.success && data.data) {
+      return data.data;
+    }
+    return null;
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return null;
+  }
+}
+
+async function fetchAllPosts() {
+  try {
+    const response = await fetch(API_URL + '/blog');
+    const data = await response.json();
+    
+    if (data.success && data.data) {
+      return data.data;
+    }
+    return [];
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    return [];
+  }
+}
+
+// Main execution
+(function() {
   var params = new URLSearchParams(location.search);
   var slug = params.get('slug');
 
-  BlogStore.fetchPublished().then(function(list){
-    var post = list.filter(function(p){return p.slug===slug;})[0];
-    // Draft preview: if not yet published, fall back to the admin working copy
-    // (only present in the editor's own browser   never shown to public visitors).
-    if(!post){
-      var working = BlogStore.loadWorking();
-      if(working){
-        var wp = working.filter(function(p){return p.slug===slug;})[0];
-        if(wp){ post = wp; list = working; }
-      }
-    }
-    var others = list.filter(function(p){return p.slug!==slug;});
+  if (!slug) {
+    document.getElementById('postRoot').innerHTML =
+      '<div class="bd-missing"><h1>No post specified</h1>' +
+      '<p>Please provide a valid post slug.</p>' +
+      '<a href="./index.html" class="side-cta-btn" style="background:var(--blue);">Browse all articles →</a></div>';
+    return;
+  }
 
-    if(!post){
+  // Fetch post and related posts
+  Promise.all([fetchPost(slug), fetchAllPosts()]).then(function(results) {
+    var post = results[0];
+    var list = results[1];
+    var others = list.filter(function(p) { return p.slug !== slug; });
+
+    if (!post) {
       document.getElementById('postRoot').innerHTML =
-        '<div class="bd-missing"><h1>Article not found</h1>'+
-        '<p>This post may have been removed or the link is incorrect.</p>'+
+        '<div class="bd-missing"><h1>Article not found</h1>' +
+        '<p>This post may have been removed or the link is incorrect.</p>' +
         '<a href="./index.html" class="side-cta-btn" style="background:var(--blue);">Browse all articles →</a></div>';
       return;
     }
 
     document.title = post.title + '   Techdataseeders';
 
-    var meta = '<span>By <strong>'+BlogStore.esc(post.author||'Techdataseeders')+'</strong></span>';
-    if(post.date){ meta += '<span class="dot"></span><span>'+BlogStore.esc(post.date)+'</span>'; }
-    if(post.readTime){ meta += '<span class="dot"></span><span>'+BlogStore.esc(post.readTime)+'</span>'; }
-    if(post.client){ meta += '<span class="dot"></span><span>Client: <strong>'+BlogStore.esc(post.client)+'</strong></span>'; }
+    var meta = '<span>By <strong>' + escapeHtml(post.author || 'Techdataseeders') + '</strong></span>';
+    if (post.date) { meta += '<span class="dot"></span><span>' + escapeHtml(post.date) + '</span>'; }
+    if (post.readTime) { meta += '<span class="dot"></span><span>' + escapeHtml(post.readTime) + '</span>'; }
 
-    var tags = (post.tags||[]).map(function(t){return '<span class="bd-tag">'+BlogStore.esc(t)+'</span>';}).join('');
+    var tags = (post.tags || []).map(function(t) { return '<span class="bd-tag">' + escapeHtml(t) + '</span>'; }).join('');
 
-    var popular = others.slice(0,3).map(BlogStore.popHTML).join('') ||
+    var popular = others.slice(0, 3).map(popHTML).join('') ||
                   '<p style="font-size:13px;color:#999;">No other posts yet.</p>';
 
     document.getElementById('postRoot').innerHTML =
-      '<div class="bd-crumb">'+
-        '<a href="./index.html" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to Blog</a>'+
-        '<nav class="bd-bread"><a href="../index.html">Home</a><span class="sep">/</span>'+
-        '<a href="./index.html">Blog</a><span class="sep">/</span>'+
-        '<span class="current">'+BlogStore.esc(post.category||'Article')+'</span></nav>'+
-      '</div>'+
-      '<div class="bd-head">'+
-        '<span class="bd-cat">'+BlogStore.esc(post.category||'Article')+'</span>'+
-        '<h1 class="bd-title">'+BlogStore.esc(post.title)+'</h1>'+
-        (post.excerpt?'<p class="bd-exc">'+BlogStore.esc(post.excerpt)+'</p>':'')+
-        '<div class="bd-meta">'+meta+'</div>'+
-      '</div>'+
-      (post.heroImage?'<div class="bd-hero" style="background-image:url(\''+post.heroImage.replace(/'/g,"%27")+'\');"></div>':'<div style="height:40px;"></div>')+
-      (post.metrics&&post.metrics.length?'<div class="metband">'+post.metrics.map(function(m){return '<div class="met"><div class="metv">'+BlogStore.esc(m.value)+'</div><div class="metl">'+BlogStore.esc(m.label)+'</div></div>';}).join('')+'</div>':'')+
-      '<div class="bd-layout">'+
-        '<article class="bd-article">'+BlogStore.renderBody(post.body)+
-          (tags?'<div class="bd-tags">'+tags+'</div>':'')+
-        '</article>'+
-        '<aside class="bd-side">'+
-          '<div class="side-card"><div class="side-h">Popular Posts</div>'+popular+'</div>'+
-          '<div class="side-cta"><div class="side-cta-h">Need data like this?</div>'+
-          '<div class="side-cta-p">Tell us your requirements and we\'ll send a tailored proposal within 24 hours.</div>'+
-          '<a href="../index.html#contact" class="side-cta-btn">Get a Quote →</a></div>'+
-        '</aside>'+
+      '<div class="bd-crumb">' +
+        '<a href="./index.html" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to Blog</a>' +
+        '<nav class="bd-bread"><a href="../index.html">Home</a><span class="sep">/</span>' +
+        '<a href="./index.html">Blog</a><span class="sep">/</span>' +
+        '<span class="current">' + escapeHtml(post.category || 'Article') + '</span></nav>' +
+      '</div>' +
+      '<div class="bd-head">' +
+        '<span class="bd-cat">' + escapeHtml(post.category || 'Article') + '</span>' +
+        '<h1 class="bd-title">' + escapeHtml(post.title) + '</h1>' +
+        (post.excerpt ? '<p class="bd-exc">' + escapeHtml(post.excerpt) + '</p>' : '') +
+        '<div class="bd-meta">' + meta + '</div>' +
+      '</div>' +
+      (post.heroImage ? '<div class="bd-hero" style="background-image:url(\'' + escapeHtml(post.heroImage) + '\');"></div>' : '<div style="height:40px;"></div>') +
+      (post.metrics && post.metrics.length ? '<div class="metband">' + post.metrics.map(function(m) { return '<div class="met"><div class="metv">' + escapeHtml(m.value) + '</div><div class="metl">' + escapeHtml(m.label) + '</div></div>'; }).join('') + '</div>' : '') +
+      '<div class="bd-layout">' +
+        '<article class="bd-article">' + renderBody(post.body) +
+          (tags ? '<div class="bd-tags">' + tags + '</div>' : '') +
+        '</article>' +
+        '<aside class="bd-side">' +
+          '<div class="side-card"><div class="side-h">Popular Posts</div>' + popular + '</div>' +
+          '<div class="side-cta"><div class="side-cta-h">Need data like this?</div>' +
+          '<div class="side-cta-p">Tell us your requirements and we\'ll send a tailored proposal within 24 hours.</div>' +
+          '<a href="../index.html#contact" class="side-cta-btn">Get a Quote →</a></div>' +
+        '</aside>' +
       '</div>';
 
-    var rel = others.slice(0,3);
-    if(rel.length){
-      document.getElementById('relGrid').innerHTML = rel.map(BlogStore.cardHTML).join('');
+    var rel = others.slice(0, 3);
+    if (rel.length) {
+      document.getElementById('relGrid').innerHTML = rel.map(createCardHTML).join('');
       document.getElementById('relSection').style.display = '';
     }
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   });
 })();
 </script>

@@ -52,7 +52,7 @@
     .modal{background:#fff;border-radius:22px;width:100%;max-width:760px;box-shadow:0 30px 80px rgba(0,0,0,.3);}
     .modal-head{display:flex;align-items:center;justify-content:space-between;padding:22px 28px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;border-radius:22px 22px 0 0;z-index:2;}
     .modal-head h2{font-family:var(--font-d);font-size:19px;font-weight:700;}
-    .x{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;}
+    .x{width:34px;height:40px;border-radius:9px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;justify-content:center;}
     .x svg{width:16px;height:16px;stroke:#555;fill:none;stroke-width:2;stroke-linecap:round;}
     .modal-body{padding:24px 28px;}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
@@ -67,9 +67,9 @@
     .err{color:#dc2626;font-size:13px;margin-right:auto;}
 
     /* login */
-    .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+    .login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f4f6fb;}
     .login-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:40px;width:100%;max-width:380px;box-shadow:0 24px 60px rgba(0,0,0,.08);text-align:center;}
-    .login-card img{height:34px;margin-bottom:24px;}
+    .login-card img{height:40px;margin-bottom:24px;}
     .login-card h1{font-family:var(--font-d);font-size:22px;font-weight:800;margin-bottom:8px;}
     .login-card p{font-size:13.5px;color:#777;margin-bottom:24px;}
     .login-card input{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px 15px;font-size:15px;margin-bottom:14px;font-family:var(--font-b);}
@@ -89,8 +89,9 @@
   <div class="login-card">
     <img src="./logo/Tech DataSeeders Logo.png" alt="Techdataseeders">
     <h1>Blog Admin</h1>
-    <p>Enter your password to manage blog posts.</p>
+    <p>Enter your credentials to manage blog posts.</p>
     <div class="login-err" id="loginErr"></div>
+    <input type="text" id="username" placeholder="Username" autocomplete="username">
     <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
     <button class="btn btn-primary" id="loginBtn">Sign in →</button>
   </div>
@@ -104,20 +105,16 @@
       <span class="top-badge">Blog Admin</span>
     </div>
     <div class="top-r">
-      <button class="btn" id="importBtn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import</button>
-      <button class="btn" id="resetBtn">Reset</button>
+      <button class="btn" id="refreshBtn"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh</button>
       <button class="btn btn-primary" id="newBtn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Post</button>
-      <button class="btn btn-pub" id="publishBtn"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Publish (Download)</button>
       <button class="btn btn-danger" id="logoutBtn">Logout</button>
     </div>
   </div>
 
   <div class="wrap">
     <div class="note">
-      <strong>How to publish:</strong> Add, edit, or delete posts below   changes save automatically in this browser.
-      When you're ready to make them live for everyone, click <strong>Publish (Download)</strong> to get an updated
-      <strong>blogs.json</strong> file, then upload it to your website's <strong>/data/</strong> folder (replacing the old one).
-      That's it   no developer needed.
+     All changes are saved directly to the database.
+      Posts are automatically available on the live site. No manual file uploads needed.
     </div>
     <div class="count" id="count"></div>
     <div class="plist" id="plist"></div>
@@ -193,70 +190,205 @@
   </div>
 </div>
 
-<input type="file" id="importFile" accept="application/json,.json" style="display:none;">
 <div class="toast" id="toast"></div>
 
-<script src="./data/blogs-data.js"></script>
-<script src="./assets/blog-store.js"></script>
 <script>
 (function(){
   /* ====== CONFIG ====== */
-  // Change this password before sharing the admin link.
-  var ADMIN_PASSWORD = 'dataseeders2026';
+  const API_URL = window.location.origin + '/api';
+  let authToken = localStorage.getItem('admin_token') || null;
+  let posts = [];
+
+  /* ====== TOAST ====== */
+  var toastT;
+  function toast(msg){
+    var t=document.getElementById('toast'); 
+    t.textContent=msg; 
+    t.classList.add('show');
+    clearTimeout(toastT); 
+    toastT=setTimeout(function(){t.classList.remove('show');},3000);
+  }
+
+  /* ====== API HELPERS ====== */
+  async function apiRequest(endpoint, options = {}) {
+    const headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...options.headers
+    };
+    
+    if (authToken) {
+      headers['Authorization'] = 'Bearer ' + authToken;
+    }
+    
+    const response = await fetch(API_URL + endpoint, {
+      ...options,
+      headers
+    });
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new Error(data.message || 'API request failed');
+    }
+    
+    return data;
+  }
+
+  async function fetchPosts() {
+    try {
+      const data = await apiRequest('/blog');
+      return data.data || [];
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+      toast('❌ Failed to load posts');
+      return [];
+    }
+  }
+
+  async function savePostToAPI(post) {
+    try {
+      const data = await apiRequest('/blog', {
+        method: 'POST',
+        body: JSON.stringify(post)
+      });
+      return data.data;
+    } catch (error) {
+      console.error('Error saving post:', error);
+      throw error;
+    }
+  }
+
+  async function deletePostFromAPI(slug) {
+    try {
+      await apiRequest('/blog/' + slug, {
+        method: 'DELETE'
+      });
+      return true;
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      throw error;
+    }
+  }
 
   /* ====== LOGIN ====== */
   var loginEl = document.getElementById('login'), appEl = document.getElementById('app');
-  function showApp(){ loginEl.style.display='none'; appEl.style.display='block'; init(); }
-  if(sessionStorage.getItem('tds_admin_auth')==='1'){ showApp(); }
-  function tryLogin(){
-    var v = document.getElementById('pw').value;
-    if(v===ADMIN_PASSWORD){ sessionStorage.setItem('tds_admin_auth','1'); showApp(); }
-    else { document.getElementById('loginErr').textContent='Incorrect password. Try again.'; }
+  
+  async function verifyToken() {
+    if (!authToken) return false;
+    try {
+      await apiRequest('/blog');
+      return true;
+    } catch (error) {
+      localStorage.removeItem('admin_token');
+      authToken = null;
+      return false;
+    }
   }
+
+  async function showApp() {
+    loginEl.style.display = 'none';
+    appEl.style.display = 'block';
+    await loadPosts();
+  }
+
+  // Check if already logged in
+  (async function checkAuth() {
+    if (authToken) {
+      const valid = await verifyToken();
+      if (valid) {
+        showApp();
+        return;
+      }
+    }
+    // Show login
+    loginEl.style.display = 'flex';
+    appEl.style.display = 'none';
+  })();
+
+  async function tryLogin() {
+    var username = document.getElementById('username').value.trim();
+    var password = document.getElementById('pw').value;
+    var errEl = document.getElementById('loginErr');
+    
+    if (!username || !password) {
+      errEl.textContent = 'Please enter both username and password';
+      return;
+    }
+    
+    // Disable button to prevent multiple submissions
+    var btn = document.getElementById('loginBtn');
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+    
+    try {
+      const data = await apiRequest('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      });
+      
+      if (data.success) {
+        authToken = data.token;
+        localStorage.setItem('admin_token', authToken);
+        errEl.textContent = '';
+        showApp();
+      } else {
+        errEl.textContent = data.message || 'Invalid credentials';
+        btn.disabled = false;
+        btn.textContent = 'Sign in →';
+      }
+    } catch (error) {
+      errEl.textContent = 'Network error. Please try again.';
+      console.error('Login error:', error);
+      btn.disabled = false;
+      btn.textContent = 'Sign in →';
+    }
+  }
+
   document.getElementById('loginBtn').addEventListener('click', tryLogin);
-  document.getElementById('pw').addEventListener('keydown', function(e){ if(e.key==='Enter') tryLogin(); });
-  document.getElementById('logoutBtn').addEventListener('click', function(){
-    sessionStorage.removeItem('tds_admin_auth'); location.reload();
+  document.getElementById('pw').addEventListener('keydown', function(e){ 
+    if(e.key==='Enter') tryLogin(); 
+  });
+  document.getElementById('username').addEventListener('keydown', function(e){ 
+    if(e.key==='Enter') tryLogin(); 
   });
 
-  /* ====== STATE ====== */
-  var posts = [];
+  document.getElementById('logoutBtn').addEventListener('click', function(){
+    localStorage.removeItem('admin_token');
+    authToken = null;
+    location.reload();
+  });
+
+  /* ====== POST MANAGEMENT ====== */
   var plist = document.getElementById('plist');
-  var toastT;
 
-  function toast(msg){
-    var t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-    clearTimeout(toastT); toastT=setTimeout(function(){t.classList.remove('show');},2200);
-  }
-  function save(){ BlogStore.saveWorking(posts); render(); }
-
-  function init(){
-    // populate selects
-    var g=document.getElementById('f-gradient');
-    Object.keys(BlogStore.GRADIENTS).forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=k.charAt(0).toUpperCase()+k.slice(1); g.appendChild(o); });
-    var ic=document.getElementById('f-icon');
-    Object.keys(BlogStore.ICONS).forEach(function(k){ var o=document.createElement('option'); o.value=k; o.textContent=k.charAt(0).toUpperCase()+k.slice(1); ic.appendChild(o); });
-    g.addEventListener('change', updateSwatch);
-
-    var working = BlogStore.loadWorking();
-    if(working){ posts = working; render(); }
-    else { BlogStore.fetchPublished().then(function(list){ posts=list.slice(); BlogStore.saveWorking(posts); render(); }); }
+  async function loadPosts() {
+    posts = await fetchPosts();
+    render();
   }
 
-  function updateSwatch(){
-    document.getElementById('gradSwatch').style.background = BlogStore.GRADIENTS[document.getElementById('f-gradient').value] || '';
-  }
-
-  function render(){
+  function render() {
     document.getElementById('count').textContent = posts.length + (posts.length===1?' post':' posts');
-    if(!posts.length){ plist.innerHTML='<div class="empty">No posts yet. Click “New Post” to create one.</div>'; return; }
-    plist.innerHTML = posts.map(function(p,i){
+    if(!posts.length){ 
+      plist.innerHTML='<div class="empty">No posts yet. Click “New Post” to create one.</div>'; 
+      return; 
+    }
+    plist.innerHTML = posts.map(function(p, i){
+      // Use the BlogStore functions if available
+      var gradient = window.BlogStore ? BlogStore.gradientOf(p) : 'linear-gradient(135deg,#2563FF,#1a4fd8)';
+      var icon = window.BlogStore ? BlogStore.iconOf(p) : '<circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="12"/>';
+      var escapedTitle = String(p.title || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var escapedCategory = String(p.category || ' ').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var escapedAuthor = String(p.author || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var escapedDate = String(p.date || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var escapedSlug = String(p.slug || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      
       return '<div class="pitem">'+
-        '<div class="pthumb" style="background:'+BlogStore.gradientOf(p)+'"><svg viewBox="0 0 24 24">'+BlogStore.iconOf(p)+'</svg></div>'+
+        '<div class="pthumb" style="background:'+gradient+'"><svg viewBox="0 0 24 24">'+icon+'</svg></div>'+
         '<div class="pmeta">'+
-          '<div class="pcat">'+BlogStore.esc(p.category||' ')+'</div>'+
-          '<div class="ptitle">'+BlogStore.esc(p.title)+'</div>'+
-          '<div class="psub">'+BlogStore.esc(p.author||'')+(p.date?' • '+BlogStore.esc(p.date):'')+' • '+BlogStore.esc(p.slug)+'</div>'+
+          '<div class="pcat">'+escapedCategory+'</div>'+
+          '<div class="ptitle">'+escapedTitle+'</div>'+
+          '<div class="psub">'+escapedAuthor+(p.date?' • '+escapedDate:'')+' • '+escapedSlug+'</div>'+
         '</div>'+
         '<div class="pacts">'+
           '<a class="btn" target="_blank" href="./blog/post.html?slug='+encodeURIComponent(p.slug)+'">View</a>'+
@@ -268,20 +400,28 @@
   }
 
   plist.addEventListener('click', function(e){
-    var ed=e.target.getAttribute('data-edit'), dl=e.target.getAttribute('data-del');
-    if(ed!==null && ed!==undefined) openEditor(+ed);
+    var ed = e.target.getAttribute('data-edit');
+    var dl = e.target.getAttribute('data-del');
+    if(ed!==null && ed!==undefined) openEditor(parseInt(ed));
     if(dl!==null && dl!==undefined){
-      var p=posts[+dl];
-      if(confirm('Delete “'+p.title+'”? This cannot be undone (until you re-publish).')){
-        posts.splice(+dl,1); save(); toast('Post deleted');
+      var p = posts[parseInt(dl)];
+      if(confirm('Delete “'+p.title+'”? This cannot be undone.')){
+        deletePostFromAPI(p.slug).then(function() {
+          posts.splice(parseInt(dl), 1);
+          render();
+          toast('✅ Post deleted');
+        }).catch(function(err) {
+          toast('❌ Failed to delete: ' + err.message);
+        });
       }
     }
   });
 
   /* ====== EDITOR ====== */
-  var overlay=document.getElementById('overlay');
+  var overlay = document.getElementById('overlay');
+
   function openEditor(index){
-    var p = (index!=null) ? posts[index] : {gradient:'blue',icon:'database'};
+    var p = (index!=null) ? posts[index] : {gradient:'blue', icon:'database'};
     document.getElementById('modalTitle').textContent = (index!=null)?'Edit Post':'New Post';
     document.getElementById('f-orig').value = (index!=null)? p.slug : '';
     document.getElementById('f-title').value = p.title||'';
@@ -296,91 +436,181 @@
     document.getElementById('f-gradient').value = p.gradient||'blue';
     document.getElementById('f-icon').value = p.icon||'database';
     document.getElementById('f-body').value = p.body||'';
-    document.getElementById('formErr').textContent='';
+    document.getElementById('formErr').textContent = '';
     updateSwatch();
     overlay.classList.add('show');
   }
-  function closeEditor(){ overlay.classList.remove('show'); }
 
-  // auto-slug from title (only when slug empty or matches a fresh new post)
-  document.getElementById('f-title').addEventListener('input', function(){
-    var slugField=document.getElementById('f-slug');
-    if(!document.getElementById('f-orig').value && (!slugField.dataset.touched)){
-      slugField.value = BlogStore.slugify(this.value);
-    }
-  });
-  document.getElementById('f-slug').addEventListener('input', function(){ this.dataset.touched='1'; });
+  function closeEditor(){ 
+    overlay.classList.remove('show'); 
+  }
 
-  document.getElementById('saveBtn').addEventListener('click', function(){
-    var title=document.getElementById('f-title').value.trim();
-    var slug=BlogStore.slugify(document.getElementById('f-slug').value || title);
-    var orig=document.getElementById('f-orig').value;
-    var err=document.getElementById('formErr');
-    if(!title){ err.textContent='Title is required.'; return; }
-    if(!slug){ err.textContent='A valid URL slug is required.'; return; }
-    // unique slug check (allow keeping own slug when editing)
-    var clash = posts.some(function(p){ return p.slug===slug && p.slug!==orig; });
-    if(clash){ err.textContent='Another post already uses that slug. Choose a different one.'; return; }
-
-    var tags = document.getElementById('f-tags').value.split(',').map(function(t){return t.trim();}).filter(Boolean);
-    var obj = {
-      slug:slug, title:title,
-      category:document.getElementById('f-category').value.trim(),
-      author:document.getElementById('f-author').value.trim(),
-      date:document.getElementById('f-date').value.trim(),
-      readTime:document.getElementById('f-read').value.trim(),
-      excerpt:document.getElementById('f-excerpt').value.trim(),
-      heroImage:document.getElementById('f-hero').value.trim(),
-      gradient:document.getElementById('f-gradient').value,
-      icon:document.getElementById('f-icon').value,
-      tags:tags,
-      body:document.getElementById('f-body').value
+  function updateSwatch(){
+    var grad = document.getElementById('f-gradient').value;
+    var gradients = {
+      blue: 'linear-gradient(135deg,#0d1b4b 0%,#1a4fd6 50%,#2563FF 100%)',
+      green: 'linear-gradient(135deg,#064e3b 0%,#059669 50%,#10b981 100%)',
+      purple: 'linear-gradient(135deg,#2e1065 0%,#5b21b6 50%,#7c3aed 100%)',
+      magenta: 'linear-gradient(135deg,#4d1a3d 0%,#9d4edd 50%,#c77dff 100%)',
+      teal: 'linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%)',
+      navy: 'linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%)'
     };
-    if(orig){ // editing
-      var idx = posts.findIndex(function(p){return p.slug===orig;});
-      if(idx>-1) posts[idx]=obj; else posts.unshift(obj);
-    } else { // new -> add to top
-      posts.unshift(obj);
+    document.getElementById('gradSwatch').style.background = gradients[grad] || gradients.blue;
+  }
+
+  // auto-slug from title
+  function slugify(s) {
+    return String(s || '').toLowerCase().trim()
+      .replace(/['"]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
+  }
+
+  document.getElementById('f-title').addEventListener('input', function(){
+    var slugField = document.getElementById('f-slug');
+    if(!document.getElementById('f-orig').value && (!slugField.dataset.touched)){
+      slugField.value = slugify(this.value);
     }
-    save(); closeEditor(); toast('Post saved');
+  });
+  document.getElementById('f-slug').addEventListener('input', function(){ 
+    this.dataset.touched = '1'; 
   });
 
+ document.getElementById('saveBtn').addEventListener('click', async function(){
+  var title = document.getElementById('f-title').value.trim();
+  var slug = slugify(document.getElementById('f-slug').value || title);
+  var origSlug = document.getElementById('f-orig').value; // This is the original slug
+  var err = document.getElementById('formErr');
+  
+  if(!title){ err.textContent='Title is required.'; return; }
+  if(!slug){ err.textContent='A valid URL slug is required.'; return; }
+  
+  // Check for duplicate slug - EXCLUDE the current post when editing
+  var clash = posts.some(function(p){ 
+    // If we're editing (origSlug exists), skip the current post
+    if (origSlug && p.slug === origSlug) {
+      return false; // Skip the current post
+    }
+    // Check if any OTHER post has this slug
+    return p.slug === slug; 
+  });
+  
+  if(clash){ 
+    err.textContent='Another post already uses that slug. Choose a different one.'; 
+    return; 
+  }
+
+  var tags = document.getElementById('f-tags').value.split(',').map(function(t){return t.trim();}).filter(Boolean);
+  
+  // Build the post object
+  var obj = {
+    title: title,
+    slug: slug,
+    category: document.getElementById('f-category').value.trim(),
+    author: document.getElementById('f-author').value.trim(),
+    date: document.getElementById('f-date').value.trim(),
+    readTime: document.getElementById('f-read').value.trim(),
+    excerpt: document.getElementById('f-excerpt').value.trim(),
+    heroImage: document.getElementById('f-hero').value.trim(),
+    gradient: document.getElementById('f-gradient').value,
+    icon: document.getElementById('f-icon').value,
+    tags: tags,
+    body: document.getElementById('f-body').value
+  };
+
+  // If editing, include the _id so the backend knows it's an update
+  if (origSlug) {
+    var existing = posts.find(function(p) { return p.slug === origSlug; });
+    if (existing && existing._id) {
+      obj._id = existing._id;
+      // Keep the original slug in a separate field for the backend to identify the post
+      obj.originalSlug = origSlug;
+    }
+  }
+
+  console.log('📝 Saving post:', { 
+    title: obj.title, 
+    slug: obj.slug, 
+    origSlug: origSlug,
+    isEdit: !!origSlug,
+    hasId: !!obj._id
+  });
+
+  try {
+    const saved = await savePostToAPI(obj);
+    if(origSlug){
+      var idx = posts.findIndex(function(p){ return p.slug === origSlug; });
+      if(idx > -1) {
+        posts[idx] = saved;
+      } else {
+        posts.unshift(saved);
+      }
+    } else {
+      posts.unshift(saved);
+    }
+    render();
+    closeEditor();
+    toast('✅ Post saved to database');
+  } catch(error) {
+    err.textContent = 'Failed to save: ' + error.message;
+    toast('❌ Error saving post');
+    console.error('Save error:', error);
+  }
+});
   document.getElementById('newBtn').addEventListener('click', function(){
-    document.getElementById('f-slug').dataset.touched='';
+    document.getElementById('f-slug').dataset.touched = '';
+    document.getElementById('f-orig').value = '';
     openEditor(null);
   });
   document.getElementById('closeBtn').addEventListener('click', closeEditor);
   document.getElementById('cancelBtn').addEventListener('click', closeEditor);
   overlay.addEventListener('click', function(e){ if(e.target===overlay) closeEditor(); });
 
-  /* ====== PUBLISH / IMPORT / RESET ====== */
-  function download(name, text){
-    var blob=new Blob([text],{type:'application/json'});
-    var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=name;
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(function(){URL.revokeObjectURL(a.href);},1000);
-  }
-  document.getElementById('publishBtn').addEventListener('click', function(){
-    download('blogs.json', JSON.stringify(posts, null, 2));
-    toast('blogs.json downloaded   upload it to /data/');
-  });
-  document.getElementById('importBtn').addEventListener('click', function(){ document.getElementById('importFile').click(); });
-  document.getElementById('importFile').addEventListener('change', function(e){
-    var file=e.target.files[0]; if(!file) return;
-    var reader=new FileReader();
-    reader.onload=function(){
-      try{
-        var data=JSON.parse(reader.result);
-        if(!Array.isArray(data)) throw new Error('not an array');
-        posts=data; save(); toast('Imported '+data.length+' posts');
-      }catch(err){ alert('Could not read that file   make sure it is a valid blogs.json.'); }
+  /* ====== INIT SELECTS ====== */
+  (function initSelects() {
+    var g = document.getElementById('f-gradient');
+    var gradients = {
+      blue: 'Blue',
+      green: 'Green',
+      purple: 'Purple',
+      magenta: 'Magenta',
+      teal: 'Teal',
+      navy: 'Navy'
     };
-    reader.readAsText(file); e.target.value='';
+    Object.keys(gradients).forEach(function(k){ 
+      var o = document.createElement('option'); 
+      o.value = k; 
+      o.textContent = gradients[k]; 
+      g.appendChild(o); 
+    });
+    
+    var ic = document.getElementById('f-icon');
+    var icons = {
+      database: 'Database',
+      activity: 'Activity',
+      shield: 'Shield',
+      clock: 'Clock',
+      chart: 'Chart',
+      doc: 'Document',
+      globe: 'Globe',
+      star: 'Star',
+      bulb: 'Bulb'
+    };
+    Object.keys(icons).forEach(function(k){ 
+      var o = document.createElement('option'); 
+      o.value = k; 
+      o.textContent = icons[k]; 
+      ic.appendChild(o); 
+    });
+    
+    g.addEventListener('change', updateSwatch);
+  })();
+
+  /* ====== REFRESH ====== */
+  document.getElementById('refreshBtn').addEventListener('click', function(){
+    loadPosts().then(function() {
+      toast('🔄 Posts refreshed');
+    });
   });
-  document.getElementById('resetBtn').addEventListener('click', function(){
-    if(!confirm('Discard your unsaved changes and reload the currently published posts?')) return;
-    BlogStore.fetchPublished().then(function(list){ posts=list.slice(); BlogStore.saveWorking(posts); render(); toast('Reset to published posts'); });
-  });
+
 })();
 </script>
 </body>
