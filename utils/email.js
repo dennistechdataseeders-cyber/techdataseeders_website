@@ -86,7 +86,7 @@ async function sendContactEmail(data) {
   const recipient = process.env.CONTACT_EMAIL || 'sales@techdats.in';
   
   const mailOptions = {
-    from: process.env.SMTP_FROM || 'sales@techdats.in',
+    from: process.env.SMTP_FROM || 'sales@techdataseeders.in',
     to: recipient,
     replyTo: email,
     subject: `📩 New Contact Form Submission from ${name}`,

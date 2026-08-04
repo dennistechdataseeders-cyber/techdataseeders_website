@@ -55,7 +55,34 @@ app.put('/api/submissions/:id', authMiddleware, contactAPI.updateSubmission);
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'admin.html'));
 });
-
+// Add this to server/server.js
+app.get('/sitemap.xml', async (req, res) => {
+  const posts = await getBlogPosts(); // Your existing function
+  
+  let urls = posts.map(post => `
+    <url>
+      <loc>https://techdataseeders.com/blog/post.html?slug=${post.slug}</loc>
+      <lastmod>${post.updatedAt || new Date().toISOString()}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>
+  `).join('');
+  
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      <!-- Static URLs -->
+      <url>
+        <loc>https://techdataseeders.com/</loc>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+      </url>
+      <!-- Dynamic blog posts -->
+      ${urls}
+    </urlset>`;
+  
+  res.header('Content-Type', 'application/xml');
+  res.send(sitemap);
+});
 // Serve index for all other routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'index.html'));
