@@ -568,19 +568,20 @@
     }
 
     /* Globe sits at bottom of hero */
-    .hero-globe-bg {
-      position: absolute;
-      bottom: -60px;
-      left: 50%;
-      -webkit-transform: translateX(-50%) translateZ(0);
-      transform: translateX(-50%) translateZ(0);
-      width: 1200px;
-      height: 1200px;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.5;
-      will-change: transform;
-    }
+/* Globe touches navbar - no gap */
+.hero-globe-bg {
+  position: absolute;
+  top: -200px;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateZ(0);
+  transform: translateX(-50%) translateZ(0);
+  width: 1200px;
+  height: 1200px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.4;
+  will-change: transform;
+}
 
     .hero-globe-svg {
       width: 100%;
@@ -616,7 +617,7 @@
 
     .hero {
       min-height: 100vh;
-      padding: 110px 60px 60px;
+      padding: 70px 60px 60px; /* Reduced top padding from 110px to 70px */
       background: #fff;
       position: relative;
       overflow: hidden;
@@ -733,16 +734,17 @@
     }
 
     /* hero content wrapper */
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 900px;
-      width: 100%;
-      margin-top: 60px; /* Changed from top: 140px */
-    }
+   .hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 900px;
+  width: 100%;
+  top: 0;
+  margin-top: -40px;
+}
 
     /* headline   light + bold-italic contrast */
     .hero-h1 {
@@ -783,7 +785,7 @@
       line-height: 1.75;
       color: #666;
       max-width: 520px;
-      margin-bottom: 44px;
+      margin-bottom: 14px;
       opacity: 0;
       transform: translateY(20px);
     }
@@ -841,6 +843,7 @@
 
     /* CTA inside stats row */
     .hero-cta-btn {
+      margin-top: 30px;
       margin-left: 28px;
       background: var(--blue);
       color: #fff;
@@ -4043,6 +4046,275 @@
         border-right: none;
       }
     }
+    /* Reduce gap between navbar and hero text */
+.hero {
+  padding-top: 90px !important; /* Reduced from 110px */
+}
+
+.hero-content {
+  margin-top: -20px !important;
+}
+
+/* Mobile hero stats - single line with button below */
+@media(max-width: 1100px) {
+  .hero-content {
+    top: 0 !important;
+    margin-top: -10px !important;
+  }
+  .hero-globe-bg {
+    width: 800px;
+    height: 800px;
+    top: 0;
+  }
+}
+
+@media(max-width: 768px) {
+  .hero-stats {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 6px 12px !important;
+    max-width: 100% !important;
+  }
+    .hero-globe-bg {
+    width: 600px;
+    height: 600px;
+    top: 0;
+  }
+
+  .h-stat {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 0 10px !important;
+    border-right: 1px solid rgba(0, 0, 0, .1) !important;
+    flex: 0 1 auto !important;
+  }
+  
+  .h-stat:last-of-type {
+    border-right: none !important;
+  }
+  
+  .h-stat-ico {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  
+  .h-stat-ico img {
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  .h-stat-num {
+    font-size: 14px !important;
+    line-height: 1 !important;
+  }
+  
+  .h-stat-lbl {
+    font-size: 8px !important;
+    letter-spacing: 0 !important;
+    margin-top: 1px !important;
+    line-height: 1 !important;
+  }
+  
+  .hero-cta-btn {
+    margin-left: 0 !important;
+    margin-top: 20px !important;
+    width: auto !important;
+    padding: 8px 24px !important;
+    font-size: 12px !important;
+    flex: 0 1 100% !important;
+    justify-content: center !important;
+  }
+   .ind-showcase {
+    flex-direction: column !important;
+    gap: 24px !important;
+    margin-top: 30px !important;
+  }
+  
+  .ind-cols {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+  
+  .ind-col {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    margin-top: 0 !important;
+  }
+  
+  .ind-col-1 .ind-photo {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 3/4 !important;
+  }
+  
+  .ind-col-2 .ind-photo {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 3/4 !important;
+  }
+  
+  .ind-col-3 .ind-photo {
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 3/4 !important;
+  }
+  
+  .ind-col-3 .ind-photo:only-child {
+    height: auto !important;
+    aspect-ratio: 3/4 !important;
+  }
+  
+  .ind-photo img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  
+  .ind-photo-overlay {
+    padding: 0 6px 10px !important;
+  }
+  
+  .ind-photo-name {
+    font-size: 10px !important;
+  }
+  
+  .ind-photo-sub {
+    font-size: 6px !important;
+  }
+  
+  .ind-list {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0 !important;
+    width: 100% !important;
+  }
+  
+  .ind-row {
+    padding: 10px 0 !important;
+  }
+  
+  .ind-row-name {
+    font-size: 13px !important;
+  }
+  
+  .ind-row-tag {
+    font-size: 7px !important;
+    padding-left: 20px !important;
+  }
+  
+  .ind-row-bar {
+    width: 12px !important;
+    height: 8px !important;
+  }
+  
+  .ind-row.hov-active .ind-row-bar {
+    width: 18px !important;
+  }
+
+
+}
+
+@media(max-width: 480px) {
+  .hero-stats {
+    gap: 4px 8px !important;
+  }
+   .hero-globe-bg {
+    width: 450px;
+    height: 450px;
+    top: 0;
+  }
+  .h-stat {
+    padding: 0 6px !important;
+    gap: 4px !important;
+  }
+  
+  .h-stat-num {
+    font-size: 12px !important;
+  }
+  
+  .h-stat-lbl {
+    font-size: 7px !important;
+  }
+  
+  .h-stat-ico {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  
+  .h-stat-ico img {
+    width: 11px !important;
+    height: 11px !important;
+  }
+  
+  .hero-cta-btn {
+    padding: 6px 18px !important;
+    font-size: 10px !important;
+  }
+  .ind-cols {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 4px !important;
+  }
+  
+  .ind-col {
+    gap: 4px !important;
+  }
+  
+  .ind-photo-name {
+    font-size: 8px !important;
+  }
+  
+  .ind-photo-sub {
+    font-size: 5px !important;
+  }
+  
+  .ind-photo-overlay {
+    padding: 0 4px 6px !important;
+  }
+  
+  .ind-list {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0 !important;
+  }
+  
+  .ind-row {
+    padding: 8px 0 !important;
+  }
+  
+  .ind-row-name {
+    font-size: 11px !important;
+  }
+  
+  .ind-row-tag {
+    font-size: 6px !important;
+    padding-left: 14px !important;
+  }
+  
+  .ind-row-inner {
+    gap: 8px !important;
+  }
+  
+  .ind-row-bar {
+    width: 10px !important;
+    height: 6px !important;
+  }
+}
+@media(max-width: 380px) {
+  .ind-cols {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .ind-list {
+    grid-template-columns: 1fr !important;
+  }
+}
   </style>
 </head>
 
@@ -4201,29 +4473,30 @@
 
       <!-- Stats bar + CTA in one row -->
       <div class="hero-stats">
-        <div class="h-stat">
-          <div class="h-stat-ico"><img src="./logo/ri_star-fill.svg" alt="Records"></div>
-          <div>
-            <div class="h-stat-num">100M+</div>
-            <div class="h-stat-lbl">Records Scraped Every Day</div>
-          </div>
-        </div>
-        <div class="h-stat">
-          <div class="h-stat-ico"><img src="./logo/solar_medal-ribbon-star-bold.svg" alt="Accuracy"></div>
-          <div>
-            <div class="h-stat-num">50+</div>
-            <div class="h-stat-lbl">Platforms Monitored Daily</div>
-          </div>
-        </div>
-        <div class="h-stat">
-          <div class="h-stat-ico"><img src="./logo/weui_done2-filled.svg" alt="Happy Clients"></div>
-          <div>
-            <div class="h-stat-num">100+</div>
-            <div class="h-stat-lbl">Clients Served Worldwide</div>
-          </div>
-        </div>
-        <a href="#contact" class="hero-cta-btn">LET'S TALK</a>
-      </div>
+  <div class="h-stat">
+    <div class="h-stat-ico"><img src="./logo/ri_star-fill.svg" alt="Records"></div>
+    <div>
+      <div class="h-stat-num">100M+</div>
+      <div class="h-stat-lbl">Records Scraped Every Day</div>
+    </div>
+  </div>
+  <div class="h-stat">
+    <div class="h-stat-ico"><img src="./logo/solar_medal-ribbon-star-bold.svg" alt="Accuracy"></div>
+    <div>
+      <div class="h-stat-num">50+</div>
+      <div class="h-stat-lbl">Platforms Monitored Daily</div>
+    </div>
+  </div>
+  <div class="h-stat">
+    <div class="h-stat-ico"><img src="./logo/weui_done2-filled.svg" alt="Happy Clients"></div>
+    <div>
+      <div class="h-stat-num">100+</div>
+      <div class="h-stat-lbl">Clients Served Worldwide</div>
+    </div>
+  </div>
+</div>
+  <a href="#contact" class="hero-cta-btn">LET'S TALK</a>
+
     </div>
 
   </section>
@@ -4705,7 +4978,7 @@
               </svg>
             </div>
           </div>
-          <div class="f-stat-n">24<sup>/7</sup></div>
+          <div class="f-stat-n">24/7</div>
           <div class="f-stat-l">Support Coverage</div>
           <div class="f-stat-d">Always on, always available</div>
         </div>
@@ -4718,7 +4991,7 @@
               </svg>
             </div>
           </div>
-          <div class="f-stat-n">Eight</div>
+          <div class="f-stat-n">8</div>
           <div class="f-stat-l">Industries Powered</div>
           <div class="f-stat-d">Diverse domain expertise</div>
         </div>
@@ -5983,7 +6256,7 @@
         <div class="faq-ccard rv">
           <h4>Connect with our Team</h4>
           <p>Have questions or want to discuss your data project?</p>
-          <a href="mailto:ceo@techdataseeders.in" class="faq-clink">Email Us →</a>
+          <a href="mailto:sales@techdataseeders.in" class="faq-clink">Email Us →</a>
         </div>
       </div>
       <div class="faq-list rv">
@@ -6043,65 +6316,78 @@
   </section>
 
   <!-- ======================== FOOTER ======================== -->
-  <footer class="footer">
-    <div class="ft">
-      <div>
-        <img src="./logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Techdataseeders" style="height:40px;">
-        <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation — seeding intelligence from the web.</p>
-        <div class="socials">
-          <a href="https://linkedin.com/company/techdataseeders" class="soc" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-          <a href="https://twitter.com/techdataseeders" class="soc" aria-label="Twitter"><svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg></a>
-          <a href="mailto:ceo@techdataseeders.in" class="soc" aria-label="Email"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></a>
-        </div>
-      </div>
-      <div class="fc">
-        <h4>Services</h4>
-        <div class="fl">
-          <a href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
-          <a href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
-          <a href="./services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
-          <a href="./services/custom-data-api.html">Custom Data API Delivery</a>
-        </div>
-      </div>
-      <div class="fc">
-        <h4>Industries</h4>
-        <div class="fl">
-          <a href="./industries/ecomm.html">E-Commerce</a>
-          <a href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
-          <a href="./industries/food-beverages.html">Food &amp; Beverages</a>
-          <a href="./industries/q-commerce.html">Quick Commerce</a>
-          <a href="./industries/real-estate.html">Real Estate</a>
-          <a href="./industries/retail.html">Retail</a>
-          <a href="./industries/social-media.html">Social Media</a>
-          <a href="./industries/travel-hotel.html">Travel &amp; Hospitality</a>
-        </div>
-      </div>
-      <div class="fc">
-        <h4>Company</h4>
-        <div class="fl">
-          <a href="./about.html">About Us</a>
-          <a href="./blog/index.html">Blog</a>
-          <a href="./case-studies.html">Case Studies</a>
-          <a href="./index.html#testimonials">Testimonials</a>
-          <a href="./index.html#contact">Pricing</a>
-        </div>
-      </div>
-      <div class="fc">
-        <h4>Contact</h4>
-        <div class="fl">
-          <a href="mailto:sales@techdataseeders.in" style="word-break:break-all;">sales@techdataseeders.in</a>
-        </div>
+<footer class="footer">
+  <div class="ft">
+    <div>
+      <img src="./logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Tech DataSeeders - Home" loading="lazy" style="height:40px; width:auto;">
+      <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation — seeding intelligence from the web.</p>
+      <div class="socials" aria-label="Social media links">
+        <a href="https://linkedin.com/company/techdataseeders" target="_blank" rel="noopener noreferrer" class="soc" aria-label="LinkedIn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="https://twitter.com/techdataseeders" target="_blank" rel="noopener noreferrer" class="soc" aria-label="Twitter (X)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+        </a>
+        <a href="mailto:sales@techdataseeders.in" class="soc" aria-label="Email sales">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        </a>
       </div>
     </div>
-    <div class="fbot">
-      <p class="fcopy">&copy; 2025 TechDataSeeders. All rights reserved.</p>
-      <div class="fleg">
-        <a href="./privacy.html">Privacy Policy</a>
-        <a href="./terms.html">Terms &amp; Conditions</a>
+
+    <div class="fc">
+      <h4>Services</h4>
+      <div class="fl">
+        <a href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a href="./services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+        <a href="./services/custom-data-api.html">Custom Data API</a>
       </div>
     </div>
-    <p class="fdisclaim">TechDataSeeders only extracts information that is publicly available and does not scrape personal or identity-related information.</p>
-  </footer>
+
+    <div class="fc">
+      <h4>Industries</h4>
+      <div class="fl">
+        <a href="./industries/ecomm.html">E-Commerce</a>
+        <a href="./industries/retail.html">Retail</a>
+        <a href="./industries/real-estate.html">Real Estate</a>
+        <a href="./industries/travel-hotel.html">Travel &amp; Hospitality</a>
+        <a href="./industries/food-beverages.html">Food &amp; Beverages</a>
+        <a href="./industries/q-commerce.html">Quick Commerce</a>
+        <a href="./industries/social-media.html">Social Media</a>
+        <a href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+      </div>
+    </div>
+
+    <div class="fc">
+      <h4>Company</h4>
+      <div class="fl">
+        <a href="./about.html">About Us</a>
+        <a href="./blog/index.html">Blog</a>
+        <a href="./case-studies.html">Case Studies</a>
+        <a href="./index.html#testimonials">Testimonials</a>
+        <a href="./index.html#contact">Contact</a>
+      </div>
+    </div>
+
+    <div class="fc">
+      <h4>Contact</h4>
+      <div class="fl">
+        <a href="mailto:sales@techdataseeders.in">sales@techdataseeders.in</a>
+        <a href="tel:+918401481455" style="color:rgba(255,255,255,.85);">+91 8401481455</a>
+        <span style="font-size:12px;color:rgba(255,255,255,.35);line-height:1.5;"> INDIA &nbsp;|&nbsp; USA &nbsp;|&nbsp;  UAE</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="fbot">
+    <p class="fcopy">&copy; 2025 Techdataseeders. All rights reserved.</p>
+    <div class="fleg">
+      <a href="./privacy.html">Privacy Policy</a>
+      <a href="./terms.html">Terms &amp; Conditions</a>
+    </div>
+  </div>
+  <p class="fdisclaim">Techdataseeders only extracts publicly available information and does not scrape personal or identity-related data.</p>
+</footer>
 
   <!-- Scroll to top -->
   <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>

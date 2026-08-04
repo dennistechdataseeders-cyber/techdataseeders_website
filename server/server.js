@@ -88,13 +88,18 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log('🚀 Techdataseeders Server Started');
   console.log('=====================================');
-  console.log(`📍 Server: http://localhost:${PORT}`);
-  console.log(`📝 Admin: http://localhost:${PORT}/admin`);
-  console.log(`📊 API: http://localhost:${PORT}/api/health`);
+  console.log(`📍 Local: http://localhost:${PORT}`);
+  console.log(`📍 Network: http://192.168.1.8:${PORT}`);
+  console.log(`📝 Admin: http://192.168.1.8:${PORT}/admin`);
+  console.log(`📊 API: http://192.168.1.8:${PORT}/api/health`);
   console.log('🗄️  Database: MongoDB (techdataseeder_website_data)');
+  console.log('=====================================');
+  console.log('📱 To view on your phone, open:');
+  console.log(`   http://192.168.1.8:${PORT}`);
+  console.log('💡 Make sure both devices are on the same WiFi network');
   console.log('=====================================');
   console.log('💡 Press Ctrl+C to stop');
 });
