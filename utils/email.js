@@ -83,10 +83,10 @@ async function sendContactEmail(data) {
   const formattedPhone = formatPhone(phone);
   
   // Get recipient from .env or use default
-  const recipient = process.env.CONTACT_EMAIL || 'sales@techdats.in';
+  const recipient = process.env.CONTACT_EMAIL || 'sales@techdataseeders.com';
   
   const mailOptions = {
-    from: process.env.SMTP_FROM || 'sales@techdataseeders.in',
+    from: process.env.SMTP_FROM ,
     to: recipient,
     replyTo: email,
     subject: `📩 New Contact Form Submission from ${name}`,
