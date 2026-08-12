@@ -3207,192 +3207,194 @@
     }
 
     /* ===== FORMULA SECTION ===== */
-    .formula-lay {
-      display: grid;
-      grid-template-columns: 1fr 1.6fr;
-      gap: 72px;
-      align-items: start;
-    }
+.formula-lay {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 72px;
+  align-items: start;
+}
 
-    .formula-title {
-      font-family: var(--font-d);
-      font-size: clamp(36px, 4.2vw, 58px);
-      font-weight: 300;
-      color: #0a0a0a;
-      line-height: 1.1;
-      letter-spacing: -.03em;
-      margin-bottom: 18px;
-    }
+.formula-title {
+  font-family: var(--font-d);
+  font-size: clamp(36px, 4.2vw, 58px);
+  font-weight: 300;
+  color: #0a0a0a;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  margin-bottom: 18px;
+}
 
-    .formula-title .it {
-      font-weight: 800;
-      font-style: italic;
-    }
+.formula-title .it {
+  font-weight: 800;
+  font-style: italic;
+}
 
-    .formula-desc {
-      font-size: 15px;
-      line-height: 1.8;
-      color: #555;
-      margin-bottom: 36px;
-      max-width: 360px;
-    }
+.formula-desc {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 36px;
+  max-width: 360px;
+}
 
-    .formula-stats {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      border: 1px solid rgba(0, 0, 0, .07);
-      border-radius: 22px;
-      overflow: hidden;
-    }
+.formula-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border: 1px solid rgba(0, 0, 0, .07);
+  border-radius: 22px;
+  overflow: hidden;
+}
 
-    .f-stat {
-      padding: 30px 26px;
-      border-right: 1px solid rgba(0, 0, 0, .06);
-      border-bottom: 1px solid rgba(0, 0, 0, .06);
-      transition: background .3s;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+.f-stat {
+  padding: 30px 26px;
+  border-right: 1px solid rgba(0, 0, 0, .06);
+  border-bottom: 1px solid rgba(0, 0, 0, .06);
+  transition: background .3s;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-    .f-stat:nth-child(even) {
-      border-right: none;
-    }
+.f-stat:nth-child(even) {
+  border-right: none;
+}
 
-    .f-stat:nth-last-child(-n+2) {
-      border-bottom: none;
-    }
+.f-stat:nth-last-child(-n+2) {
+  border-bottom: none;
+}
 
-    .f-stat:hover {
-      background: #f9fbff;
-    }
+.f-stat:hover {
+  background: #f9fbff;
+}
 
-    .f-stat-ico-wrap {
-      margin-bottom: 2px;
-    }
+.f-stat-ico-wrap {
+  margin-bottom: 2px;
+}
 
-    .f-stat-ico {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: rgba(37, 99, 255, .08);
-      border: 1.5px solid rgba(37, 99, 255, .28);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: background .3s, border-color .3s;
-    }
+.f-stat-ico {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: rgba(37, 99, 255, .08);
+  border: 1.5px solid rgba(37, 99, 255, .28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background .3s, border-color .3s;
+}
 
-    .f-stat:hover .f-stat-ico {
-      background: rgba(37, 99, 255, .14);
-      border-color: rgba(37, 99, 255, .5);
-    }
+.f-stat:hover .f-stat-ico {
+  background: rgba(37, 99, 255, .14);
+  border-color: rgba(37, 99, 255, .5);
+}
 
-    .f-stat-ico svg {
-      width: 19px;
-      height: 19px;
-      stroke: #2563FF;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
+.f-stat-ico svg {
+  width: 19px;
+  height: 19px;
+  stroke: #2563FF;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
-    .f-stat-n {
-      font-family: var(--font-d);
-      font-size: 38px;
-      font-weight: 800;
-      color: #0a0a0a;
-      letter-spacing: -.025em;
-      line-height: 1;
-    }
+.f-stat-n {
+  font-family: var(--font-d);
+  font-size: 38px;
+  font-weight: 800;
+  color: #0a0a0a;
+  letter-spacing: -.025em;
+  line-height: 1;
+}
 
-    .f-stat-n sup {
-      font-size: 20px;
-      color: var(--blue);
-      vertical-align: super;
-      margin-left: 1px;
-    }
+.f-stat-n sup {
+  font-size: 20px;
+  color: var(--blue);
+  vertical-align: super;
+  margin-left: 1px;
+}
 
-    .f-stat-l {
-      font-size: 14px;
-      font-weight: 700;
-      color: #222;
-    }
+.f-stat-l {
+  font-size: 14px;
+  font-weight: 700;
+  color: #222;
+}
 
-    .f-stat-d {
-      font-size: 12px;
-      color: #aaa;
-      line-height: 1.5;
-    }
+.f-stat-d {
+  font-size: 12px;
+  color: #aaa;
+  line-height: 1.5;
+}
 
-    .formula-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 40px;
-      border-top: 1px solid rgba(0, 0, 0, .07);
-      margin-top: 52px;
-    }
+.formula-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 40px;
+  border-top: 1px solid rgba(0, 0, 0, .07);
+  margin-top: 52px;
+  flex-wrap: wrap;
+  gap: 24px;
+}
 
-    .formula-team {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
+.formula-team {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
 
-    .team-avs {
-      display: flex;
-    }
+.team-avs {
+  display: flex;
+}
 
-    .team-av {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--font-d);
-      font-size: 13px;
-      font-weight: 800;
-      color: #fff;
-      margin-left: -14px;
-      flex-shrink: 0;
-    }
+.team-av {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: linear-gradient(135deg, var(--blue), var(--blue-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-d);
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  margin-left: -10px;
+  flex-shrink: 0;
+}
 
-    .team-av:first-child {
-      margin-left: 0;
-    }
+.team-av:first-child {
+  margin-left: 0;
+}
 
-    .team-av:nth-child(2) {
-      background: linear-gradient(135deg, #10b981, #059669);
-    }
+.team-av:nth-child(2) {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
 
-    .team-av:nth-child(3) {
-      background: linear-gradient(135deg, #7c3aed, #5b21b6);
-    }
+.team-av:nth-child(3) {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+}
 
-    .team-av:nth-child(4) {
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-    }
+.team-av:nth-child(4) {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
 
-    .team-info .team-txt {
-      font-family: var(--font-d);
-      font-size: 22px;
-      font-weight: 800;
-      color: #0a0a0a;
-      line-height: 1;
-    }
+.team-info .team-txt {
+  font-family: var(--font-d);
+  font-size: 22px;
+  font-weight: 800;
+  color: #0a0a0a;
+  line-height: 1;
+}
 
-    .team-info .team-sub {
-      font-size: 13px;
-      color: #999;
-      margin-top: 3px;
-    }
-
+.team-info .team-sub {
+  font-size: 13px;
+  color: #999;
+  margin-top: 3px;
+}
     /* ===== CASE STUDIES REDESIGN ===== */
     .cs-new-tabs {
       display: flex;
@@ -4103,6 +4105,18 @@
     height: 800px;
     top: 0;
   }
+  .formula-lay {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  
+  .formula-desc {
+    max-width: 100%;
+  }
+  
+  .formula-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media(max-width: 768px) {
@@ -4256,7 +4270,84 @@
     width: 18px !important;
   }
 
-
+  @media(max-width: 768px) {
+  /* Keep 2 columns on mobile */
+  .formula-stats {
+    grid-template-columns: repeat(2, 1fr);
+    border-radius: 16px;
+  }
+  
+  .f-stat {
+    padding: 24px 20px;
+    border-right: 1px solid rgba(0, 0, 0, .06);
+    border-bottom: 1px solid rgba(0, 0, 0, .06);
+  }
+  
+  /* Even items (2, 4, 6) - no right border */
+  .f-stat:nth-child(even) {
+    border-right: none;
+  }
+  
+  /* Last 2 items (5, 6) - no bottom border */
+  .f-stat:nth-last-child(-n+2) {
+    border-bottom: none;
+  }
+  
+  .f-stat-n {
+    font-size: 32px;
+  }
+  
+  .f-stat-n sup {
+    font-size: 16px;
+  }
+  
+  .f-stat-ico {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .f-stat-ico svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .formula-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding-top: 32px;
+    margin-top: 40px;
+  }
+  
+  .formula-cta-right {
+    max-width: 100% !important;
+    text-align: left !important;
+    width: 100%;
+  }
+  
+  .formula-cta-right p {
+    font-size: 13px !important;
+  }
+  
+  .formula-cta-right .btn-p {
+    display: inline-flex !important;
+  }
+  
+  .formula-team {
+    width: 100%;
+  }
+  
+  .team-info .team-txt {
+    font-size: 18px;
+  }
+  
+  .team-av {
+    width: 38px;
+    height: 38px;
+    font-size: 11px;
+    margin-left: -10px;
+  }
+}
 }
 
 @media(max-width: 480px) {
@@ -4341,6 +4432,69 @@
   .ind-row-bar {
     width: 10px !important;
     height: 6px !important;
+  }
+  .formula-title {
+    font-size: clamp(26px, 4vw, 32px);
+  }
+  
+  .formula-desc {
+    font-size: 14px;
+  }
+  
+  .f-stat {
+    padding: 18px 16px;
+    gap: 8px;
+  }
+  
+  .f-stat-n {
+    font-size: 28px;
+  }
+  
+  .f-stat-l {
+    font-size: 12px;
+  }
+  
+  .f-stat-d {
+    font-size: 11px;
+  }
+  
+  .f-stat-ico {
+    width: 34px;
+    height: 34px;
+  }
+  
+  .f-stat-ico svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .formula-bottom {
+    padding-top: 24px;
+    margin-top: 32px;
+  }
+  
+  .team-info .team-txt {
+    font-size: 16px;
+  }
+  
+  .team-info .team-sub {
+    font-size: 12px;
+  }
+  
+  .team-av {
+    width: 32px;
+    height: 32px;
+    font-size: 10px;
+    border-width: 2px;
+  }
+  
+  .formula-cta-right p {
+    font-size: 12px !important;
+  }
+  
+  .btn-p {
+    padding: 12px 24px;
+    font-size: 13px;
   }
 }
 @media(max-width: 380px) {
@@ -4939,129 +5093,129 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ======================== FORMULA (WHITE) ======================== -->
-  <section class="sec sec-light" id="stats">
-    <div class="formula-lay">
-      <!-- Left: headline + description -->
-      <div>
-        <div class="lbl rv">Our Numbers</div>
-        <h2 class="formula-title rv">Our Disruptive<br><span class="it">Data Formula</span></h2>
-        <p class="formula-desc rv">Techdataseeders consistently delivers exceptional outcomes   our numbers speak to the
-          scale, precision, and reliability of our data operations worldwide.</p>
-        <a href="#contact" class="btn-p rv">Book a Demo
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="arr">
-            <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </a>
-      </div>
-
-      <!-- Right: stats grid -->
-      <div class="formula-stats rv d2">
-        <div class="f-stat">
-          <div class="f-stat-ico-wrap">
-            <div class="f-stat-ico">
-              <svg viewBox="0 0 24 24">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div>
-          </div>
-          <div class="f-stat-n"><span class="cu" data-t="100">0</span>M<sup>+</sup></div>
-          <div class="f-stat-l">Records Scraped Every Day</div>
-          <div class="f-stat-d">High-volume, consistent delivery</div>
-        </div>
-        <div class="f-stat">
-          <div class="f-stat-ico-wrap">
-            <div class="f-stat-ico">
-              <svg viewBox="0 0 24 24">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                <circle cx="9" cy="7" r="4" />
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-              </svg>
-            </div>
-          </div>
-          <div class="f-stat-n"><span class="cu" data-t="100">0</span><sup>+</sup></div>
-          <div class="f-stat-l">Clients Served Worldwide</div>
-          <div class="f-stat-d">Global enterprise customers</div>
-        </div>
-        <div class="f-stat">
-          <div class="f-stat-ico-wrap">
-            <div class="f-stat-ico">
-              <svg viewBox="0 0 24 24">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
-              </svg>
-            </div>
-          </div>
-          <div class="f-stat-n"><span class="cu" data-t="50">0</span><sup>+</sup></div>
-          <div class="f-stat-l">Platforms Monitored Daily</div>
-          <div class="f-stat-d">Clean, validated datasets</div>
-        </div>
-        <div class="f-stat">
-          <div class="f-stat-ico-wrap">
-            <div class="f-stat-ico">
-              <svg viewBox="0 0 24 24">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-              </svg>
-            </div>
-          </div>
-          <div class="f-stat-n"><span class="cu" data-t="98">0</span><sup>%</sup></div>
-          <div class="f-stat-l">Success Rate</div>
-          <div class="f-stat-d">Projects delivered on time</div>
-        </div>
-        <div class="f-stat">
-          <div class="f-stat-ico-wrap">
-            <div class="f-stat-ico">
-              <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-            </div>
-          </div>
-          <div class="f-stat-n">24/7</div>
-          <div class="f-stat-l">Support Coverage</div>
-          <div class="f-stat-d">Always on, always available</div>
-        </div>
-        <div class="f-stat">
-          <div class="f-stat-ico-wrap">
-            <div class="f-stat-ico">
-              <svg viewBox="0 0 24 24">
-                <polygon
-                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-              </svg>
-            </div>
-          </div>
-          <div class="f-stat-n">8</div>
-          <div class="f-stat-l">Industries Powered</div>
-          <div class="f-stat-d">Diverse domain expertise</div>
-        </div>
-      </div>
+<section class="sec sec-light" id="stats">
+  <div class="formula-lay">
+    <!-- Left: headline + description -->
+    <div>
+      <div class="lbl rv">Our Numbers</div>
+      <h2 class="formula-title rv">Our Disruptive<br><span class="it">Data Formula</span></h2>
+      <p class="formula-desc rv">Techdataseeders consistently delivers exceptional outcomes   our numbers speak to the
+        scale, precision, and reliability of our data operations worldwide.</p>
+      <a href="#contact" class="btn-p rv">Book a Demo
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="arr">
+          <path d="M1 7h12M7 1l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </a>
     </div>
 
-    <!-- Bottom row: team + CTA -->
-    <div class="formula-bottom">
-      <div class="formula-team">
-        <div class="team-avs">
-          <div class="team-av">K</div>
-          <div class="team-av">R</div>
-          <div class="team-av">S</div>
-          <div class="team-av">M</div>
+    <!-- Right: stats grid -->
+    <div class="formula-stats rv d2">
+      <div class="f-stat">
+        <div class="f-stat-ico-wrap">
+          <div class="f-stat-ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+          </div>
         </div>
-        <div class="team-info">
-          <div class="team-txt rv">20+ Creative Mavericks</div>
-          <div class="team-sub rv">A team of innovative data engineers & scrapers</div>
-        </div>
+        <div class="f-stat-n"><span class="cu" data-t="100">0</span>M<sup>+</sup></div>
+        <div class="f-stat-l">Records Scraped Every Day</div>
+        <div class="f-stat-d">High-volume, consistent delivery</div>
       </div>
-      <div class="rv d2" style="max-width:440px;text-align:right;">
-        <p style="font-size:14px;color:#888;line-height:1.7;">Techdataseeders' battle-tested approach creates data
-          solutions that are precise, scalable, and utterly reliable.</p>
-        <a href="#about" class="btn-p" style="margin-top:18px;display:inline-flex;">ABOUT US
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="arr">
-            <path d="M1 13L13 1M13 1H5M13 1V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
-          </svg>
-        </a>
+      <div class="f-stat">
+        <div class="f-stat-ico-wrap">
+          <div class="f-stat-ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+          </div>
+        </div>
+        <div class="f-stat-n"><span class="cu" data-t="100">0</span><sup>+</sup></div>
+        <div class="f-stat-l">Clients Served Worldwide</div>
+        <div class="f-stat-d">Global enterprise customers</div>
+      </div>
+      <div class="f-stat">
+        <div class="f-stat-ico-wrap">
+          <div class="f-stat-ico">
+            <svg viewBox="0 0 24 24">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
+          </div>
+        </div>
+        <div class="f-stat-n"><span class="cu" data-t="50">0</span><sup>+</sup></div>
+        <div class="f-stat-l">Platforms Monitored Daily</div>
+        <div class="f-stat-d">Clean, validated datasets</div>
+      </div>
+      <div class="f-stat">
+        <div class="f-stat-ico-wrap">
+          <div class="f-stat-ico">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+          </div>
+        </div>
+        <div class="f-stat-n"><span class="cu" data-t="98">0</span><sup>%</sup></div>
+        <div class="f-stat-l">Success Rate</div>
+        <div class="f-stat-d">Projects delivered on time</div>
+      </div>
+      <div class="f-stat">
+        <div class="f-stat-ico-wrap">
+          <div class="f-stat-ico">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+          </div>
+        </div>
+        <div class="f-stat-n">24/7</div>
+        <div class="f-stat-l">Support Coverage</div>
+        <div class="f-stat-d">Always on, always available</div>
+      </div>
+      <div class="f-stat">
+        <div class="f-stat-ico-wrap">
+          <div class="f-stat-ico">
+            <svg viewBox="0 0 24 24">
+              <polygon
+                points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+            </svg>
+          </div>
+        </div>
+        <div class="f-stat-n">8</div>
+        <div class="f-stat-l">Industries Powered</div>
+        <div class="f-stat-d">Diverse domain expertise</div>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Bottom row: team + CTA -->
+  <div class="formula-bottom">
+    <div class="formula-team">
+      <div class="team-avs">
+        <div class="team-av">DG</div>
+        <div class="team-av">DB</div>
+        <div class="team-av">MG</div>
+        <div class="team-av">KT</div>
+      </div>
+      <div class="team-info">
+        <div class="team-txt rv">20+ Creative Mavericks</div>
+        <div class="team-sub rv">A team of innovative data engineers & scrapers</div>
+      </div>
+    </div>
+    <div class="rv d2 formula-cta-right">
+      <p style="font-size:14px;color:#888;line-height:1.7;">Techdataseeders' battle-tested approach creates data
+        solutions that are precise, scalable, and utterly reliable.</p>
+      <a href="#about" class="btn-p" style="margin-top:18px;display:inline-flex;">ABOUT US
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="arr">
+          <path d="M1 13L13 1M13 1H5M13 1V9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>
 
   <!-- ======================== WHY CHOOSE ======================== -->
   <section class="sec sec-soft" id="why">
@@ -6179,20 +6333,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- ======================== BLOG ======================== -->
-  <section class="sec sec-light" id="blog">
-    <div
-      style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;flex-wrap:wrap;gap:16px;">
-      <div>
-        <div class="lbl rv">Insights & Resources</div>
-        <h2 class="stitle rv">Latest from<br><span class="it">Our Data Lab</span></h2>
-      </div>
-      <a href="/blog/index.html" class="btn-s rv">View all articles <span class="arr">→</span></a>
+<section class="sec sec-light" id="blog">
+  <div
+    style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:56px;flex-wrap:wrap;gap:16px;">
+    <div>
+      <div class="lbl rv">Insights & Resources</div>
+      <h2 class="stitle rv">Latest from<br><span class="it">Our Data Lab</span></h2>
     </div>
+    <a href="/blog/index.html" class="btn-s rv">View all articles <span class="arr">→</span></a>
+  </div>
 
-    <div class="blog-grid" id="homeBlogGrid">
+  <div class="blog-grid" id="homeBlogGrid">
+    <!-- Loading state -->
+    <div class="bl-loading" style="grid-column:1/-1;text-align:center;padding:40px 0;color:#999;font-size:14px;">
+      Loading articles...
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- ======================== TESTIMONIALS ======================== -->
   <section class="sec sec-grey" id="testimonials">
@@ -6953,18 +7110,140 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   <script src="./data/blogs-data.js"></script>
   <script src="/assets/blog-store.js"></script>
   <script>
-    (function () {
-      var grid = document.getElementById('homeBlogGrid');
-      if (!grid || !window.BlogStore) return;
-      BlogStore.fetchPublished().then(function (list) {
-        if (list && list.length) {
-          var sorted = list.slice().sort(function (a, b) {
-            return new Date(b.date) - new Date(a.date);
-          });
-          grid.innerHTML = sorted.slice(0, 3).map(BlogStore.cardHTML).join('');
-        }
-      });
-    })();
+  // ============================================================
+// HOME PAGE - FETCH LATEST 3 BLOGS FROM MONGODB API
+// ============================================================
+
+(function() {
+  'use strict';
+  
+  const API_URL = '/api/blog';
+  const grid = document.getElementById('homeBlogGrid');
+  
+  if (!grid) return;
+
+  // Icon mapping for blog cards
+  const ICONS = {
+    database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4.03 3-9 3S3 13.66 3 12"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/>',
+    activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    chart: '<path d="M3 21h18"/><path d="M7 21V10"/><path d="M12 21V4"/><path d="M17 21v-7"/>',
+    doc: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>',
+    globe: '<circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/>',
+    star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.9L12 17.8l-6.2 3.3L7 14.2l-5-4.9 6.9-1z"/>',
+    bulb: '<path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2v.3h6v-.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    bar: '<rect x="4" y="4" width="4" height="16"/><rect x="12" y="10" width="4" height="10"/>'
+  };
+
+  // Gradient mapping
+  const GRADIENTS = {
+    blue: 'linear-gradient(135deg,#0d1b4b 0%,#1a4fd6 50%,#2563FF 100%)',
+    green: 'linear-gradient(135deg,#064e3b 0%,#059669 50%,#10b981 100%)',
+    purple: 'linear-gradient(135deg,#2e1065 0%,#5b21b6 50%,#7c3aed 100%)',
+    magenta: 'linear-gradient(135deg,#4d1a3d 0%,#9d4edd 50%,#c77dff 100%)',
+    teal: 'linear-gradient(135deg,#1a4d3d 0%,#2d9d6e 50%,#52b788 100%)',
+    navy: 'linear-gradient(135deg,#0d1840 0%,#162050 60%,#2563FF 100%)'
+  };
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function getGradient(post) {
+    return GRADIENTS[post.gradient] || GRADIENTS.blue;
+  }
+
+  function getIcon(post) {
+    return ICONS[post.icon] || ICONS.database;
+  }
+
+  function getPostUrl(slug) {
+    return '/blog/post.html?slug=' + encodeURIComponent(slug);
+  }
+
+  function createCardHTML(post) {
+    const artContent = post.heroImage
+      ? '<img src="' + escapeHtml(post.heroImage) + '" alt="' + escapeHtml(post.title) + '" class="blog-art-img" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+      : '<div class="blog-art-ico"><svg viewBox="0 0 24 24">' + getIcon(post) + '</svg></div>';
+    
+    // If heroImage exists, we use img, else we show the icon
+    const artStyle = post.heroImage ? '' : ' style="background:' + getGradient(post) + ';display:flex;align-items:center;justify-content:center;"';
+    
+    // If heroImage exists but fails to load, show fallback icon
+    const fallbackIcon = post.heroImage ? '<div class="blog-art-ico" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg viewBox="0 0 24 24">' + getIcon(post) + '</svg></div>' : '';
+    
+    return '<a href="' + getPostUrl(post.slug) + '" class="blog-card">' +
+      '<div class="blog-art"' + artStyle + '>' +
+        artContent +
+        fallbackIcon +
+      '</div>' +
+      '<div class="blog-body">' +
+        '<span class="blog-cat">' + escapeHtml(post.category) + '</span>' +
+        '<h3 class="blog-title">' + escapeHtml(post.title) + '</h3>' +
+        '<p class="blog-exc">' + escapeHtml(post.excerpt) + '</p>' +
+        '<div class="blog-foot">' +
+          '<span class="blog-date">' + escapeHtml(post.date) + '</span>' +
+          '<span class="blog-read">Read more <svg viewBox="0 0 14 14"><path d="M1 7h12M7 1l6 6-6 6"/></svg></span>' +
+        '</div>' +
+      '</div>' +
+    '</a>';
+  }
+
+  async function fetchLatestBlogs() {
+    try {
+      const response = await fetch(API_URL);
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.length > 0) {
+        // Sort by date (newest first) and get the latest 3
+        const sorted = data.data.sort(function(a, b) {
+          return new Date(b.date) - new Date(a.date);
+        });
+        return sorted.slice(0, 3);
+      }
+      return [];
+    } catch (error) {
+      console.error('Error fetching blogs from API:', error);
+      
+      // Fallback to local data if API fails
+      if (window.BLOGS_DATA && window.BLOGS_DATA.length > 0) {
+        const sorted = window.BLOGS_DATA.slice().sort(function(a, b) {
+          return new Date(b.date) - new Date(a.date);
+        });
+        return sorted.slice(0, 3);
+      }
+      return [];
+    }
+  }
+
+  function renderBlogs(posts) {
+    const grid = document.getElementById('homeBlogGrid');
+    if (!grid) return;
+    
+    if (!posts || posts.length === 0) {
+      grid.innerHTML = '<div class="bl-empty" style="grid-column:1/-1;text-align:center;padding:40px 0;color:#999;font-size:14px;">No articles published yet.</div>';
+      return;
+    }
+    
+    grid.innerHTML = posts.map(createCardHTML).join('');
+  }
+
+  // Load blogs when page is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      fetchLatestBlogs().then(renderBlogs);
+    });
+  } else {
+    fetchLatestBlogs().then(renderBlogs);
+  }
+})();
   </script>
   <!-- Case study carousel arrows (static content above) -->
   <script>
