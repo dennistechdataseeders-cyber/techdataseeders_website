@@ -1,9 +1,8 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
- <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 
   <!-- Google Search Console Verification -->
   <meta name="google-site-verification" content="SUkJLI1WcKiq-KlscwvfpRhO9ST2FvWcsugMeehhT5E" />
@@ -53,10 +52,12 @@
     ]
   }
   </script>
+  
   <title>About Techdataseeders | Custom Web Scraping Service</title>
   <meta name="description" content="Learn how Techdataseeders delivers custom web scraping services that turn the open web into decision-ready data. Get to know our team today!">
-  <link rel="icon" href="./images/tds-icon.png" type="image/png">
+  <link rel="icon" href="/images/tds-icon.png" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
@@ -67,26 +68,33 @@
     .cur-dot{width:8px;height:8px;background:var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
     .cur-ring{width:36px;height:36px;border:1.5px solid var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,opacity .2s;}
 
-    /* NAV */
-    .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;transition:background .3s,border-color .3s;}
-    .nav.dark{background:#0a0a0a;border-bottom-color:rgba(255,255,255,.08);}
-    .nav-logo img{height:40px;transition:opacity .3s;}
-    .nl{display:flex;align-items:center;gap:6px;list-style:none;}
-    .nl a{font-size:14px;font-weight:500;color:#444;padding:8px 14px;border-radius:8px;transition:color .2s,background .2s;position:relative;}
-    .nl a:hover{color:var(--blue);}
-    .nav.dark .nl a{color:rgba(255,255,255,.75);}
+    /* NAVBAR - MATCHING REST OF WEBSITE */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:70px;padding:0 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:all .4s;}
+    .nav.dark{background:rgba(8,8,8,.96);border-bottom-color:rgba(255,255,255,.08);}
+    .nav.dark .nl a{color:rgba(255,255,255,.85);}
     .nav.dark .nl a:hover{color:#fff;}
-    .has-drop{position:relative;}
-    .has-drop>a span{font-size:10px;margin-left:3px;display:inline-block;transition:transform .25s;}
-    .has-drop.open>a span{transform:rotate(180deg);}
-    .nav-drop{position:absolute;top:calc(100% + 10px);left:0;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:14px;box-shadow:0 18px 48px rgba(0,0,0,.12);padding:8px;min-width:220px;opacity:0;visibility:hidden;transform:translateY(8px);transition:all .22s;}
-    .has-drop.open>.nav-drop{opacity:1;visibility:visible;transform:translateY(0);}
-    .nav-drop a{display:block;padding:10px 14px;font-size:14px;color:#444;border-radius:8px;transition:background .15s,color .15s;}
-    .nav-drop a:hover{background:#f4f6ff;color:var(--blue);}
-    .nav-cta{background:var(--blue);color:#fff !important;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;white-space:nowrap;}
-    .nav-cta:hover{background:var(--blue-dark);transform:translateY(-1px);}
-    .nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:6px;}
-    .nav-toggle span{display:block;width:22px;height:2px;background:#222;border-radius:2px;transition:all .3s;}
+    .nav-logo img{height:36px;}
+    .nl{display:flex;align-items:center;gap:36px;list-style:none;margin:0;padding:0;}
+    .nl a{font-size:14px;font-weight:500;color:rgba(0,0,0,.7);transition:color .25s;position:relative;}
+    .nl a::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:1.5px;background:var(--blue);transition:width .3s;}
+    .nl a:hover::after{width:100%;}
+    .nl a:hover{color:var(--blue);}
+    .nav-cta{background:var(--blue);color:#fff !important;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
+    .nav-cta:hover{background:var(--blue-dark);box-shadow:0 6px 20px rgba(37,99,255,.4);transform:translateY(-1px);}
+    .nav-cta::after{display:none !important;}
+    .nl .has-drop{position:relative;}
+    .nl .has-drop>a::after{display:none;}
+    .nl .has-drop>a{cursor:pointer;}
+    .nl .has-drop>a span{display:inline-block;transition:transform .25s;}
+    .nl .has-drop.open>a span{transform:rotate(180deg);}
+    .nav-drop{display:none;flex-direction:column;gap:2px;position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.12);padding:10px;min-width:230px;z-index:200;}
+    .nav-menu{color:#333 !important;}
+    .has-drop.open>.nav-drop{display:flex;}
+    .nav-drop a{display:block;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#333;white-space:nowrap;transition:background .18s,color .18s;}
+    .nav-drop a:hover{background:#f0f4ff;color:var(--blue);}
+    .nav-drop a::after{display:none !important;}
+    .nav-toggle{display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;background:none;border:none;cursor:pointer;padding:0;z-index:1100;}
+    .nav-toggle span{display:block;width:24px;height:2px;background:var(--black);border-radius:2px;transition:transform .3s,opacity .3s;}
     .nav.dark .nav-toggle span{background:#fff;}
     .nav-open .nav-toggle span:nth-child(1){transform:translateY(7px) rotate(45deg);}
     .nav-open .nav-toggle span:nth-child(2){opacity:0;}
@@ -113,16 +121,16 @@
     .ind-hero-sub{font-size:18px;line-height:1.75;color:rgba(255,255,255,.68);max-width:580px;}
 
     /* INTRO / STORY */
-    .sec-intro{padding:90px 80px 80px;}
+    .sec-intro{padding:90px 80px 80px;max-width:1180px;margin:0 auto;}
     .intro-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:20px;}
     .intro-kicker::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:2px;}
     .intro-h{font-family:var(--font-d);font-size:clamp(28px,3vw,40px);font-weight:700;line-height:1.14;letter-spacing:-.025em;color:var(--black);margin-bottom:22px;}
     .intro-h em{font-style:italic;color:var(--blue);}
-    .intro-p{font-size:17px;line-height:1.85;color:#555;margin-bottom:20px;}
+    .intro-p{font-size:17px;line-height:1.85;color:#555;margin-bottom:20px;max-width:720px;}
     .intro-p:last-child{margin-bottom:0;}
 
     /* STATS BAND */
-    .sec-stats{padding:0 80px 90px;}
+    .sec-stats{padding:0 80px 90px;max-width:1180px;margin:0 auto;}
     .stats-band{background:linear-gradient(140deg,#06091a 0%,#0d1840 55%,#162050 100%);border-radius:28px;padding:56px 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;position:relative;overflow:hidden;}
     .stats-band::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 80% 120%,rgba(37,99,255,.35),transparent);}
     .stat{position:relative;z-index:1;text-align:center;}
@@ -131,7 +139,7 @@
     .stat-l{font-size:13.5px;color:rgba(255,255,255,.55);margin-top:10px;}
 
     /* MISSION & VISION */
-    .sec-mv{padding:0 80px 90px;}
+    .sec-mv{padding:0 80px 90px;max-width:1180px;margin:0 auto;}
     .mv-head{max-width:640px;margin-bottom:48px;}
     .mv-kicker{display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:16px;}
     .mv-kicker::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:2px;}
@@ -150,7 +158,7 @@
     /* VALUES */
     .sec-val{padding:90px 80px;background:#f8f9fb;border-top:1px solid rgba(0,0,0,.06);border-bottom:1px solid rgba(0,0,0,.06);}
     .val-head{max-width:640px;margin-bottom:52px;}
-    .val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .val-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1180px;margin:0 auto;}
     .val-card{background:#fff;border:1px solid rgba(37,99,255,.08);border-radius:20px;padding:32px;transition:all .35s cubic-bezier(.16,1,.3,1);}
     .val-card:hover{border-color:rgba(37,99,255,.25);box-shadow:0 18px 50px rgba(37,99,255,.1);transform:translateY(-6px);}
     .val-ico{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,rgba(37,99,255,.12),rgba(37,99,255,.06));display:flex;align-items:center;justify-content:center;margin-bottom:20px;transition:all .3s;}
@@ -161,7 +169,7 @@
     .val-d{font-size:14px;line-height:1.7;color:#666;}
 
     /* WHAT WE DO */
-    .sec-wd{padding:90px 80px;}
+    .sec-wd{padding:90px 80px;max-width:1180px;margin:0 auto;}
     .wd-head{max-width:640px;margin-bottom:48px;}
     .wd-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
     .wd-link{display:flex;align-items:center;justify-content:space-between;gap:16px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:18px;padding:26px 30px;transition:all .3s;}
@@ -204,21 +212,21 @@
     .fdisclaim{font-size:11px;color:rgba(255,255,255,.35);text-align:center;margin-top:22px;line-height:1.6;max-width:700px;margin-left:auto;margin-right:auto;}
 
     /* SCROLL TOP */
-    .stb{position:fixed;bottom:32px;right:32px;width:46px;height:46px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;}
-    .stb.on{opacity:1;transform:translateY(0);}
-    .stb:hover{background:var(--blue-dark);transform:translateY(-3px) !important;box-shadow:0 12px 28px rgba(37,99,255,.45);}
+    .stb{position:fixed;bottom:32px;right:32px;width:46px;height:46px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;box-shadow:0 6px 20px rgba(37,99,255,.4);}
+    .stb.on{opacity:1;transform:none;}
+    .stb:hover{background:var(--blue-dark);transform:translateY(-3px);}
 
-    /* MOBILE */
+    /* ===== FULL MOBILE RESPONSIVE ===== */
     @media(max-width:960px){
       .nav{padding:0 24px;}
       .nav-toggle{display:flex;}
-      .nl{position:fixed;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;padding:10px 22px 22px;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 24px 44px rgba(0,0,0,.13);max-height:calc(100vh - 68px);overflow-y:auto;transform:translateY(-14px);opacity:0;visibility:hidden;transition:transform .3s,opacity .3s,visibility .3s;}
+      .nl{position:fixed;top:70px;left:0;right:0;flex-direction:column;align-items:stretch;gap:0;background:#fff;padding:10px 22px 22px;border-bottom:1px solid rgba(0,0,0,.08);box-shadow:0 24px 44px rgba(0,0,0,.13);max-height:calc(100vh - 70px);overflow-y:auto;transform:translateY(-14px);opacity:0;visibility:hidden;transition:transform .3s,opacity .3s,visibility .3s;}
       .nav-open .nl{transform:translateY(0);opacity:1;visibility:visible;}
       .nl li{width:100%;}
       .nl>li>a{display:block;padding:14px 6px;font-size:16px;border-bottom:1px solid rgba(0,0,0,.06);color:#0a0a0a !important;}
-      .nav-drop{position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0;opacity:1;visibility:visible;}
-      .has-drop .nav-drop{display:none;}
-      .has-drop.open .nav-drop{display:block;}
+      .nl a::after{display:none !important;}
+      .nl .has-drop>a span{float:right;}
+      .nav-drop{position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0;}
       .nav-drop a{font-size:14px;padding:9px 8px;color:#555;}
       .nl .nav-cta{display:block;text-align:center;margin-top:16px;}
       .ind-hero{padding:150px 24px 64px;}
@@ -238,7 +246,46 @@
     }
     @media(max-width:480px){
       .val-grid{grid-template-columns:1fr;}
-      .nav{padding:0 16px;}
+      .nav{padding:0 16px;height:60px;}
+      .nav-logo img{height:28px;}
+      .ind-hero-h1{font-size:clamp(30px,5vw,42px);}
+      .ind-hero-sub{font-size:15px;}
+      .intro-h{font-size:clamp(22px,2.5vw,30px);}
+      .stat-n{font-size:clamp(24px,3.5vw,32px);}
+      .stat-l{font-size:11px;}
+      .mv-h{font-size:clamp(22px,2.5vw,30px);}
+      .mv-t{font-size:18px;}
+      .mv-d{font-size:14px;}
+      .val-t{font-size:16px;}
+      .wd-link-t{font-size:15px;}
+      .cta-h{font-size:clamp(24px,3.5vw,34px);}
+      .btn-p,.btn-s{font-size:13px;padding:12px 24px;}
+      .fb-desc{font-size:13px;}
+      .fl a{font-size:13px;}
+      .fc h4{font-size:11px;}
+      .fcopy{font-size:12px;}
+      .fleg a{font-size:12px;}
+      .fdisclaim{font-size:10px;}
+      .nl{top:60px;max-height:calc(100vh - 60px);}
+    }
+    @media(max-width:380px){
+      .nav{padding:0 12px;}
+      .ind-hero{padding:120px 16px 50px;}
+      .sec-intro{padding:40px 16px;}
+      .sec-stats{padding:0 16px 40px;}
+      .sec-mv{padding:0 16px 40px;}
+      .sec-val{padding:40px 16px;}
+      .sec-wd{padding:40px 16px;}
+      .cta-band{padding:50px 16px;}
+      .footer{padding:30px 16px 20px;}
+      .stats-band{padding:24px 16px;grid-template-columns:1fr 1fr;gap:16px;}
+      .mv-grid{gap:16px;}
+      .mv-card{padding:24px;}
+      .val-grid{gap:12px;}
+      .val-card{padding:20px;}
+      .wd-grid{gap:12px;}
+      .wd-link{padding:16px 18px;}
+      .ft{gap:20px;}
     }
   </style>
 </head>
@@ -254,35 +301,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <!-- NAV -->
 <nav class="nav" id="nav">
-  <a href="./index.html" class="nav-logo">
-    <img src="./logo/Tech DataSeeders Logo.png" alt="Techdataseeders" id="navLogo">
+  <a href="/index.html" class="nav-logo">
+    <img src="/logo/Tech DataSeeders Logo.png" alt="Techdataseeders" id="navLogo">
   </a>
   <ul class="nl">
     <li class="has-drop">
-      <a href="./index.html#services">Services <span>▾</span></a>
+      <a href="/index.html#services">Services <span>▾</span></a>
       <div class="nav-drop">
-        <a href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
-        <a href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
-        <a href="./services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
-        <a href="./services/custom-data-api.html">Custom Data API Delivery</a>
+        <a class="nav-menu" href="/services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a class="nav-menu" href="/services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a class="nav-menu" href="/services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+        <a class="nav-menu" href="/services/custom-data-api.html">Custom Data API Delivery</a>
       </div>
     </li>
     <li class="has-drop">
-      <a href="./index.html#industries">Industries <span>▾</span></a>
+      <a href="/index.html#industries">Industries <span>▾</span></a>
       <div class="nav-drop">
-        <a href="./industries/ecomm.html">E-Commerce</a>
-        <a href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
-        <a href="./industries/food-beverages.html">Food &amp; Beverages</a>
-        <a href="./industries/q-commerce.html">Quick Commerce</a>
-        <a href="./industries/real-estate.html">Real Estate</a>
-        <a href="./industries/retail.html">Retail</a>
-        <a href="./industries/social-media.html">Social Media</a>
-        <a href="./industries/travel-hotel.html">Travel &amp; Hospitality</a>
+        <a class="nav-menu" href="/industries/ecomm.html">E-commerce</a>
+        <a class="nav-menu" href="/industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+        <a class="nav-menu" href="/industries/food-beverages.html">Food &amp; Beverages</a>
+        <a class="nav-menu" href="/industries/q-commerce.html">Quick Commerce</a>
+        <a class="nav-menu" href="/industries/real-estate.html">Real Estate</a>
+        <a class="nav-menu" href="/industries/retail.html">Retail</a>
+        <a class="nav-menu" href="/industries/social-media.html">Social Media</a>
+        <a class="nav-menu" href="/industries/travel-hotel.html">Travel &amp; Hospitality</a>
       </div>
     </li>
-    <li><a href="./case-studies.html">Case Studies</a></li>
-    <li><a href="./about.html">About Us</a></li>
-    <li><a href="./index.html#contact" class="nav-cta">Get a Quote →</a></li>
+    <li><a href="/case-studies.html">Case Studies</a></li>
+    <li><a href="/about.html">About Us</a></li>
+    <li><a href="/index.html#contact" class="nav-cta" data-scroll-to="contact">Get a Quote →</a></li>
   </ul>
   <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false">
     <span></span><span></span><span></span>
@@ -293,9 +340,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="ind-hero-bg"></div>
   <div class="ind-hero-overlay"></div>
   <div class="crumb-bar">
-    <a href="./index.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</a>
+    <a href="/index.html" class="back-link"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</a>
     <nav class="breadcrumb" aria-label="Breadcrumb">
-      <a href="./index.html">Home</a>
+      <a href="/index.html">Home</a>
       <span class="sep">/</span>
       <span class="current">About Us</span>
     </nav>
@@ -320,7 +367,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="stats-band">
     <div class="stat"><div class="stat-n">100M<span>+</span></div><div class="stat-l">Records Scraped Every Day</div></div>
     <div class="stat"><div class="stat-n">100<span>+</span></div><div class="stat-l">Clients Served Worldwide</div></div>
-    <div class="stat"><div class="stat-n">Eight</div><div class="stat-l">Industries Powered</div></div>
+    <div class="stat"><div class="stat-n">8</div><div class="stat-l">Industries Powered</div></div>
     <div class="stat"><div class="stat-n">50<span>+</span></div><div class="stat-l">Platforms Monitored Daily</div></div>
   </div>
 </section>
@@ -389,19 +436,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 class="mv-h">Four Ways We Turn the<br><em>Web Into Value</em></h2>
   </div>
   <div class="wd-grid">
-    <a href="./services/enterprise-web-scraping.html" class="wd-link">
+    <a href="/services/enterprise-web-scraping.html" class="wd-link">
       <div><div class="wd-link-t">Enterprise Web Scraping</div><div class="wd-link-d">Millions of structured records from thousands of sites.</div></div>
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
-    <a href="./services/mobile-app-scraping.html" class="wd-link">
+    <a href="/services/mobile-app-scraping.html" class="wd-link">
       <div><div class="wd-link-t">Mobile App Scraping</div><div class="wd-link-d">Ratings, reviews, menus &amp; pricing from iOS and Android.</div></div>
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
-    <a href="./services/data-analytics-intelligence.html" class="wd-link">
+    <a href="/services/data-analytics-intelligence.html" class="wd-link">
       <div><div class="wd-link-t">Data Analytics &amp; Intelligence</div><div class="wd-link-d">Benchmarks, price signals &amp; sentiment, dashboard-ready.</div></div>
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
-    <a href="./services/custom-data-api.html" class="wd-link">
+    <a href="/services/custom-data-api.html" class="wd-link">
       <div><div class="wd-link-t">Custom Data API Delivery</div><div class="wd-link-d">REST, GraphQL, CSV &amp; real-time streams, your way.</div></div>
       <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </a>
@@ -413,8 +460,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <h2 class="cta-h">Ready to Work With<br><em>Techdataseeders?</em></h2>
   <p class="cta-p">Tell us your data needs and what you've got in mind. We'll send a tailored proposal within 24 hours.</p>
   <div class="cta-btns">
-    <a href="./index.html#contact" class="btn-p">Get a Quote →</a>
-    <a href="./index.html#services" class="btn-s">Explore Our Services</a>
+    <a href="/index.html#contact" class="btn-p" data-scroll-to="contact">Get a Quote →</a>
+    <a href="/index.html#services" class="btn-s">Explore Our Services</a>
   </div>
 </section>
 
@@ -422,7 +469,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <footer class="footer">
   <div class="ft">
     <div>
-      <img src="./logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Tech DataSeeders - Home" loading="lazy" style="height:40px; width:auto;">
+      <img src="/logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Techdataseeders - Home" loading="lazy" style="height:40px; width:auto;">
       <p class="fb-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation — seeding intelligence from the web.</p>
       <div class="socials" aria-label="Social media links">
         <a href="https://linkedin.com/company/techdataseeders" target="_blank" rel="noopener noreferrer" class="soc" aria-label="LinkedIn">
@@ -431,7 +478,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="https://twitter.com/techdataseeders" target="_blank" rel="noopener noreferrer" class="soc" aria-label="Twitter (X)">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
         </a>
-        <a href="mailto:sales@techdataseeders.in" class="soc" aria-label="Email sales">
+        <a href="/index.html#contact" class="soc" aria-label="Contact us">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
         </a>
       </div>
@@ -440,42 +487,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="fc">
       <h4>Services</h4>
       <div class="fl">
-        <a href="./services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
-        <a href="./services/mobile-app-scraping.html">Mobile App Scraping</a>
-        <a href="./services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
-        <a href="./services/custom-data-api.html">Custom Data API</a>
+        <a href="/services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+        <a href="/services/mobile-app-scraping.html">Mobile App Scraping</a>
+        <a href="/services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+        <a href="/services/custom-data-api.html">Custom Data API</a>
       </div>
     </div>
 
     <div class="fc">
       <h4>Industries</h4>
       <div class="fl">
-        <a href="./industries/ecomm.html">E-Commerce</a>
-        <a href="./industries/retail.html">Retail</a>
-        <a href="./industries/real-estate.html">Real Estate</a>
-        <a href="./industries/travel-hotel.html">Travel &amp; Hospitality</a>
-        <a href="./industries/food-beverages.html">Food &amp; Beverages</a>
-        <a href="./industries/q-commerce.html">Quick Commerce</a>
-        <a href="./industries/social-media.html">Social Media</a>
-        <a href="./industries/entertainment-ott.html">Entertainment &amp; OTT</a>
+        <a href="/industries/ecomm.html">E-Commerce</a>
+        <a href="/industries/retail.html">Retail</a>
+        <a href="/industries/real-estate.html">Real Estate</a>
+        <a href="/industries/travel-hotel.html">Travel &amp; Hospitality</a>
+        <a href="/industries/food-beverages.html">Food &amp; Beverages</a>
+        <a href="/industries/q-commerce.html">Quick Commerce</a>
+        <a href="/industries/social-media.html">Social Media</a>
+        <a href="/industries/entertainment-ott.html">Entertainment &amp; OTT</a>
       </div>
     </div>
 
     <div class="fc">
       <h4>Company</h4>
       <div class="fl">
-        <a href="./about.html">About Us</a>
-        <a href="./blog/index.html">Blog</a>
-        <a href="./case-studies.html">Case Studies</a>
-        <a href="./index.html#testimonials">Testimonials</a>
-        <a href="./index.html#contact">Contact</a>
+        <a href="/about.html">About Us</a>
+        <a href="/blog/index.html">Blog</a>
+        <a href="/case-studies.html">Case Studies</a>
+        <a href="/index.html#testimonials">Testimonials</a>
+        <a href="/index.html#contact">Contact</a>
       </div>
     </div>
 
     <div class="fc">
       <h4>Contact</h4>
       <div class="fl">
-        <a href="mailto:sales@techdataseeders.in">sales@techdataseeders.in</a>
+        <a href="/index.html#contact">Contact Us</a>
         <a href="tel:+918401481455" style="color:rgba(255,255,255,.85);">+91 8401481455</a>
         <span style="font-size:12px;color:rgba(255,255,255,.35);line-height:1.5;">INDIA &nbsp;|&nbsp; USA &nbsp;|&nbsp; UAE</span>
       </div>
@@ -483,13 +530,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="fbot">
-    <p class="fcopy">&copy; 2025 TechDataSeeders. All rights reserved.</p>
+    <p class="fcopy">&copy; 2026 Techdataseeders. All rights reserved.</p>
     <div class="fleg">
-      <a href="./privacy.html">Privacy Policy</a>
-      <a href="./terms.html">Terms &amp; Conditions</a>
+      <a href="/privacy.html">Privacy Policy</a>
+      <a href="/terms.html">Terms &amp; Conditions</a>
     </div>
   </div>
-  <p class="fdisclaim">TechDataSeeders only extracts publicly available information and does not scrape personal or identity-related data.</p>
+  <p class="fdisclaim">Techdataseeders only extracts publicly available information and does not scrape personal or identity-related data.</p>
 </footer>
 
 <!-- Scroll to top -->
@@ -511,38 +558,273 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   window.addEventListener('scroll', () => {
     const s = window.scrollY;
     nav.classList.toggle('dark', s > 80);
-    navLogo.src = s > 80 ? './logo/TDS Logo Set/Tech DataSeeders Logo white.png' : './logo/Tech DataSeeders Logo.png';
+    if (navLogo) {
+      navLogo.src = s > 80 ? '/logo/TDS Logo Set/Tech DataSeeders Logo white.png' : '/logo/Tech DataSeeders Logo.png';
+    }
     stb.classList.toggle('on', s > 400);
   });
 
   /* MOBILE NAV */
   (function () {
     var toggle = document.getElementById('navToggle');
-    var drops = nav.querySelectorAll('.has-drop');
+    var drops = nav.querySelectorAll('.nl .has-drop');
+    
+    function closeDrops(except) {
+      drops.forEach(function (li) { if (li !== except) li.classList.remove('open'); });
+    }
+    
     drops.forEach(function (li) {
       var link = li.querySelector(':scope > a');
       link.addEventListener('click', function (e) {
-        if (window.innerWidth <= 960) { e.preventDefault(); li.classList.toggle('open'); }
+        if (window.innerWidth <= 960) {
+          e.preventDefault();
+          var willOpen = !li.classList.contains('open');
+          closeDrops(li);
+          li.classList.toggle('open', willOpen);
+        }
       });
     });
+    
     document.addEventListener('click', function (e) {
-      if (!e.target.closest('.has-drop')) drops.forEach(function (li) { li.classList.remove('open'); });
+      if (!e.target.closest('.has-drop')) closeDrops(null);
     });
+    
     if (toggle) {
       toggle.addEventListener('click', function () {
         var open = nav.classList.toggle('nav-open');
         toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (!open) drops.forEach(function (li) { li.classList.remove('open'); });
+        if (!open) closeDrops(null);
       });
-      nav.querySelectorAll('.nl a:not(.has-drop a ~ a)').forEach(function (a) {
-        if (a.closest('.has-drop') && a === a.closest('.has-drop').querySelector(':scope > a')) return;
-        a.addEventListener('click', function () { nav.classList.remove('nav-open'); toggle.setAttribute('aria-expanded', 'false'); });
+      
+      nav.querySelectorAll('.nl a').forEach(function (a) {
+        if (a.parentElement && a.parentElement.classList && a.parentElement.classList.contains('has-drop')) return;
+        a.addEventListener('click', function () {
+          nav.classList.remove('nav-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          closeDrops(null);
+        });
       });
+      
       window.addEventListener('resize', function () {
-        if (window.innerWidth > 960) { nav.classList.remove('nav-open'); toggle.setAttribute('aria-expanded', 'false'); drops.forEach(function (li) { li.classList.remove('open'); }); }
+        if (window.innerWidth > 960) {
+          nav.classList.remove('nav-open');
+          toggle.setAttribute('aria-expanded', 'false');
+          closeDrops(null);
+        }
       });
     }
   })();
+
+  /* SCROLL TO CONTACT - Universal handler */
+  (function() {
+    // Check if we need to scroll to contact on page load
+    if (window.location.hash === '#contact' || sessionStorage.getItem('scrollToContact') === 'true') {
+      sessionStorage.removeItem('scrollToContact');
+      setTimeout(function() {
+        const contactSection = document.getElementById('contact');
+        if (contactSection) {
+          contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 400);
+    }
+
+    // Handle all "Get a Quote" links with data-scroll-to attribute
+    document.querySelectorAll('[data-scroll-to="contact"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const href = this.getAttribute('href') || '/index.html';
+        
+        // If already on index page, just scroll
+        if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
+          const contactSection = document.getElementById('contact');
+          if (contactSection) {
+            contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          return;
+        }
+        
+        // Store flag in sessionStorage before navigating
+        sessionStorage.setItem('scrollToContact', 'true');
+        window.location.href = href;
+      });
+    });
+  })();
 </script>
+
+<!-- WhatsApp Floating Button -->
+<style>
+.whatsapp-float {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.4);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  cursor: pointer;
+  animation: waPulse 2.5s ease-in-out infinite;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.12) translateY(-4px);
+  box-shadow: 0 10px 40px rgba(37, 211, 102, 0.55);
+  background: #20b85a;
+}
+
+.whatsapp-float:active {
+  transform: scale(0.92);
+}
+
+.whatsapp-float svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+@keyframes waPulse {
+  0%, 100% {
+    box-shadow: 0 6px 30px rgba(37, 211, 102, 0.4);
+  }
+  50% {
+    box-shadow: 0 6px 50px rgba(37, 211, 102, 0.6), 0 0 0 15px rgba(37, 211, 102, 0.1);
+  }
+}
+
+.whatsapp-tooltip {
+  position: absolute;
+  right: 72px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.whatsapp-tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 6px solid rgba(0, 0, 0, 0.85);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+.whatsapp-float:hover .whatsapp-tooltip {
+  opacity: 1;
+}
+
+@media screen and (max-width: 768px) {
+  .whatsapp-float {
+    width: 52px;
+    height: 52px;
+    bottom: 90px;
+    right: 16px;
+  }
+  .whatsapp-float svg {
+    width: 28px;
+    height: 28px;
+  }
+  .whatsapp-tooltip {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .whatsapp-float {
+    width: 48px;
+    height: 48px;
+    bottom: 80px;
+    right: 12px;
+  }
+  .whatsapp-float svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .whatsapp-float {
+    width: 42px;
+    height: 42px;
+    bottom: 70px;
+    right: 10px;
+  }
+  .whatsapp-float svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+</style>
+
+<a href="https://wa.me/918401481455?text=Hi%21%20I%27m%20interested%20in%20your%20services.%20Can%20you%20help%20me%3F" 
+   class="whatsapp-float" 
+   target="_blank" 
+   rel="noopener noreferrer"
+   aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  <span class="whatsapp-tooltip">Chat with us</span>
+</a>
+
+<script>
+(function() {
+  const waButton = document.querySelector('.whatsapp-float');
+  if (!waButton) return;
+  
+  waButton.addEventListener('click', function() {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'click', {
+        'event_category': 'WhatsApp',
+        'event_label': 'Floating Button'
+      });
+    }
+  });
+  
+  let lastScrollY = window.scrollY;
+  let isHidden = false;
+  
+  window.addEventListener('scroll', function() {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY > lastScrollY && currentScrollY > 300) {
+      if (!isHidden) {
+        waButton.style.opacity = '0';
+        waButton.style.transform = 'scale(0.8) translateY(20px)';
+        waButton.style.pointerEvents = 'none';
+        isHidden = true;
+      }
+    } else if (currentScrollY < lastScrollY || currentScrollY < 300) {
+      if (isHidden) {
+        waButton.style.opacity = '1';
+        waButton.style.transform = 'scale(1) translateY(0)';
+        waButton.style.pointerEvents = 'auto';
+        isHidden = false;
+      }
+    }
+    
+    lastScrollY = currentScrollY;
+  });
+})();
+</script>
+
 </body>
 </html>

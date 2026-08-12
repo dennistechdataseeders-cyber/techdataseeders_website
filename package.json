@@ -21,6 +21,11 @@
     "nodemailer": "^9.0.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "imagemin": "^9.0.1",
+    "imagemin-mozjpeg": "^10.0.0",
+    "imagemin-pngquant": "^10.0.0",
+    "imagemin-webp": "^8.0.0",
+    "nodemon": "^3.0.1",
+    "sharp": "^0.35.3"
   }
 }
