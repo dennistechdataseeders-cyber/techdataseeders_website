@@ -786,7 +786,7 @@
     /* headline   light + bold-italic contrast */
     .hero-h1 {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: clamp(52px, 6.2vw, 90px);
+      font-size: clamp(40px, 5.8vw, 85px);
       line-height: 1.08;
       letter-spacing: -0.03em;
       color: #0a0a0a;
@@ -837,6 +837,7 @@
       flex-wrap: wrap;
       justify-content: center;
       gap:10px;
+       margin-top: 30px;
     }
 
     .h-stat {
@@ -880,7 +881,7 @@
 
     /* CTA inside stats row */
     .hero-cta-btn {
-      margin-top: 30px;
+      margin-top: 40px;
       margin-left: 28px;
       background: var(--blue);
       color: #fff;
@@ -4508,6 +4509,21 @@
 }
   </style>
 </head>
+<script>
+// Simple scroll-to-top fix
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('stb');
+  if (btn) {
+    btn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    window.addEventListener('scroll', function() {
+      btn.classList.toggle('on', window.scrollY > 400);
+    });
+  }
+});
+</script>
 <body>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHKDNZLD"
