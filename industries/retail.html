@@ -81,11 +81,26 @@
       background: #fff;
       color: var(--black);
       -webkit-font-smoothing: antialiased;
+      cursor: none;
     }
 
     a {
       text-decoration: none;
       color: inherit;
+    }
+
+    /* ==== CUSTOM CURSOR ==== */
+    .cur-dot {
+      width: 8px; height: 8px; background: var(--blue);
+      border-radius: 50%; position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%); transition: width .15s, height .15s;
+    }
+    .cur-ring {
+      width: 36px; height: 36px; border: 1.5px solid var(--blue);
+      border-radius: 50%; position: fixed; top: 0; left: 0;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%, -50%); transition: width .1s, height .1s, opacity .1s;
     }
 
     .nav {
@@ -99,7 +114,6 @@
       justify-content: space-between;
       padding: 0 60px;
       background: rgba(255, 255, 255, .95);
-      -webkit-backdrop-filter: blur(14px);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(0, 0, 0, .07);
       z-index: 100;
@@ -134,7 +148,6 @@
       padding: 8px 16px;
       border-radius: 100px;
       transition: all .25s;
-      -webkit-backdrop-filter: blur(6px);
       backdrop-filter: blur(6px);
     }
 
@@ -282,7 +295,7 @@
 
     .ov-content {
       padding: 0 4px;
-margin-bottom: 30px;
+      margin-bottom: 30px;
     }
 
     .ov-h2 {
@@ -299,8 +312,7 @@ margin-bottom: 30px;
       font-size: 15.5px;
       line-height: 1.9;
       color: #555;
-      margin-bottom: 40px;
-     
+      margin-bottom: 16px;
     }
 
     .ov-p:last-child {
@@ -689,11 +701,19 @@ margin-bottom: 30px;
       align-items: center;
       justify-content: space-between;
       background: rgba(255, 255, 255, .96);
-      -webkit-backdrop-filter: blur(20px);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(0, 0, 0, .06);
       transition: all .4s;
     }
+
+    .nav.dark {
+      background: rgba(10, 10, 10, .97) !important;
+      border-bottom-color: rgba(255,255,255,.07) !important;
+    }
+    .nav.dark .nl a { color: rgba(255,255,255,.85); }
+    .nav.dark .nl a:hover { color: #fff; }
+    .nav.dark .nav-toggle span { background: #fff; }
+    .nav.dark .nav-logo img { content: url('/logo/TDS Logo Set/Tech DataSeeders Logo white.png'); }
 
     .nav-logo img {
       height: 36px;
@@ -949,6 +969,7 @@ margin-bottom: 30px;
         padding: 14px 6px;
         font-size: 16px;
         border-bottom: 1px solid rgba(0, 0, 0, .06);
+        color: #0a0a0a !important;
       }
 
       .nl a::after {
@@ -989,30 +1010,6 @@ margin-bottom: 30px;
         padding: 60px 24px;
       }
     }
-  
-    /* ==== CUSTOM CURSOR ==== */
-    body { cursor: none; }
-    .cur-dot {
-      width: 8px; height: 8px; background: var(--blue);
-      border-radius: 50%; position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 9999;
-      transform: translate(-50%, -50%); transition: width .15s, height .15s;
-    }
-    .cur-ring {
-      width: 36px; height: 36px; border: 1.5px solid var(--blue);
-      border-radius: 50%; position: fixed; top: 0; left: 0;
-      pointer-events: none; z-index: 9998;
-      transform: translate(-50%, -50%); transition: width .1s, height .1s, opacity .1s;
-    }
-  
-    .nav.dark {
-      background: rgba(10, 10, 10, .97) !important;
-      border-bottom-color: rgba(255,255,255,.07) !important;
-    }
-    .nav.dark .nl a { color: rgba(255,255,255,.85); }
-    .nav.dark .nl a:hover { color: #fff; }
-    .nav.dark .nav-toggle span { background: #fff; }
-    .nav.dark .nav-logo img { content: url('/logo/TDS Logo Set/Tech DataSeeders Logo white.png'); }
   </style>
 </head>
 <body>
@@ -1025,7 +1022,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <div id="navbar-placeholder"></div>
 
-  <section class="ind-hero">ssh root@old.dcycle.design
+  <section class="ind-hero">
     <div class="ind-hero-bg"></div>
     <div class="ind-hero-overlay"></div>
     <div class="crumb-bar">

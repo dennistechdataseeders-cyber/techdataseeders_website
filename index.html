@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -6530,128 +6530,73 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
 
     /* ==== FORM SUBMIT ==== */
-    document.getElementById('contactForm').addEventListener('submit', function(e) {/* ==== FORM SUBMIT (Node.js Backend) ==== */
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  var btn = document.getElementById('formBtn');
-  var msg = document.getElementById('formMsg');
-  
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
-  msg.style.display = 'none';
-  
-  var formData = new FormData(this);
-  var phone = formData.get('phone') || '';
-  
-  // Client-side phone validation (optional - shows error faster)
-  if (phone) {
-    // Remove all non-digit characters for validation
-    var cleaned = phone.replace(/[\s\-\.\(\)\+]/g, '');
-    if (cleaned.length < 9 || cleaned.length > 15) {
-      msg.style.color = '#f87171';
-      msg.textContent = '❌ Please enter a valid phone number (minimum 7 digits)';
-      msg.style.display = 'block';
-      btn.disabled = false;
-      btn.textContent = 'Submit Request ↗';
-      return;
-    }
-  }
-  
-  var data = {
-    name: formData.get('name'),
-    email: formData.get('email'),
-    phone: phone,
-    message: formData.get('message')
-  };
-  
-  fetch('/api/contact', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(function(response) {
-    if (!response.ok) {
-      return response.json().then(function(errData) {
-        throw new Error(errData.message || 'Server error');
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var btn = document.getElementById('formBtn');
+      var msg = document.getElementById('formMsg');
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      msg.style.display = 'none';
+
+      var formData = new FormData(this);
+      var phone = formData.get('phone') || '';
+
+      // Client-side phone validation
+      if (phone) {
+        var cleaned = phone.replace(/[\s\-\.\(\)\+]/g, '');
+        if (cleaned.length < 7 || cleaned.length > 15) {
+          msg.style.color = '#f87171';
+          msg.textContent = '❌ Please enter a valid phone number (minimum 7 digits)';
+          msg.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit Request ↗';
+          return;
+        }
+      }
+
+      var data = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: phone,
+        message: formData.get('message')
+      };
+
+      fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(function(response) {
+        if (!response.ok) {
+          return response.json().then(function(errData) {
+            throw new Error(errData.message || 'Server error');
+          });
+        }
+        return response.json();
+      })
+      .then(function(result) {
+        if (result.success) {
+          // Redirect to thank-you page on success
+          window.location.href = '/thank-you.html';
+        } else {
+          msg.style.color = '#f87171';
+          msg.textContent = '❌ ' + (result.message || 'Something went wrong. Please try again.');
+          msg.style.display = 'block';
+          btn.disabled = false;
+          btn.textContent = 'Submit Request ↗';
+        }
+      })
+      .catch(function(error) {
+        console.error('Form error:', error);
+        msg.style.color = '#f87171';
+        msg.textContent = '❌ ' + (error.message || 'Network error. Please try again.');
+        msg.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Submit Request ↗';
       });
-    }
-    return response.json();
-  })
-  .then(function(data) {
-    if (data.success) {
-      msg.style.color = '#4ade80';
-      msg.textContent = '✅ Message sent! We\'ll get back to you shortly.';
-      document.getElementById('contactForm').reset();
-    } else {
-      msg.style.color = '#f87171';
-      msg.textContent = '❌ ' + (data.message || 'Something went wrong. Please try again.');
-    }
-    msg.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Submit Request ↗';
-  })
-  .catch(function(error) {
-    console.error('❌ Form error:', error);
-    msg.style.color = '#f87171';
-    msg.textContent = '❌ ' + error.message;
-    msg.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Submit Request ↗';
-  });
-});
-  e.preventDefault();
-  
-  var btn = document.getElementById('formBtn');
-  var msg = document.getElementById('formMsg');
-  
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
-  msg.style.display = 'none';
-  
-  var formData = new FormData(this);
-  var data = {
-    name: formData.get('name'),
-    email: formData.get('email'),
-    phone: formData.get('phone'),
-    message: formData.get('message')
-  };
-  
-  fetch('/api/contact', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-  .then(function(response) {
-    return response.json();
-  })
-  .then(function(data) {
-    if (data.success) {
-      msg.style.color = '#4ade80';
-      msg.textContent = '✅ Message sent! We\'ll get back to you shortly.';
-      document.getElementById('contactForm').reset();
-    } else {
-      msg.style.color = '#f87171';
-      msg.textContent = '❌ ' + (data.message || 'Something went wrong.');
-    }
-    msg.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Submit Request ↗';
-  })
-  .catch(function(error) {
-    console.error('Form error:', error);
-    msg.style.color = '#f87171';
-    msg.textContent = '❌ Network error. Please try again.';
-    msg.style.display = 'block';
-    btn.disabled = false;
-    btn.textContent = 'Submit Request ↗';
-  });
-});
+    });
     /* ==== NAVBAR ==== */
     const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
     const stb = document.getElementById('stb');
@@ -7077,7 +7022,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   }
 
   function getPostUrl(slug) {
-    return '/blog/post.html?slug=' + encodeURIComponent(slug);
+    return '/blog/' + slug + '/';
   }
 
   function createCardHTML(post) {
