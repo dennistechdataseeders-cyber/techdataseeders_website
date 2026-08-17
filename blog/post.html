@@ -54,6 +54,7 @@
   }
   </script>
   <title>Article   Techdataseeders</title>
+  <link rel="canonical" href="https://techdataseeders.com/blog/">
   <link rel="icon" href="/./images/optimized/tds-icon.webp" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -507,9 +508,9 @@ async function fetchAllPosts() {
 
     document.getElementById('postRoot').innerHTML =
       '<div class="bd-crumb">' +
-        '<a href="/#contact" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to Blog</a>' +
-        '<nav class="bd-bread"><a href="/index.html">Home</a><span class="sep">/</span>' +
-        '<a href="/#contact">Blog</a><span class="sep">/</span>' +
+        '<a href="/blog/" class="bd-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back to Blog</a>' +
+        '<nav class="bd-bread"><a href="/">Home</a><span class="sep">/</span>' +
+        '<a href="/blog/">Blog</a><span class="sep">/</span>' +
         '<span class="current">' + escapeHtml(post.category || 'Article') + '</span></nav>' +
       '</div>' +
       '<div class="bd-head">' +

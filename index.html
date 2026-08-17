@@ -56,6 +56,7 @@
   </script>
   <title>Web Data Scraping Company in the USA | Techdataseeders</title>
   <meta name="description" content="Partner with a trusted web data scraping company in the USA. AI-powered extraction, custom pipelines & 24/7 support. Request a free quote today!">
+  <link rel="canonical" href="https://techdataseeders.com/">
   <link rel="icon" href="/./images/optimized/tds-icon.webp" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -78,10 +79,10 @@
         }
 
         // Handle all "Get a Quote" links with data-scroll-to attribute
-        document.querySelectorAll('[]').forEach(function(link) {
+        document.querySelectorAll('[data-scroll-to="contact"]').forEach(function(link) {
           link.addEventListener('click', function(e) {
             e.preventDefault();
-            const href = this.getAttribute('href') || '/index.html';
+            const href = this.getAttribute('href') || '/#contact';
             
             // If already on index page, just scroll
             if (window.location.pathname === '/' || window.location.pathname === '/index.html') {
@@ -6323,7 +6324,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="lbl rv">Insights & Resources</div>
       <h2 class="stitle rv">Latest from<br><span class="it">Our Data Lab</span></h2>
     </div>
-    <a href="/blog/index.html" class="btn-s rv">View all articles <span class="arr">→</span></a>
+    <a href="/blog/" class="btn-s rv">View all articles <span class="arr">→</span></a>
   </div>
 
   <div class="blog-grid" id="homeBlogGrid">

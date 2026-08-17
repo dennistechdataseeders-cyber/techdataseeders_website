@@ -3,11 +3,12 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
-const { connectDB, checkDBConnection, getBlogPosts } = require('./db');
+const { connectDB, checkDBConnection, getBlogPosts, getBlogPostBySlug } = require('./db');
 const { login, authMiddleware } = require('./auth');
 const blogAPI = require('./blog');
 const contactAPI = require('./contact');
 
+// Legacy slug → current slug mapping (old URLs from GSC that must 301 redirect)
 const urlMap = {
   "why-rental-market-intelligence-matters-for-property-investors": "why-rental-market-intelligence-matters-for-property-investors",
   "why-hyperlocal-data-intelligence-is-essential-for-modern-business-growth": "hyperlocal-data-intelligence-for-business-growth",
@@ -75,31 +76,150 @@ connectDB();
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 
-// 301 Redirect for legacy /blog/post.html?slug= URL format
-app.get('/blog/post.html', (req, res, next) => {
-  const oldSlug = req.query.slug;
-  if (oldSlug) {
-    const targetSlug = urlMap[oldSlug] || oldSlug;
-    return res.redirect(301, `/blog/${targetSlug}/`);
-  }
-  res.sendFile(path.join(__dirname, '..', 'blog', 'post.html'));
+// ---------------------------------------------------------------
+// REDIRECT: /index.html → / (301 Permanent)
+// Fixes the homepage duplicate canonical issue in Google Search Console
+// ---------------------------------------------------------------
+app.get('/index.html', (req, res) => {
+  return res.redirect(301, '/');
 });
 
+// ---------------------------------------------------------------
+// REDIRECT: Legacy /blog/post.html?slug=OLD-SLUG → /blog/CURRENT-SLUG/
+// Three-step resolution:
+//   1. urlMap lookup (handles renamed slugs from GSC soft 404 list)
+//   2. Database lookup (handles current slugs and future posts)
+//   3. Fallback to /blog/ (never a soft 404)
+// ---------------------------------------------------------------
+app.get('/blog/post.html', async (req, res) => {
+  const slug = req.query.slug;
+
+  // No slug provided — redirect to blog index
+  if (!slug) {
+    return res.redirect(301, '/blog/');
+  }
+
+  // Step 1: Check urlMap for renamed slugs (old GSC URLs)
+  if (urlMap[slug]) {
+    return res.redirect(301, `/blog/${urlMap[slug]}/`);
+  }
+
+  // Step 2: Query the database to verify the slug exists as-is
+  try {
+    const post = await getBlogPostBySlug(slug);
+    if (post) {
+      return res.redirect(301, `/blog/${post.slug}/`);
+    }
+  } catch (err) {
+    console.error('DB lookup error in /blog/post.html redirect:', err.message);
+  }
+
+  // Step 3: Unknown slug — redirect to blog index (prevents soft 404)
+  return res.redirect(301, '/blog/');
+});
+
+// ---------------------------------------------------------------
+// DYNAMIC SITEMAP — must be registered before express.static so the
+// physical sitemap.xml file (if any) does not intercept this route
+// ---------------------------------------------------------------
+app.get('/sitemap.xml', async (req, res) => {
+  let posts = [];
+  try {
+    posts = await getBlogPosts();
+  } catch (err) {
+    console.error('Error fetching posts for sitemap:', err.message);
+  }
+
+  const now = new Date().toISOString();
+
+  const staticUrls = [
+    // Homepage
+    { loc: 'https://techdataseeders.com/', changefreq: 'daily',   priority: '1.0', lastmod: now },
+    // Core pages
+    { loc: 'https://techdataseeders.com/about.html',        changefreq: 'monthly', priority: '0.8', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies.html', changefreq: 'weekly',  priority: '0.8', lastmod: now },
+    { loc: 'https://techdataseeders.com/blog/',             changefreq: 'daily',   priority: '0.9', lastmod: now },
+    // Services
+    { loc: 'https://techdataseeders.com/services/enterprise-web-scraping.html',   changefreq: 'monthly', priority: '0.8', lastmod: now },
+    { loc: 'https://techdataseeders.com/services/mobile-app-scraping.html',       changefreq: 'monthly', priority: '0.8', lastmod: now },
+    { loc: 'https://techdataseeders.com/services/data-analytics-intelligence.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
+    { loc: 'https://techdataseeders.com/services/custom-data-api.html',           changefreq: 'monthly', priority: '0.8', lastmod: now },
+    // Industries
+    { loc: 'https://techdataseeders.com/industries/ecomm.html',           changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/entertainment-ott.html', changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/food-beverages.html',   changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/q-commerce.html',       changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/real-estate.html',      changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/retail.html',           changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/social-media.html',     changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/travel-hotel.html',     changefreq: 'monthly', priority: '0.7', lastmod: now },
+    // Case Studies
+    { loc: 'https://techdataseeders.com/case-studies/pharma-data-extraction-services.html',       changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies/retail-automated-product-matching.html',     changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies/food-delivery-competitive-intelligence.html', changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies/finance-real-time-alternative-data-scraping.html', changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies/real-estate-aggregator-growth.html',         changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies/car-rental-pricing-intelligence.html',       changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies/event-ticket-booking-data-extraction.html',  changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/case-studies/ecommerce-pricing-intelligence.html',        changefreq: 'monthly', priority: '0.7', lastmod: now },
+    // Legal
+    { loc: 'https://techdataseeders.com/privacy.html', changefreq: 'yearly', priority: '0.3', lastmod: now },
+    { loc: 'https://techdataseeders.com/terms.html',   changefreq: 'yearly', priority: '0.3', lastmod: now },
+  ];
+
+  const staticXml = staticUrls.map(u => `
+  <url>
+    <loc>${u.loc}</loc>
+    <lastmod>${u.lastmod}</lastmod>
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('');
+
+  const blogXml = posts.map(post => {
+    const lastmod = post.updatedAt ? new Date(post.updatedAt).toISOString() : now;
+    return `
+  <url>
+    <loc>https://techdataseeders.com/blog/${post.slug}/</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+  }).join('');
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${staticXml}${blogXml}
+</urlset>`;
+
+  res.header('Content-Type', 'application/xml');
+  res.send(sitemap);
+});
+
+// ---------------------------------------------------------------
 // Serve blog post HTML for SEO-friendly URLs: /blog/:slug and /blog/:slug/
+// Also handles old slugs that are in urlMap
+// ---------------------------------------------------------------
 app.get(['/blog/:slug', '/blog/:slug/'], (req, res, next) => {
   const { slug } = req.params;
+  // Let express.static handle actual files (blog/index.html, etc.)
   if (slug === 'index.html' || slug === 'post.html') {
     return next();
   }
+  // Redirect old-slug → new-slug if found in urlMap
   if (urlMap[slug] && urlMap[slug] !== slug) {
     return res.redirect(301, `/blog/${urlMap[slug]}/`);
   }
   res.sendFile(path.join(__dirname, '..', 'blog', 'post.html'));
 });
 
-app.use(express.static('.'));
+// Static files (CSS, images, JS, HTML pages)
+app.use(express.static(path.join(__dirname, '..'), {
+  // Do not serve index.html automatically — we handle it via the catch-all
+  index: false
+}));
 
+// ---------------------------------------------------------------
 // Health check
+// ---------------------------------------------------------------
 app.get('/api/health', async (req, res) => {
   const dbConnected = await checkDBConnection();
   res.json({ 
@@ -136,36 +256,20 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'admin.html'));
 });
 
-// Dynamic sitemap route
-app.get('/sitemap.xml', async (req, res) => {
-  const posts = await getBlogPosts();
-  
-  let urls = posts.map(post => `
-    <url>
-      <loc>https://techdataseeders.com/blog/${post.slug}/</loc>
-      <lastmod>${post.updatedAt || new Date().toISOString()}</lastmod>
-      <changefreq>weekly</changefreq>
-      <priority>0.7</priority>
-    </url>
-  `).join('');
-  
-  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      <!-- Static URLs -->
-      <url>
-        <loc>https://techdataseeders.com/</loc>
-        <changefreq>daily</changefreq>
-        <priority>1.0</priority>
-      </url>
-      <!-- Dynamic blog posts -->
-      ${urls}
-    </urlset>`;
-  
-  res.header('Content-Type', 'application/xml');
-  res.send(sitemap);
+// ---------------------------------------------------------------
+// Catch-all: serve index.html for the root and any unknown route
+// Returns 404 status for non-existent API paths to avoid soft 404s
+// ---------------------------------------------------------------
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
-// Serve index for all other routes
-app.get('*', (req, res) => {
+
+app.use((req, res) => {
+  // API routes that don't exist get a real 404
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ success: false, message: 'Not found' });
+  }
+  // All other routes (SPA fallback) serve index.html
   res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 

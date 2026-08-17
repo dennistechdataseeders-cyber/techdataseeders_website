@@ -2,11 +2,10 @@
   RewriteEngine On
   RewriteBase /
 
-  # Redirect old /blog/post.html?slug=old-slug to /blog/new-slug/
-  RewriteCond %{QUERY_STRING} ^slug=([a-zA-Z0-9-]+)$
-  RewriteRule ^blog/post\.html$ /blog/%1/? [R=301,L]
+  # Redirect /index.html to root domain /
+  RewriteRule ^index\.html$ / [R=301,L]
 
-  # Serve post.html for /blog/slug/ or /blog/slug requests
+  # Serve post.html for /blog/slug/ or /blog/slug requests (if served via Apache)
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule ^blog/([a-zA-Z0-9-]+)/?$ blog/post.html?slug=$1 [L,QSA]
