@@ -1,12 +1,22 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config();
 
 const { connectDB, checkDBConnection, getBlogPosts, getBlogPostBySlug } = require('./db');
 const { login, authMiddleware } = require('./auth');
 const blogAPI = require('./blog');
 const contactAPI = require('./contact');
+
+// Helper to check if a file or directory exists on disk safely
+function checkFileExists(filePath) {
+  try {
+    return fs.existsSync(filePath);
+  } catch (err) {
+    return false;
+  }
+}
 
 // Legacy slug → current slug mapping (old URLs from GSC that must 301 redirect)
 const urlMap = {
@@ -82,6 +92,14 @@ app.use(express.json({ limit: '10mb' }));
 // ---------------------------------------------------------------
 app.get('/index.html', (req, res) => {
   return res.redirect(301, '/');
+});
+
+// ---------------------------------------------------------------
+// ROUTE: /blog, /blog/, and /blog/index.html → blog/index.html
+// Ensures the blog index page is served correctly when requested
+// ---------------------------------------------------------------
+app.get(['/blog', '/blog/', '/blog/index.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'blog', 'index.html'));
 });
 
 // ---------------------------------------------------------------
@@ -257,7 +275,7 @@ app.get('/admin', (req, res) => {
 });
 
 // ---------------------------------------------------------------
-// Catch-all: serve index.html for the root and any unknown route
+// Catch-all: resolves clean URLs, serves directory indexes, or falls back to root index.html
 // Returns 404 status for non-existent API paths to avoid soft 404s
 // ---------------------------------------------------------------
 app.get('/', (req, res) => {
@@ -265,12 +283,54 @@ app.get('/', (req, res) => {
 });
 
 app.use((req, res) => {
-  // API routes that don't exist get a real 404
-  if (req.path.startsWith('/api/')) {
+  const reqPath = req.path;
+
+  // 1. API routes that don't exist get a real 404 JSON response
+  if (reqPath.startsWith('/api/')) {
     return res.status(404).json({ success: false, message: 'Not found' });
   }
-  // All other routes (SPA fallback) serve index.html
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
+
+  const baseDir = path.join(__dirname, '..');
+  
+  // Resolve the physical path on disk (safely handling URL encoding)
+  let decodedPath = '';
+  try {
+    decodedPath = decodeURIComponent(reqPath);
+  } catch (err) {
+    decodedPath = reqPath;
+  }
+  
+  const targetPath = path.join(baseDir, decodedPath);
+
+  // 2. Check if a directory exists on disk and has an index.html file
+  if (checkFileExists(targetPath)) {
+    try {
+      const stats = fs.statSync(targetPath);
+      if (stats.isDirectory()) {
+        const indexHtmlPath = path.join(targetPath, 'index.html');
+        if (checkFileExists(indexHtmlPath)) {
+          return res.sendFile(indexHtmlPath);
+        }
+      } else if (stats.isFile()) {
+        // Direct file match
+        return res.sendFile(targetPath);
+      }
+    } catch (err) {
+      console.error('Error reading path stats:', err.message);
+    }
+  }
+
+  // 3. Clean URL resolution: if a path doesn't end with a slash and has no extension,
+  // check if appending '.html' yields a valid file (e.g. /about → /about.html)
+  if (!reqPath.endsWith('/') && !path.extname(reqPath)) {
+    const htmlFilePath = targetPath + '.html';
+    if (checkFileExists(htmlFilePath)) {
+      return res.sendFile(htmlFilePath);
+    }
+  }
+
+  // 4. Fallback to homepage index.html as a last resort
+  res.sendFile(path.join(baseDir, 'index.html'));
 });
 
 app.listen(PORT, '0.0.0.0', () => {
