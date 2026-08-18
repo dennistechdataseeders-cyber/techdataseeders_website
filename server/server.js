@@ -95,10 +95,18 @@ app.get('/index.html', (req, res) => {
 });
 
 // ---------------------------------------------------------------
-// ROUTE: /blog, /blog/, and /blog/index.html → blog/index.html
+// REDIRECT: /blog/index.html → /blog/ (301 Permanent)
+// Prevents duplicate content canonical issues for the blog index
+// ---------------------------------------------------------------
+app.get('/blog/index.html', (req, res) => {
+  return res.redirect(301, '/blog/');
+});
+
+// ---------------------------------------------------------------
+// ROUTE: /blog and /blog/ → blog/index.html
 // Ensures the blog index page is served correctly when requested
 // ---------------------------------------------------------------
-app.get(['/blog', '/blog/', '/blog/index.html'], (req, res) => {
+app.get(['/blog', '/blog/'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'blog', 'index.html'));
 });
 
