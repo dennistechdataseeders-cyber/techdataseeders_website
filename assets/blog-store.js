@@ -90,9 +90,11 @@
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/"/g, '&quot;');
   }
-  function inline(s) { // escape then apply **bold**
-    return esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  }
+ function inline(s) { // escape then apply **bold** and [text](url) links
+  var out = esc(s).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  out = out.replace(/\[(.+?)\]\((\/[^\s)]+|https?:\/\/[^\s)]+)\)/g, '<a href="$2">$1</a>');
+  return out;
+}
   function gradientOf(p) { return GRADIENTS[p && p.gradient] || GRADIENTS.blue; }
   function iconOf(p) { return ICONS[p && p.icon] || ICONS.database; }
   function postUrl(slug) { return '/blog/' + slug + '/'; }

@@ -66,6 +66,14 @@ const BlogPostSchema = new mongoose.Schema({
   views: {
     type: Number,
     default: 0
+  },
+  metaTitle: {
+    type: String,
+    default: ''
+  },
+  metaDescription: {
+    type: String,
+    default: ''
   }
 }, {
   timestamps: true

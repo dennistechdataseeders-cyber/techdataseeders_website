@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -53,7 +53,10 @@
     ]
   }
   </script>
-  <title>Article   Techdataseeders</title>
+  <title>Article | Techdataseeders</title>
+  <meta name="description" content="Techdataseeders blog article">
+  <meta property="og:title" content="Article">
+  <meta property="og:description" content="Techdataseeders blog article">
   <link rel="canonical" href="https://techdataseeders.com/blog/">
   <link rel="icon" href="/./images/optimized/tds-icon.webp" type="image/png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -62,6 +65,21 @@
     :root{--blue:#2563FF;--blue-dark:#1a4fd8;--black:#0a0a0a;--font-d:'Plus Jakarta Sans',sans-serif;--font-b:'Inter',sans-serif;}
     body{font-family:var(--font-b);background:#fff;color:var(--black);-webkit-font-smoothing:antialiased;}
     a{text-decoration:none;color:inherit;}
+    
+    /* --- LINK STYLES FOR BLOG CONTENT --- */
+    .bd-article a {
+      color: var(--blue);
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(37, 99, 255, 0.3);
+      transition: all 0.25s ease;
+    }
+    .bd-article a:hover {
+      color: var(--blue-dark);
+      text-decoration-color: var(--blue);
+    }
+    
     .nav{position:fixed;top:0;left:0;right:0;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 60px;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,0,0,.07);z-index:100;}
     .nav-logo img{height:32px;}
     .nav-cta{background:var(--blue);color:#fff;padding:10px 22px;border-radius:100px;font-size:14px;font-weight:600;transition:all .25s;}
@@ -117,10 +135,55 @@
     .side-cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--blue);color:#fff;padding:12px 24px;border-radius:100px;font-family:var(--font-d);font-size:13.5px;font-weight:700;transition:all .3s;}
     .side-cta-btn:hover{background:var(--blue-dark);transform:translateY(-2px);}
 
+    /* --- Related Posts Section (More from Our Data Lab) --- */
     .sec-rel{padding:80px 80px 96px;background:#f8f9fb;border-top:1px solid rgba(0,0,0,.06);}
-    .rel-h{font-family:var(--font-d);font-size:clamp(26px,3vw,38px);font-weight:700;letter-spacing:-.02em;margin-bottom:40px;}
+    .rel-h{font-family:var(--font-d);font-size:clamp(28px,3.2vw,40px);font-weight:700;letter-spacing:-.02em;margin-bottom:44px;}
     .rel-h em{font-style:italic;color:var(--blue);}
-    .rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+
+    .rel-card {
+      background:#fff;
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:16px;
+      overflow:hidden;
+      transition:all .35s cubic-bezier(.16,1,.3,1);
+      display:block;
+      text-decoration:none;
+    }
+    .rel-card:hover {
+      transform:translateY(-6px);
+      box-shadow:0 20px 50px rgba(0,0,0,.08);
+      border-color:rgba(37,99,255,.15);
+    }
+    .rel-card-image{height:180px;background-size:cover;background-position:center;position:relative;}
+    .rel-card-body{padding:24px 24px 28px;}
+    .rel-cat{
+      font-size:10px;
+      font-weight:700;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:var(--blue);
+      display:block;
+      margin-bottom:12px;
+    }
+    .rel-title{
+      font-family:var(--font-d);
+      font-size:17px;
+      font-weight:700;
+      color:#0a0a0a;
+      line-height:1.35;
+      margin-bottom:10px;
+    }
+    .rel-exc{
+      font-size:13.5px;
+      color:#666;
+      line-height:1.7;
+      display:-webkit-box;
+      -webkit-line-clamp:3;
+      -webkit-box-orient:vertical;
+      overflow:hidden;
+    }
+
     .blog-card{background:#fff;border:1px solid rgba(0,0,0,.07);border-radius:22px;overflow:hidden;transition:all .35s cubic-bezier(.16,1,.3,1);display:block;}
     .blog-card:hover{transform:translateY(-7px);box-shadow:0 22px 60px rgba(0,0,0,.1);border-color:rgba(37,99,255,.18);}
     .blog-art{height:170px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;}
@@ -145,8 +208,9 @@
 
     .footer-mini{text-align:center;padding:28px;font-size:13px;color:#aaa;border-top:1px solid rgba(0,0,0,.06);}
 
-    @media(max-width:980px){.bd-layout{grid-template-columns:1fr;gap:48px;}.bd-side{position:static;}.rel-grid{grid-template-columns:1fr;}}
+    @media(max-width:980px){.bd-layout{grid-template-columns:1fr;gap:48px;}.bd-side{position:static;}.rel-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:900px){.nav{padding:0 24px;}.bd-shell{padding:96px 24px 0;}.sec-rel{padding:60px 24px;}.metband{grid-template-columns:1fr;}}
+    @media(max-width:600px){.rel-grid{grid-template-columns:1fr;}.rel-card-body{padding:20px 20px 24px;}.rel-title{font-size:16px;}}
   
     /* ---- FULL NAV OVERRIDE ---- */
     .nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:70px;padding:0 60px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.96);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06);transition:all .4s;}
@@ -230,6 +294,117 @@
       pointer-events: none; z-index: 9998;
       transform: translate(-50%, -50%); transition: width .1s, height .1s, opacity .1s;
     }
+    
+    /* ---- TABLE STYLING ---- */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      margin: 30px 0;
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.01);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14.5px;
+      background: #fff;
+    }
+    th, td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    th {
+      font-family: var(--font-d);
+      font-weight: 700;
+      color: var(--black);
+      background: #f8f9fb;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    tr:nth-child(even) {
+      background: #fbfcfe;
+    }
+    tr:hover {
+      background: rgba(37, 99, 255, 0.02);
+    }
+    
+    /* ---- FAQ ACCORDION STYLING ---- */
+    .faq-accordion {
+      margin: 30px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .faq-item {
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 14px;
+      background: #fdfdfd;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .faq-item:hover {
+      border-color: rgba(37, 99, 255, 0.2);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+    .faq-item.open {
+      border-color: rgba(37, 99, 255, 0.25);
+      background: #fff;
+      box-shadow: 0 10px 30px rgba(37, 99, 255, 0.05);
+    }
+    .faq-question {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      background: none;
+      border: none;
+      text-align: left;
+      font-family: var(--font-d);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--black);
+      cursor: pointer;
+      outline: none;
+      transition: color 0.25s;
+    }
+    .faq-question:hover {
+      color: var(--blue);
+    }
+    .faq-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(37, 99, 255, 0.05);
+      color: var(--blue);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .faq-item.open .faq-arrow {
+      transform: rotate(180deg);
+      background: var(--blue);
+      color: #fff;
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .faq-answer p {
+      padding: 0 24px 20px 24px;
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.7;
+      color: #555;
+    }
   </style>
 </head>
 <body>
@@ -247,6 +422,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="bd-missing"><p>Loading article…</p></div>
 </div>
 
+<!-- ============================================================ -->
+<!-- RELATED POSTS SECTION - "More from Our Data Lab"              -->
+<!-- ============================================================ -->
 <section class="sec-rel" id="relSection" style="display:none;">
   <h2 class="rel-h">More from <em>Our Data Lab</em></h2>
   <div class="rel-grid" id="relGrid"></div>
@@ -295,6 +473,37 @@ function escapeHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
+function inline(s) {
+  // First, extract and save HTML links
+  var links = [];
+  var out = String(s || '');
+  
+  // Temporarily replace HTML links with placeholders
+  out = out.replace(/<a\s+[^>]*>.*?<\/a>/gi, function(match) {
+    links.push(match);
+    return '###LINK' + (links.length - 1) + '###';
+  });
+  
+  // Now escape the remaining text (but NOT the placeholders)
+  out = out
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  
+  // Apply bold formatting
+  out = out.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  
+  // Convert markdown links [text](url) to HTML
+  out = out.replace(/\[(.+?)\]\((\/[^\s)]+|https?:\/\/[^\s)]+)\)/g, '<a href="$2">$1</a>');
+  
+  // Restore the HTML links
+  out = out.replace(/###LINK(\d+)###/g, function(match, index) {
+    return links[parseInt(index)];
+  });
+  
+  return out;
+}
 function getGradient(post) {
   return GRADIENTS[post.gradient] || GRADIENTS.blue;
 }
@@ -307,38 +516,265 @@ function getPostUrl(slug) {
   return '/blog/' + slug + '/';
 }
 
+function parseTableRow(rowLine) {
+  var cells = rowLine.split('|');
+  if (rowLine.indexOf('|') === 0) {
+    cells.shift();
+  }
+  if (rowLine.lastIndexOf('|') === rowLine.length - 1 && rowLine.length > 1) {
+    cells.pop();
+  }
+  return cells.map(function(c) { return c.trim(); });
+}
+
+function renderTable(tableLines) {
+  if (tableLines[0] && tableLines[0].indexOf('Product A') === 0 && tableLines[0].split('|').length === 6) {
+    tableLines.unshift('Product | Marketplace | Date | Seller | Price | Availability');
+    tableLines.splice(1, 0, '---|---|---|---|---|---');
+  }
+  
+  var dividerIndex = -1;
+  for (var j = 0; j < tableLines.length; j++) {
+    var cleanLine = tableLines[j].trim();
+    if (/^[|:\-\s]+$/.test(cleanLine) && cleanLine.indexOf('-') !== -1) {
+      dividerIndex = j;
+      break;
+    }
+  }
+  
+  var html = '<div class="table-container"><table>';
+  var headerRows = [];
+  var bodyRows = [];
+  
+  if (dividerIndex !== -1) {
+    headerRows = tableLines.slice(0, dividerIndex);
+    bodyRows = tableLines.slice(dividerIndex + 1);
+  } else {
+    headerRows = [tableLines[0]];
+    bodyRows = tableLines.slice(1);
+  }
+  
+  if (headerRows.length > 0) {
+    html += '<thead>';
+    headerRows.forEach(function(rowLine) {
+      html += '<tr>';
+      var cells = parseTableRow(rowLine);
+      cells.forEach(function(cell) {
+        html += '<th>' + escapeHtml(cell) + '</th>';
+      });
+      html += '</tr>';
+    });
+    html += '</thead>';
+  }
+  
+  if (bodyRows.length > 0) {
+    html += '<tbody>';
+    bodyRows.forEach(function(rowLine) {
+      html += '<tr>';
+      var cells = parseTableRow(rowLine);
+      cells.forEach(function(cell) {
+        html += '<td>' + escapeHtml(cell) + '</td>';
+      });
+      html += '</tr>';
+    });
+    html += '</tbody>';
+  }
+  
+  html += '</table></div>';
+  return html;
+}
+
+function injectFaqSchema(faqs) {
+  if (!faqs || faqs.length === 0) return;
+  var existingSchema = document.getElementById('faq-schema-markup');
+  if (existingSchema) {
+    existingSchema.remove();
+  }
+  
+  var schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(function(faq) {
+      return {
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.a
+        }
+      };
+    })
+  };
+  
+  var script = document.createElement('script');
+  script.id = 'faq-schema-markup';
+  script.type = 'application/ld+json';
+  script.text = JSON.stringify(schema);
+  document.head.appendChild(script);
+}
+
+function toggleFaq(btn) {
+  var item = btn.parentElement;
+  var isOpen = item.classList.contains('open');
+  
+  var allItems = document.querySelectorAll('.faq-item');
+  allItems.forEach(function(i) {
+    i.classList.remove('open');
+    var ans = i.querySelector('.faq-answer');
+    if (ans) ans.style.maxHeight = null;
+  });
+  
+  if (!isOpen) {
+    item.classList.add('open');
+    var answer = item.querySelector('.faq-answer');
+    if (answer) {
+      answer.style.maxHeight = answer.scrollHeight + 'px';
+    }
+  }
+}
+
 function renderBody(md) {
   var lines = String(md || '').split(/\r?\n/);
   var html = '', listOpen = false;
   function closeList() { if (listOpen) { html += '</ul>'; listOpen = false; } }
+
+  var faqs = [];
+  var tempInFaq = false;
+  var currentQuestion = null;
+  var currentAnswer = [];
+
+  for (var j = 0; j < lines.length; j++) {
+    var l = lines[j].trim();
+    if (l.indexOf('## ') === 0 && l.toLowerCase().indexOf('faq') !== -1) {
+      tempInFaq = true;
+      continue;
+    }
+    if (tempInFaq) {
+      if (l.indexOf('## ') === 0 || l.indexOf('### ') === 0) {
+        if (currentQuestion && currentAnswer.length > 0) {
+          faqs.push({ q: currentQuestion, a: currentAnswer.join(' ') });
+        }
+        tempInFaq = false;
+        continue;
+      }
+      if (l.indexOf('**') === 0 && l.lastIndexOf('**') === l.length - 2 && l.length > 4) {
+        if (currentQuestion && currentAnswer.length > 0) {
+          faqs.push({ q: currentQuestion, a: currentAnswer.join(' ') });
+        }
+        currentQuestion = l.slice(2, -2).trim();
+        currentAnswer = [];
+      } else if (l) {
+        if (currentQuestion) {
+          currentAnswer.push(l);
+        }
+      }
+    }
+  }
+  if (currentQuestion && currentAnswer.length > 0) {
+    faqs.push({ q: currentQuestion, a: currentAnswer.join(' ') });
+  }
+
+  injectFaqSchema(faqs);
+
+  var inFaqSection = false;
   for (var i = 0; i < lines.length; i++) {
     var line = lines[i].trim();
-    if (!line) { closeList(); continue; }
-    if (line.indexOf('## ') === 0) { closeList(); html += '<h2>' + escapeHtml(line.slice(3)) + '</h2>'; }
-    else if (line.indexOf('### ') === 0) { closeList(); html += '<h3>' + escapeHtml(line.slice(4)) + '</h3>'; }
-    else if (line.indexOf('> ') === 0) { closeList(); html += '<blockquote class="bd-quote"><p>' + escapeHtml(line.slice(2)) + '</p></blockquote>'; }
-    else if (line.indexOf('- ') === 0) { if (!listOpen) { html += '<ul>'; listOpen = true; } html += '<li>' + escapeHtml(line.slice(2)) + '</li>'; }
-    else { closeList(); html += '<p>' + escapeHtml(line) + '</p>'; }
+    
+    // Skip empty lines
+    if (!line) {
+      closeList();
+      continue;
+    }
+    
+    // Check if this line starts with an HTML link (already processed)
+    var isHtmlLink = line.indexOf('<a ') === 0 || line.indexOf('</a>') !== -1;
+    
+    if (line.indexOf('## ') === 0 && line.toLowerCase().indexOf('faq') !== -1) {
+      closeList();
+      inFaqSection = true;
+      html += '<h2>' + inline(line.slice(3)) + '</h2>';
+      html += '<div class="faq-accordion">';
+      faqs.forEach(function(faq) {
+        html += '<div class="faq-item">';
+        html += '<button class="faq-question" onclick="toggleFaq(this)">';
+        html += '<span>' + faq.q + '</span>';
+        html += '<span class="faq-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></span>';
+        html += '</button>';
+        html += '<div class="faq-answer">';
+        html += '<p>' + faq.a + '</p>';
+        html += '</div>';
+        html += '</div>';
+      });
+      html += '</div>';
+      continue;
+    }
+    
+    if (inFaqSection) {
+      if (line.indexOf('## ') === 0 || line.indexOf('### ') === 0) {
+        inFaqSection = false;
+      } else {
+        continue;
+      }
+    }
+
+    if (line.indexOf('|') !== -1) {
+      closeList();
+      var tableLines = [];
+      while (i < lines.length && lines[i].trim().indexOf('|') !== -1) {
+        tableLines.push(lines[i].trim());
+        i++;
+      }
+      i--;
+      html += renderTable(tableLines);
+      continue;
+    }
+
+    // Check if this is an HTML link line
+    if (line.indexOf('<a ') === 0) {
+      closeList();
+      html += '<p>' + line + '</p>';
+      continue;
+    }
+
+    if (line.indexOf('## ') === 0) { 
+      closeList(); 
+      html += '<h2>' + inline(line.slice(3)) + '</h2>'; 
+    }
+    else if (line.indexOf('### ') === 0) { 
+      closeList(); 
+      html += '<h3>' + inline(line.slice(4)) + '</h3>'; 
+    }
+    else if (line.indexOf('> ') === 0) { 
+      closeList(); 
+      html += '<blockquote class="bd-quote"><p>' + inline(line.slice(2)) + '</p></blockquote>'; 
+    }
+    else if (line.indexOf('- ') === 0) { 
+      if (!listOpen) { 
+        html += '<ul>'; 
+        listOpen = true; 
+      } 
+      html += '<li>' + inline(line.slice(2)) + '</li>'; 
+    }
+    else { 
+      closeList(); 
+      html += '<p>' + inline(line) + '</p>'; 
+    }
   }
   closeList();
   return html;
 }
-
-function createCardHTML(post) {
-  var artContent = post.heroImage
-    ? '<div class="blog-art" style="background-image:url(\'' + escapeHtml(post.heroImage) + '\');background-size:cover;background-position:center;"></div>'
-    : '<div class="blog-art" style="background:' + getGradient(post) + ';"><div class="blog-art-ico"><svg viewBox="0 0 24 24">' + getIcon(post) + '</svg></div></div>';
+// --- Related post card with image ---
+function createRelatedCardHTML(post) {
+  var hasImage = post.heroImage && post.heroImage.trim() !== '';
+  var imageStyle = hasImage ? 'background-image:url(\'' + escapeHtml(post.heroImage) + '\');' : 'background:' + getGradient(post) + ';';
   
-  return '<a href="' + getPostUrl(post.slug) + '" class="blog-card">' +
-    artContent +
-    '<div class="blog-body">' +
-      '<span class="blog-cat">' + escapeHtml(post.category) + '</span>' +
-      '<h3 class="blog-title">' + escapeHtml(post.title) + '</h3>' +
-      '<p class="blog-exc">' + escapeHtml(post.excerpt) + '</p>' +
-      '<div class="blog-foot">' +
-        '<span class="blog-date">' + escapeHtml(post.date) + '</span>' +
-        '<span class="blog-read">Read more <svg viewBox="0 0 14 14"><path d="M1 7h12M7 1l6 6-6 6"/></svg></span>' +
-      '</div>' +
+  return '<a href="' + getPostUrl(post.slug) + '" class="rel-card">' +
+    '<div class="rel-card-image" style="' + imageStyle + 'background-size:cover;background-position:center;height:180px;position:relative;">' +
+    '</div>' +
+    '<div class="rel-card-body">' +
+      '<span class="rel-cat">' + escapeHtml(post.category) + '</span>' +
+      '<h3 class="rel-title">' + escapeHtml(post.title) + '</h3>' +
+      '<p class="rel-exc">' + escapeHtml(post.excerpt) + '</p>' +
     '</div>' +
   '</a>';
 }
@@ -440,7 +876,6 @@ async function fetchAllPosts() {
     "a-step-by-step-guide-to-gathering-valuable-healthcare-information-online": "healthcare-data-scraping-guide"
   };
 
-  // Determine slug from URL path or search query
   var pathname = location.pathname.replace(/\/+$/, '');
   var pathSegments = pathname.split('/').filter(Boolean);
   var slug = '';
@@ -454,7 +889,6 @@ async function fetchAllPosts() {
     slug = params.get('slug');
   }
 
-  // Redirect if old slug is used or if accessed via post.html?slug=
   if (slug && (urlMap[slug] || location.pathname.includes('post.html'))) {
     var targetSlug = urlMap[slug] || slug;
     var newUrl = '/blog/' + targetSlug + '/';
@@ -472,7 +906,6 @@ async function fetchAllPosts() {
     return;
   }
 
-  // Fetch post and related posts
   Promise.all([fetchPost(slug), fetchAllPosts()]).then(function(results) {
     var post = results[0];
     var list = results[1];
@@ -486,9 +919,20 @@ async function fetchAllPosts() {
       return;
     }
 
-    document.title = post.title + '   Techdataseeders';
+    var pageTitle = (post.metaTitle && post.metaTitle.trim()) ? post.metaTitle.trim() : post.title;
+    var pageDesc  = (post.metaDescription && post.metaDescription.trim()) ? post.metaDescription.trim() : (post.excerpt || '');
 
-    // Dynamically set/update canonical URL
+    document.title = pageTitle + ' | Techdataseeders';
+
+    var metaDescEl = document.querySelector('meta[name="description"]');
+    if (metaDescEl) metaDescEl.setAttribute('content', pageDesc);
+
+    var ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.setAttribute('content', pageTitle);
+
+    var ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.setAttribute('content', pageDesc);
+
     var canonical = document.querySelector('link[rel="canonical"]');
     if (!canonical) {
       canonical = document.createElement('link');
@@ -529,13 +973,25 @@ async function fetchAllPosts() {
           '<div class="side-card"><div class="side-h">Popular Posts</div>' + popular + '</div>' +
           '<div class="side-cta"><div class="side-cta-h">Need data like this?</div>' +
           '<div class="side-cta-p">Tell us your requirements and we\'ll send a tailored proposal within 24 hours.</div>' +
-          '<a href="/#contact"  class="side-cta-btn">Get a Quote →</a></div>' +
+          '<a href="/#contact" class="side-cta-btn">Get a Quote →</a></div>' +
         '</aside>' +
       '</div>';
 
-    var rel = others.slice(0, 3);
+    // Related posts
+    var postTags = post.tags || [];
+    var scored = others.map(function(p) {
+      var score = 0;
+      if (p.category === post.category) score += 3;
+      (p.tags || []).forEach(function(t) {
+        if (postTags.indexOf(t) !== -1) score += 1;
+      });
+      return { post: p, score: score };
+    });
+    scored.sort(function(a, b) { return b.score - a.score; });
+    var rel = scored.slice(0, 3).map(function(s) { return s.post; });
+
     if (rel.length) {
-      document.getElementById('relGrid').innerHTML = rel.map(createCardHTML).join('');
+      document.getElementById('relGrid').innerHTML = rel.map(createRelatedCardHTML).join('');
       document.getElementById('relSection').style.display = '';
     }
     window.scrollTo(0, 0);

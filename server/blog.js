@@ -73,7 +73,9 @@ async function createOrUpdatePost(req, res) {
       gradient: post.gradient || 'blue',
       icon: post.icon || 'database',
       tags: Array.isArray(post.tags) ? post.tags : (post.tags ? post.tags.split(',').map(t => t.trim()).filter(Boolean) : []),
-      published: post.published !== undefined ? post.published : true
+      published: post.published !== undefined ? post.published : true,
+      metaTitle: (post.metaTitle || '').trim(),
+      metaDescription: (post.metaDescription || '').trim()
     };
     
     // If updating, preserve the _id
