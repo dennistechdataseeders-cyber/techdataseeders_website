@@ -922,7 +922,7 @@ async function fetchAllPosts() {
     var pageTitle = (post.metaTitle && post.metaTitle.trim()) ? post.metaTitle.trim() : post.title;
     var pageDesc  = (post.metaDescription && post.metaDescription.trim()) ? post.metaDescription.trim() : (post.excerpt || '');
 
-    document.title = pageTitle + ' | Techdataseeders';
+    document.title = pageTitle;
 
     var metaDescEl = document.querySelector('meta[name="description"]');
     if (metaDescEl) metaDescEl.setAttribute('content', pageDesc);
