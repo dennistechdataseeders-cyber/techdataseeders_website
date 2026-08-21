@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -119,8 +119,18 @@
     .bd-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:14px;color:#888;}
     .bd-meta .dot{width:4px;height:4px;border-radius:50%;background:#ccc;}
     .bd-meta strong{color:#333;font-weight:600;}
-    .bd-hero{width:100%;height:clamp(260px,42vw,480px);border-radius:24px;overflow:hidden;margin:40px 0;background-size:cover;background-position:center;}
+.bd-hero {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  margin: 40px 0;
+}
 
+.bd-hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
     .bd-layout{display:grid;grid-template-columns:1fr 320px;gap:60px;align-items:start;padding-bottom:96px;}
     .bd-article{min-width:0;}
     .bd-article h2{font-family:var(--font-d);font-size:clamp(24px,2.4vw,30px);font-weight:700;letter-spacing:-.02em;color:var(--black);margin:38px 0 16px;}
@@ -991,8 +1001,7 @@ async function fetchAllPosts() {
         (post.excerpt ? '<p class="bd-exc">' + escapeHtml(post.excerpt) + '</p>' : '') +
         '<div class="bd-meta">' + meta + '</div>' +
       '</div>' +
-      (post.heroImage ? '<div class="bd-hero" style="background-image:url(\'' + escapeHtml(post.heroImage) + '\');"></div>' : '<div style="height:40px;"></div>') +
-      (post.metrics && post.metrics.length ? '<div class="metband">' + post.metrics.map(function(m) { return '<div class="met"><div class="metv">' + escapeHtml(m.value) + '</div><div class="metl">' + escapeHtml(m.label) + '</div></div>'; }).join('') + '</div>' : '') +
+(post.heroImage ? '<div class="bd-hero"><img src="' + escapeHtml(post.heroImage) + '" alt="' + escapeHtml(post.title) + '" class="bd-hero-img"></div>' : '<div style="height:40px;"></div>') +      (post.metrics && post.metrics.length ? '<div class="metband">' + post.metrics.map(function(m) { return '<div class="met"><div class="metv">' + escapeHtml(m.value) + '</div><div class="metl">' + escapeHtml(m.label) + '</div></div>'; }).join('') + '</div>' : '') +
       '<div class="bd-layout">' +
         '<article class="bd-article">' + renderBody(post.body) +
           (tags ? '<div class="bd-tags">' + tags + '</div>' : '') +
