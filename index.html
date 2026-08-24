@@ -82,6 +82,8 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,800;1,800&family=Syne:wght@400;700;800&family=Inter:wght@300;400;500;600&display=swap"
     rel="stylesheet">
+  <!-- flag-icons: SVG country flags served from /flag-icons.min.css -->
+  <link rel="stylesheet" href="/flag-icons.min.css">
   <script>
       // Universal scroll handler for "Get a Quote" links
       document.addEventListener('DOMContentLoaded', function() {
@@ -2408,6 +2410,227 @@
       background: var(--blue-dark);
       box-shadow: 0 8px 28px rgba(37, 99, 255, .5);
       transform: translateY(-2px);
+    }
+
+    /* ---- Form enhancement: labels, validation, country picker, tooltip ---- */
+
+    /* Field labels */
+    .flbl {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+      margin-bottom: 6px;
+      font-family: var(--font-b);
+    }
+    .freq { color: #f87171; margin-left: 2px; }
+    .fopt { color: rgba(255,255,255,.3); font-size: 11px; text-transform: none; font-weight: 400; }
+
+    /* Wrapper that holds the input + validation icon */
+    .fi-wrap {
+      position: relative;
+    }
+
+    /* Validation icon (✓ / ✕) positioned inside the input */
+    .fvi {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 14px;
+      line-height: 1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    textarea ~ .fvi { top: 14px; transform: none; }
+
+    /* Valid state */
+    .fg.is-valid .fi    { border-color: rgba(52,211,153,.6); background: rgba(52,211,153,.06); }
+    .fg.is-valid .fvi   { opacity: 1; color: #34d399; }
+    .fg.is-valid .fvi::before { content: '✓'; }
+
+    /* Invalid state */
+    .fg.is-invalid .fi  { border-color: rgba(248,113,113,.55); background: rgba(248,113,113,.05); }
+    .fg.is-invalid .fvi { opacity: 1; color: #f87171; }
+    .fg.is-invalid .fvi::before { content: '✕'; }
+
+    /* Padding adjustment so text doesn't overlap the icon */
+    .fg.is-valid .fi,
+    .fg.is-invalid .fi { padding-right: 38px; }
+
+    /* Error message below field */
+    .ferr {
+      display: block;
+      font-size: 11.5px;
+      color: #f87171;
+      margin-top: 4px;
+      min-height: 16px;
+      font-family: var(--font-b);
+      line-height: 1.4;
+    }
+
+    /* Meta row: error + char counter */
+    .fmeta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .fchar {
+      font-size: 11px;
+      color: rgba(255,255,255,.28);
+      white-space: nowrap;
+      margin-top: 4px;
+      font-family: var(--font-b);
+    }
+    .fchar.fchar-warn { color: #fbbf24; }
+
+    /* ---- Phone row: country code + input ---- */
+    .fi-phone-wrap {
+      display: flex;
+      gap: 0;
+      align-items: stretch;
+    }
+
+    .fcc-wrap {
+      flex-shrink: 0;
+      position: relative;
+      display: flex;
+      align-items: stretch;
+    }
+
+    /* Visible display trigger — shows flag + ISO + dial code */
+    .fcc-display {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      height: 100%;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.12);
+      border-right: none;
+      border-radius: 10px 0 0 10px;
+      padding: 0 26px 0 10px;
+      font-size: 13px;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+      white-space: nowrap;
+      pointer-events: none; /* clicks pass through to the native select */
+      transition: border-color .25s, background-color .25s;
+      /* Chevron icon */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 10px;
+      min-width: 112px;
+      box-sizing: border-box;
+      user-select: none;
+    }
+    /* Size the flag-icons SVG span inside the display trigger */
+    .fcc-display .fi {
+      display: inline-block;
+      flex-shrink: 0;
+      width: 20px;
+      height: 15px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    /* ISO country code text (e.g. IN, CN) */
+    .fcc-display .fcc-iso {
+      font-weight: 500;
+      letter-spacing: 0.02em;
+    }
+    /* Dial code text (e.g. +91, +86) — slightly muted */
+    .fcc-display .fcc-dial {
+      opacity: 0.85;
+    }
+
+    /* Native select — invisible overlay so it still opens the OS dropdown */
+    .fcc {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-size: 13px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple Color Emoji', 'Segoe UI Emoji', sans-serif;
+    }
+    /* When the native select is focused, style the visible display layer */
+    .fcc:focus + .fcc-display {
+      border-color: rgba(37,99,255,.6);
+      background-color: rgba(37,99,255,.1);
+    }
+    .fcc option {
+      font-size: 14px;
+      padding: 6px 8px;
+      background: #0d1b4b;
+      color: #fff;
+    }
+
+    /* Phone input loses its left radius to connect with select */
+    .fi-phone { border-radius: 0 10px 10px 0 !important; }
+
+    /* Validation icon for phone row — anchored to phone input specifically */
+    .fi-phone-wrap .fvi {
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Valid/invalid on phone row: only colour the phone input */
+    .fg.is-valid   .fi-phone { border-color: rgba(52,211,153,.6);  background: rgba(52,211,153,.06); }
+    .fg.is-invalid .fi-phone { border-color: rgba(248,113,113,.55); background: rgba(248,113,113,.05); }
+
+    /* ---- Tooltip ---- */
+    .ftip {
+      position: fixed;
+      z-index: 9999;
+      background: rgba(13,27,75,.95);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 7px;
+      padding: 6px 11px;
+      font-size: 11.5px;
+      color: rgba(255,255,255,.85);
+      font-family: var(--font-b);
+      pointer-events: none;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity .18s, transform .18s;
+      box-shadow: 0 4px 16px rgba(0,0,0,.45);
+    }
+    .ftip.ftip-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Little arrow pointing down (toward the field) */
+    .ftip::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px; height: 8px;
+      background: rgba(13,27,75,.95);
+      border-right: 1px solid rgba(255,255,255,.14);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      clip-path: polygon(0 0, 100% 100%, 0 100%);
+      rotate: -45deg;
+    }
+
+    /* ---- Disabled submit state ---- */
+    .fsub:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
     }
 
     /* FAQ */
@@ -6428,17 +6651,114 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="cta-form rv">
         <h3>Got the Data Need?<br>We've Got the Expertise.</h3>
         <p>Tell us about your data requirements.</p>
-        <form id="contactForm">
+        <form id="contactForm" novalidate>
           <input type="hidden" name="access_key" value="1d06e0c3-ce6c-44a3-8f5b-29be531300f9">
-          <div class="fg"><input type="text" name="name" class="fi" placeholder="Your full name" required></div>
-          <div class="fg"><input type="email" name="email" class="fi" placeholder="Your email address" required></div>
-          <div class="fg">
-            <input type="tel" name="phone" class="fi" placeholder="Phone (e.g., +1 555 123 4567 or 555-123-4567)">
+
+          <!-- Name -->
+          <div class="fg" id="fg-name">
+            <label class="flbl" for="cf-name">Full Name <span class="freq">*</span></label>
+            <div class="fi-wrap">
+              <input type="text" id="cf-name" name="name" class="fi" placeholder="Your full name" autocomplete="name" data-tooltip="Required — enter your full name">
+              <span class="fvi" aria-hidden="true"></span>
+            </div>
+            <span class="ferr" id="err-name"></span>
           </div>
-          <div class="fg"><textarea name="message" class="fi" placeholder="Tell us about your data needs..." maxlength="300" rows="4"></textarea></div>
+
+          <!-- Email -->
+          <div class="fg" id="fg-email">
+            <label class="flbl" for="cf-email">Email Address <span class="freq">*</span></label>
+            <div class="fi-wrap">
+              <input type="email" id="cf-email" name="email" class="fi" placeholder="Your email address" autocomplete="email" data-tooltip="Required — enter a valid email">
+              <span class="fvi" aria-hidden="true"></span>
+            </div>
+            <span class="ferr" id="err-email"></span>
+          </div>
+
+          <!-- Phone -->
+          <div class="fg" id="fg-phone">
+            <label class="flbl" for="cf-phone">Phone Number <span class="freq">*</span></label>
+            <div class="fi-wrap fi-phone-wrap">
+              <div class="fcc-wrap">
+                <select id="cf-country" name="countryCode" class="fcc" aria-label="Country code">
+                  <option value="+91" data-iso="IN">+91</option>
+                  <option value="+1" data-iso="US" selected>+1</option>
+                  <option value="+1" data-iso="CA">+1</option>
+                  <option value="+44" data-iso="GB">+44</option>
+                  <option value="+61" data-iso="AU">+61</option>
+                  <option value="+81" data-iso="JP">+81</option>
+                  <option value="+86" data-iso="CN">+86</option>
+                  <option value="+49" data-iso="DE">+49</option>
+                  <option value="+33" data-iso="FR">+33</option>
+                  <option value="+39" data-iso="IT">+39</option>
+                  <option value="+34" data-iso="ES">+34</option>
+                  <option value="+55" data-iso="BR">+55</option>
+                  <option value="+971" data-iso="AE">+971</option>
+                  <option value="+966" data-iso="SA">+966</option>
+                  <option value="+65" data-iso="SG">+65</option>
+                  <option value="+852" data-iso="HK">+852</option>
+                  <option value="+82" data-iso="KR">+82</option>
+                  <option value="+31" data-iso="NL">+31</option>
+                  <option value="+46" data-iso="SE">+46</option>
+                  <option value="+47" data-iso="NO">+47</option>
+                  <option value="+45" data-iso="DK">+45</option>
+                  <option value="+358" data-iso="FI">+358</option>
+                  <option value="+41" data-iso="CH">+41</option>
+                  <option value="+43" data-iso="AT">+43</option>
+                  <option value="+32" data-iso="BE">+32</option>
+                  <option value="+351" data-iso="PT">+351</option>
+                  <option value="+353" data-iso="IE">+353</option>
+                  <option value="+64" data-iso="NZ">+64</option>
+                  <option value="+60" data-iso="MY">+60</option>
+                  <option value="+63" data-iso="PH">+63</option>
+                  <option value="+62" data-iso="ID">+62</option>
+                  <option value="+66" data-iso="TH">+66</option>
+                  <option value="+84" data-iso="VN">+84</option>
+                  <option value="+7" data-iso="RU">+7</option>
+                  <option value="+52" data-iso="MX">+52</option>
+                  <option value="+54" data-iso="AR">+54</option>
+                  <option value="+57" data-iso="CO">+57</option>
+                  <option value="+56" data-iso="CL">+56</option>
+                  <option value="+27" data-iso="ZA">+27</option>
+                  <option value="+234" data-iso="NG">+234</option>
+                  <option value="+254" data-iso="KE">+254</option>
+                  <option value="+20" data-iso="EG">+20</option>
+                  <option value="+212" data-iso="MA">+212</option>
+                  <option value="+216" data-iso="TN">+216</option>
+                  <option value="+90" data-iso="TR">+90</option>
+                  <option value="+98" data-iso="IR">+98</option>
+                  <option value="+92" data-iso="PK">+92</option>
+                  <option value="+880" data-iso="BD">+880</option>
+                  <option value="+94" data-iso="LK">+94</option>
+                  <option value="+977" data-iso="NP">+977</option>
+                </select>
+                <!-- Visible display: flag + ISO code + dial code. Updated by JS on change. -->
+                <div class="fcc-display" id="fcc-display" aria-hidden="true"></div>
+              </div>
+              <input type="tel" id="cf-phone" name="phone" class="fi fi-phone" placeholder="Phone number" autocomplete="tel-national" data-tooltip="Required — enter your phone number">
+              <span class="fvi" aria-hidden="true"></span>
+            </div>
+            <span class="ferr" id="err-phone"></span>
+          </div>
+
+          <!-- Message -->
+          <div class="fg" id="fg-message">
+            <label class="flbl" for="cf-message">Message <span class="fopt">(optional)</span></label>
+            <div class="fi-wrap">
+              <textarea id="cf-message" name="message" class="fi" placeholder="Tell us about your data needs..." maxlength="500" rows="4"></textarea>
+              <span class="fvi" aria-hidden="true"></span>
+            </div>
+            <div class="fmeta">
+              <span class="ferr" id="err-message"></span>
+              <span class="fchar" id="char-count">0 / 500</span>
+            </div>
+          </div>
+
           <button type="submit" class="fsub" id="formBtn">Submit Request ↗</button>
           <p id="formMsg" style="margin-top:14px;font-size:14px;display:none;"></p>
         </form>
+
+        <!-- Floating tooltip (single shared element) -->
+        <div class="ftip" id="ftip" role="tooltip"></div>
       </div>
     </div>
   </section>
@@ -6548,74 +6868,301 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       el.addEventListener('mouseleave', () => { cd.style.width = cd.style.height = '8px'; cr.style.width = cr.style.height = '36px'; cr.style.opacity = '1'; });
     });
 
-    /* ==== FORM SUBMIT ==== */
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+    /* ==== CONTACT FORM — real-time validation + country code ==== */
+    (function() {
+      'use strict';
 
-      var btn = document.getElementById('formBtn');
-      var msg = document.getElementById('formMsg');
+      /* ---------- element refs ---------- */
+      var form    = document.getElementById('contactForm');
+      var btn     = document.getElementById('formBtn');
+      var formMsg = document.getElementById('formMsg');
+      var tip     = document.getElementById('ftip');
 
-      btn.disabled = true;
-      btn.textContent = 'Sending…';
-      msg.style.display = 'none';
+      var elName    = document.getElementById('cf-name');
+      var elEmail   = document.getElementById('cf-email');
+      var elPhone   = document.getElementById('cf-phone');
+      var elCountry = document.getElementById('cf-country');
+      var elMsg     = document.getElementById('cf-message');
+      var charCount = document.getElementById('char-count');
 
-      var formData = new FormData(this);
-      var phone = formData.get('phone') || '';
-
-      // Client-side phone validation
-      if (phone) {
-        var cleaned = phone.replace(/[\s\-\.\(\)\+]/g, '');
-        if (cleaned.length < 7 || cleaned.length > 15) {
-          msg.style.color = '#f87171';
-          msg.textContent = '❌ Please enter a valid phone number (minimum 7 digits)';
-          msg.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Submit Request ↗';
-          return;
-        }
+      /* ---------- validation rules ---------- */
+      function validateName(v) {
+        v = v.trim();
+        if (!v) return 'Full name is required.';
+        if (v.length < 2) return 'Name must be at least 2 characters.';
+        if (!/^[A-Za-zÀ-ÖØ-öø-ÿ\s\-'.]+$/.test(v)) return 'Only letters, spaces, hyphens, apostrophes, and periods are allowed.';
+        return '';
       }
 
-      var data = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        phone: phone,
-        message: formData.get('message')
-      };
+      function validateEmail(v) {
+        v = v.trim();
+        if (!v) return 'Email address is required.';
+        if (!/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/.test(v)) return 'Enter a valid email address.';
+        return '';
+      }
 
-      fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify(data)
-      })
-      .then(function(response) {
-        if (!response.ok) {
-          return response.json().then(function(errData) {
-            throw new Error(errData.message || 'Server error');
-          });
-        }
-        return response.json();
-      })
-      .then(function(result) {
-        if (result.success) {
-          // Redirect to thank-you page on success
-          window.location.href = '/thank-you.html';
-        } else {
-          msg.style.color = '#f87171';
-          msg.textContent = '❌ ' + (result.message || 'Something went wrong. Please try again.');
-          msg.style.display = 'block';
-          btn.disabled = false;
-          btn.textContent = 'Submit Request ↗';
-        }
-      })
-      .catch(function(error) {
-        console.error('Form error:', error);
-        msg.style.color = '#f87171';
-        msg.textContent = '❌ ' + (error.message || 'Network error. Please try again.');
-        msg.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Submit Request ↗';
+      function validatePhone(v) {
+        if (!v.trim()) return 'Phone number is required.';
+        var digits = v.replace(/[^\d]/g, '');
+        if (digits.length < 6) return 'Phone number must have at least 6 digits.';
+        if (digits.length > 15) return 'Phone number must not exceed 15 digits.';
+        if (!/^[\d\s\+\-\(\)]+$/.test(v)) return 'Only digits, spaces, +, -, ( ) are allowed.';
+        return '';
+      }
+
+      function validateMessage(v) {
+        if (v.length > 500) return 'Message cannot exceed 500 characters.';
+        return '';
+      }
+
+      /* ---------- field state helpers ---------- */
+      function setValid(fg, errEl) {
+        fg.classList.remove('is-invalid');
+        fg.classList.add('is-valid');
+        if (errEl) errEl.textContent = '';
+      }
+
+      function setInvalid(fg, errEl, msg) {
+        fg.classList.remove('is-valid');
+        fg.classList.add('is-invalid');
+        if (errEl) errEl.textContent = msg;
+      }
+
+      function clearState(fg, errEl) {
+        fg.classList.remove('is-valid', 'is-invalid');
+        if (errEl) errEl.textContent = '';
+      }
+
+      /* ---------- per-field validate + paint ---------- */
+      function checkName(paint) {
+        var fg  = document.getElementById('fg-name');
+        var err = document.getElementById('err-name');
+        var e   = validateName(elName.value);
+        if (!paint) return e;
+        e ? setInvalid(fg, err, e) : setValid(fg, err);
+        return e;
+      }
+
+      function checkEmail(paint) {
+        var fg  = document.getElementById('fg-email');
+        var err = document.getElementById('err-email');
+        var e   = validateEmail(elEmail.value);
+        if (!paint) return e;
+        e ? setInvalid(fg, err, e) : setValid(fg, err);
+        return e;
+      }
+
+      function checkPhone(paint) {
+        var fg  = document.getElementById('fg-phone');
+        var err = document.getElementById('err-phone');
+        var e   = validatePhone(elPhone.value);
+        if (!paint) return e;
+        e ? setInvalid(fg, err, e) : setValid(fg, err);
+        return e;
+      }
+
+      function checkMessage(paint) {
+        var fg  = document.getElementById('fg-message');
+        var err = document.getElementById('err-message');
+        var e   = validateMessage(elMsg.value);
+        if (!paint) return e;
+        if (e) { setInvalid(fg, err, e); } else { clearState(fg, err); }
+        return e;
+      }
+
+      /* ---------- real-time listeners ---------- */
+      elName.addEventListener('input',  function() { checkName(true);  });
+      elName.addEventListener('blur',   function() { if (elName.value.trim()) checkName(true); });
+
+      elEmail.addEventListener('input', function() { checkEmail(true); });
+      elEmail.addEventListener('blur',  function() { if (elEmail.value.trim()) checkEmail(true); });
+
+      elPhone.addEventListener('input', function() { checkPhone(true); });
+      elPhone.addEventListener('blur',  function() { if (elPhone.value.trim()) checkPhone(true); });
+
+      elMsg.addEventListener('input', function() {
+        var len = elMsg.value.length;
+        charCount.textContent = len + ' / 500';
+        charCount.classList.toggle('fchar-warn', len >= 450);
+        checkMessage(true);
       });
-    });
+
+      /* ---------- tooltip engine ---------- */
+      var tipTimer = null;
+
+      function showTip(el) {
+        var txt = el.dataset.tooltip;
+        if (!txt) return;
+        tip.textContent = txt;
+        var rect = el.getBoundingClientRect();
+        // Position tooltip above the field, horizontally centred
+        var tw = tip.offsetWidth || 160;
+        var left = rect.left + rect.width / 2 - tw / 2;
+        var top  = rect.top - tip.offsetHeight - 10;
+        // Clamp to viewport edges
+        left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+        top  = Math.max(8, top);
+        tip.style.left = left + 'px';
+        tip.style.top  = top  + 'px';
+        clearTimeout(tipTimer);
+        tip.classList.add('ftip-visible');
+      }
+
+      function hideTip() {
+        tip.classList.remove('ftip-visible');
+      }
+
+      [elName, elEmail, elPhone].forEach(function(el) {
+        el.addEventListener('focus', function() { showTip(el); });
+        el.addEventListener('blur',  function() { hideTip(); });
+        // Reposition on scroll/resize while focused
+        el.addEventListener('focus', function() {
+          var onMove = function() { if (document.activeElement === el) showTip(el); };
+          window.addEventListener('scroll', onMove, { passive: true });
+          el.addEventListener('blur', function() {
+            window.removeEventListener('scroll', onMove);
+          }, { once: true });
+        });
+      });
+
+      /* ---------- form submit ---------- */
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Validate all required fields
+        var errName  = checkName(true);
+        var errEmail = checkEmail(true);
+        var errPhone = checkPhone(true);
+        var errMsgTx = checkMessage(true);
+
+        if (errName || errEmail || errPhone || errMsgTx) {
+          // Scroll to & focus first invalid field
+          var first = document.querySelector('.fg.is-invalid .fi, .fg.is-invalid .fi-phone');
+          if (first) {
+            first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            setTimeout(function() { first.focus(); }, 350);
+          }
+          formMsg.style.color = '#f87171';
+          formMsg.textContent = '⚠ Please fix the highlighted fields before submitting.';
+          formMsg.style.display = 'block';
+          return;
+        }
+
+        // Build full phone with country code
+        var countryCode = elCountry.value;
+        var rawPhone    = elPhone.value.trim();
+        var fullPhone   = countryCode + ' ' + rawPhone;
+
+        var data = {
+          name:    elName.value.trim(),
+          email:   elEmail.value.trim(),
+          phone:   fullPhone,
+          message: elMsg.value.trim()
+        };
+
+        // Disable button + loading state
+        btn.disabled    = true;
+        btn.textContent = 'Sending…';
+        formMsg.style.display = 'none';
+
+        fetch('/api/contact', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body:    JSON.stringify(data)
+        })
+        .then(function(response) {
+          if (!response.ok) {
+            return response.json().then(function(errData) {
+              throw new Error(errData.message || 'Server error (' + response.status + ')');
+            });
+          }
+          return response.json();
+        })
+        .then(function(result) {
+          if (result.success) {
+            window.location.href = '/thank-you.html';
+          } else {
+            formMsg.style.color   = '#f87171';
+            formMsg.textContent   = '❌ ' + (result.message || 'Something went wrong. Please try again.');
+            formMsg.style.display = 'block';
+            btn.disabled          = false;
+            btn.textContent       = 'Submit Request ↗';
+          }
+        })
+        .catch(function(error) {
+          console.error('Form error:', error);
+          formMsg.style.color   = '#f87171';
+          formMsg.textContent   = '❌ ' + (error.message || 'Network error. Please try again.');
+          formMsg.style.display = 'block';
+          btn.disabled          = false;
+          btn.textContent       = 'Submit Request ↗';
+        });
+      });
+
+    })(); /* end contact form IIFE */
+
+/* ==== COUNTRY FLAG — Using flag-icons CDN with direct SVG URLs ==== */
+(function () {
+  const sel = document.getElementById('cf-country');
+  const display = document.getElementById('fcc-display');
+  if (!sel || !display) return;
+
+  /* Flag URL — using the same CDN but with direct SVG files */
+  const FLAG_BASE = 'https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/flags/4x3/';
+
+  function getFlagHTML(iso) {
+    if (!iso) return '';
+    const isoLower = iso.toLowerCase();
+    return '<img src="' + FLAG_BASE + isoLower + '.svg" alt="' + iso + ' flag" style="width:18px;height:13px;border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:6px;border:1px solid rgba(255,255,255,0.1);display:inline-block;">';
+  }
+
+  Array.prototype.forEach.call(sel.options, function (opt) {
+    const iso = opt.getAttribute('data-iso');
+    const dial = opt.value;
+    if (iso) {
+      opt.innerHTML = getFlagHTML(iso) + iso + ' ' + dial;
+    }
+  });
+
+  sel.style.fontSize = '14px';
+  sel.style.fontFamily = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+  sel.style.color = '#fff';
+  sel.style.background = 'rgba(255,255,255,0.05)';
+
+  function syncDisplay() {
+    const opt = sel.options[sel.selectedIndex];
+    const iso = opt ? opt.getAttribute('data-iso') : '';
+    const dial = opt ? opt.value : '';
+
+    if (iso) {
+      display.innerHTML =
+        getFlagHTML(iso) +
+        '<span class="fcc-iso">' + iso + '</span>' +
+        '<span class="fcc-dial">' + dial + '</span>';
+    } else {
+      display.textContent = dial;
+    }
+  }
+
+  syncDisplay();
+  sel.addEventListener('change', syncDisplay);
+  sel.addEventListener('blur', syncDisplay);
+
+  const defaultOpt = sel.options[sel.selectedIndex];
+  const defaultIso = defaultOpt ? defaultOpt.getAttribute('data-iso') : '';
+  if (defaultIso) {
+    const img = new Image();
+    img.src = FLAG_BASE + defaultIso.toLowerCase() + '.svg';
+  }
+
+  Array.prototype.forEach.call(sel.options, function (opt) {
+    const iso = opt.getAttribute('data-iso');
+    if (iso) {
+      const img = new Image();
+      img.src = FLAG_BASE + iso.toLowerCase() + '.svg';
+    }
+  });
+})();
     /* ==== NAVBAR ==== */
     const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
     const stb = document.getElementById('stb');
