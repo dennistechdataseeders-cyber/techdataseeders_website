@@ -1,0 +1,828 @@
+/* ============================================================
+   assets/shared-components.css
+   Canonical Shared Stylesheet for TechDataSeeders
+   Consolidates: Global Reset & Overflow, Variables, Custom Cursor,
+   Navbar, Footer, Scroll-to-Top, Floating WhatsApp, Breadcrumbs
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. RESET, OVERFLOW SAFETY & OVERSCROLL
+   ------------------------------------------------------------ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ------------------------------------------------------------
+   2. CSS VARIABLES
+   ------------------------------------------------------------ */
+:root {
+  --blue:        #2563FF;
+  --blue-dark:   #1a4fd8;
+  --blue-light:  #5b8fff;
+  --black:       #0a0a0a;
+  --navy:        #060e24;
+  --white:       #fff;
+  --muted:       #888;
+  --border-dark: rgba(255, 255, 255, 0.08);
+  --font-d:      'Plus Jakarta Sans', 'Syne', sans-serif;
+  --font-b:      'Inter', sans-serif;
+}
+
+/* ------------------------------------------------------------
+   3. CUSTOM CURSOR (desktop only)
+   ------------------------------------------------------------ */
+.cur-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--blue);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: width .15s, height .15s;
+}
+
+.cur-ring {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--blue);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transform: translate(-50%, -50%);
+  transition: width .2s, height .2s, opacity .2s;
+}
+
+@media (hover: none) {
+  .cur-dot, .cur-ring { display: none !important; }
+}
+
+/* ------------------------------------------------------------
+   4. CANONICAL NAVBAR
+   ------------------------------------------------------------ */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 70px;
+  padding: 0 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, .96);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, .06);
+  transition: background .4s, border-color .4s, padding .3s, height .3s;
+}
+
+.nav.dark {
+  background: rgba(8, 8, 8, .96);
+  border-bottom-color: var(--border-dark);
+}
+
+.nav-logo img {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+
+/* Desktop nav links */
+.nl {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nl a {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, .7);
+  transition: color .25s;
+  position: relative;
+  text-decoration: none;
+}
+
+.nl a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: var(--blue);
+  transition: width .3s;
+}
+
+.nl a:hover::after { width: 100%; }
+.nl a:hover { color: var(--blue); }
+
+.nav.dark .nl a { color: rgba(255, 255, 255, .85); }
+.nav.dark .nl a:hover { color: #fff; }
+
+.nav-cta {
+  background: var(--blue);
+  color: #fff !important;
+  padding: 10px 22px;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all .25s;
+  text-decoration: none;
+}
+
+.nav-cta:hover {
+  background: var(--blue-dark);
+  box-shadow: 0 6px 20px rgba(37, 99, 255, .4);
+  transform: translateY(-1px);
+}
+
+.nav-cta::after { display: none !important; }
+
+/* Dropdown menu */
+.nl .has-drop { position: relative; }
+.nl .has-drop > a::after { display: none; }
+.nl .has-drop > a { cursor: pointer; }
+.nl .has-drop > a span { display: inline-block; transition: transform .25s; }
+.nl .has-drop.open > a span { transform: rotate(180deg); }
+
+.nav-drop {
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, .08);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .12);
+  padding: 10px;
+  min-width: 230px;
+  z-index: 200;
+}
+
+.nav-menu { color: #333 !important; }
+.has-drop.open > .nav-drop { display: flex; }
+
+.nav-drop a {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333 !important;
+  white-space: nowrap;
+  transition: background .18s, color .18s;
+  text-decoration: none;
+}
+
+.nav-drop a:hover { background: #f0f4ff; color: var(--blue) !important; }
+.nav-drop a::after { display: none !important; }
+
+/* Hamburger Button */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1100;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--black);
+  border-radius: 2px;
+  transition: transform .3s, opacity .3s, background .3s;
+}
+
+.nav.dark .nav-toggle span { background: #fff; }
+
+.nav-open .nav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-open .nav-toggle span:nth-child(2) { opacity: 0; }
+.nav-open .nav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ============================================================
+   5. CANONICAL FOOTER
+   ============================================================ */
+.footer {
+  background: #050508;
+  color: #fff;
+  padding: 60px 80px 36px;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Desktop: 5-column grid (brand + 4 link cols) ── */
+.ft {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr 1.2fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+  width: 100%;
+  box-sizing: border-box;
+  align-items: start;
+}
+
+/* Brand column - left-aligned on desktop */
+.ft-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.ft-logo {
+  height: 44px;
+  width: auto;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.ft-tagline {
+  font-family: var(--font-d);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, .45);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.ft-desc {
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, .55);
+  max-width: 240px;
+  margin-bottom: 20px;
+}
+
+.socials {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.soc {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, .45);
+  transition: all .3s;
+  text-decoration: none;
+}
+
+.soc:hover {
+  border-color: var(--blue);
+  background: rgba(37, 99, 255, .15);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Link columns */
+.fc h4 {
+  font-family: var(--font-d);
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, .4);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+
+.fl {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.fl a {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .75);
+  transition: color .25s;
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.fl a:hover {
+  color: #fff;
+}
+
+.ft-regions {
+  font-size: 12px;
+  color: rgba(255, 255, 255, .35);
+  line-height: 1.5;
+}
+
+.fbot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 26px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.fcopy {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .5);
+}
+
+.fleg {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.fleg a {
+  font-size: 13px;
+  color: rgba(255, 255, 255, .5);
+  transition: color .25s;
+  text-decoration: none;
+}
+
+.fleg a:hover {
+  color: rgba(255, 255, 255, .75);
+}
+
+.fdisclaim {
+  font-size: 11px;
+  color: rgba(255, 255, 255, .35);
+  text-align: center;
+  margin-top: 20px;
+  line-height: 1.6;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Tablet (≤1024px): tighten columns ── */
+@media (max-width: 1024px) {
+  .footer { padding: 52px 40px 32px; }
+  .ft { gap: 28px; grid-template-columns: 1.6fr 1fr 1.1fr 1fr 1fr; }
+  .ft-desc { max-width: 200px; }
+}
+
+/* ── Mobile (≤768px): brand on top centered, 2-col links below ── */
+@media (max-width: 768px) {
+  .footer { padding: 40px 20px 24px; }
+
+  /* Stack all 5 grid children vertically */
+  .ft {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  /* Brand goes full-width and centers */
+  .ft-brand {
+    align-items: center;
+    text-align: center;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+    margin-bottom: 24px;
+  }
+
+  .ft-logo { margin-bottom: 10px; }
+
+  .ft-tagline {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  .ft-desc {
+    max-width: 340px;
+    font-size: 12px;
+    text-align: center;
+  }
+
+  .socials { justify-content: center; }
+
+  /* 4 link columns → 2×2 grid */
+  .ft-brand ~ .fc {
+    /* auto-flow will create 2-col rows from the ft grid */
+  }
+
+  .ft {
+    grid-template-areas:
+      "brand brand"
+      "s1    s2"
+      "s3    s4";
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ft-brand  { grid-area: brand; }
+  .ft > .fc:nth-child(2) { grid-area: s1; }
+  .ft > .fc:nth-child(3) { grid-area: s2; }
+  .ft > .fc:nth-child(4) { grid-area: s3; }
+  .ft > .fc:nth-child(5) { grid-area: s4; }
+
+  /* Center each link column on mobile */
+  .fc { text-align: center; padding-bottom: 20px; }
+  .fl { align-items: center; gap: 8px; }
+  .fc h4 { margin-bottom: 10px; }
+
+  .fbot {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 12px;
+    padding-top: 24px;
+  }
+
+  .fcopy { text-align: center; font-size: 12px; }
+  .fleg { justify-content: center; gap: 16px; }
+}
+
+/* ── Small Phones (≤480px) ── */
+@media (max-width: 480px) {
+  .footer { padding: 30px 14px 20px; }
+  .ft { gap: 0; }
+  .fl a { font-size: 12px; }
+  .fc h4 { font-size: 10px; margin-bottom: 8px; }
+  .ft-desc { font-size: 12px; }
+}
+
+/* ------------------------------------------------------------
+   6. SCROLL-TO-TOP BUTTON
+   ------------------------------------------------------------ */
+.stb {
+  position: fixed;
+  bottom: 32px;
+  right: 24px;
+  width: 46px;
+  height: 46px;
+  background: var(--blue);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 500;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all .3s;
+  box-shadow: 0 6px 20px rgba(37, 99, 255, .4);
+  user-select: none;
+  text-decoration: none;
+}
+
+.stb.on { opacity: 1; transform: none; }
+.stb:hover { background: var(--blue-dark); transform: translateY(-3px); }
+
+/* ------------------------------------------------------------
+   7. WHATSAPP FLOATING BUTTON
+   ------------------------------------------------------------ */
+@keyframes waPulse {
+  0%, 100% { box-shadow: 0 6px 30px rgba(37, 211, 102, 0.4); }
+  50%       { box-shadow: 0 6px 50px rgba(37, 211, 102, 0.6), 0 0 0 15px rgba(37, 211, 102, 0.1); }
+}
+
+.whatsapp-float {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.4);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s, background 0.3s;
+  text-decoration: none;
+  cursor: pointer;
+  animation: waPulse 2.5s ease-in-out infinite;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+.whatsapp-float:hover {
+  transform: translateY(-50%) scale(1.12);
+  box-shadow: 0 10px 40px rgba(37, 211, 102, 0.55);
+  background: #20b85a;
+}
+
+.whatsapp-float:active { transform: translateY(-50%) scale(0.92); }
+
+.whatsapp-float svg {
+  width: 32px;
+  height: 32px;
+  fill: currentColor;
+}
+
+.whatsapp-tooltip {
+  position: absolute;
+  right: 70px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.25s;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.whatsapp-tooltip::after {
+  content: '';
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left: 6px solid rgba(0, 0, 0, 0.85);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+}
+
+.whatsapp-float:hover .whatsapp-tooltip { opacity: 1; }
+
+/* ------------------------------------------------------------
+   8. BREADCRUMBS & GENERAL WRAPPING SAFETY
+   ------------------------------------------------------------ */
+.crumb-bar, .breadcrumb, .bd-crumb, .bd-bread {
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+/* ------------------------------------------------------------
+   9. STANDARDIZED RESPONSIVE MEDIA QUERIES
+   ------------------------------------------------------------ */
+
+/* ── Tablets (≤1024px) ──────────────────────────────────────── */
+@media (max-width: 1024px) { .nav { padding: 0 32px; } }
+
+/* ── Mobile & Small Tablets (≤960px) ────────────────────────── */
+@media (max-width: 960px) {
+  .nav { padding: 0 20px; }
+  .nav-toggle { display: flex; }
+
+  /* Mobile menu dropdown panel (Default: Unscrolled / White Theme) */
+  .nl {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #fff;
+    padding: 10px 22px 22px;
+    border-bottom: 1px solid rgba(0, 0, 0, .08);
+    box-shadow: 0 24px 44px rgba(0, 0, 0, .13);
+    max-height: calc(100vh - 70px);
+    overflow-y: auto;
+    transform: translateY(-14px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform .3s, opacity .3s, visibility .3s, background .3s;
+  }
+
+  .nav-open .nl {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nl li { width: 100%; }
+
+  /* Unscrolled menu link colors (Dark text on light background) */
+  .nl > li > a {
+    display: flex;
+    align-items: center;
+    padding: 14px 6px;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, .06);
+    color: #0a0a0a;
+    min-height: 48px;
+    text-decoration: none;
+  }
+
+  .nav-open .nl a {
+    color: #0a0a0a;
+  }
+
+  .nl a::after { display: none !important; }
+  .nl .has-drop > a span { float: right; }
+
+  .nav-drop {
+    position: static;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    background: transparent;
+    padding: 2px 0 10px 14px;
+    min-width: 0;
+  }
+
+  .nav-drop a {
+    font-size: 14px;
+    padding: 11px 8px;
+    color: #555 !important;
+    white-space: normal;
+    min-height: 44px;
+  }
+
+  .nl .nav-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-top: 16px;
+    min-height: 48px;
+    color: #fff !important;
+  }
+
+  /* ───────────────────────────────────────────────────────────
+     CONFIRMED BUG #1 FIX: SCROLLED DARK NAVBAR MOBILE MENU
+     When .nav.dark is active, the mobile drawer turns solid dark
+     and links become crisp light text with proper contrast!
+     ─────────────────────────────────────────────────────────── */
+  .nav.dark .nl {
+    background: #0a0a0a;
+    border-bottom-color: rgba(255, 255, 255, .08);
+  }
+
+  .nav.dark .nl > li > a {
+    color: rgba(255, 255, 255, .85);
+    border-bottom-color: rgba(255, 255, 255, .06);
+  }
+
+  .nav.dark.nav-open .nl a {
+    color: rgba(255, 255, 255, .85);
+  }
+
+  .nav.dark.nav-open .nl a:hover {
+    color: #fff;
+  }
+
+  .nav.dark .nav-drop a {
+    color: rgba(255, 255, 255, .65) !important;
+  }
+
+  .nav.dark .nav-drop a:hover {
+    color: #fff !important;
+    background: rgba(255, 255, 255, .06);
+  }
+}
+
+/* ── Mobile Phones (≤768px) ─────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Breadcrumbs on mobile */
+  .crumb-bar { padding: 0 20px; top: 80px; }
+
+  
+
+  /* Contact form */
+  .cta-inner { grid-template-columns: 1fr; gap: 32px; }
+  .cta-sec { padding: 60px 20px; }
+  .fi-phone-wrap { display: flex; gap: 8px; }
+  .fcc-wrap { flex-shrink: 0; }
+
+  /* WhatsApp button: centered bottom on mobile */
+  .whatsapp-float {
+    width: 54px;
+    height: 54px;
+    top: 50%;
+    right: 12px;
+    bottom: auto;
+    left: auto;
+    transform: translateY(-50%);
+  }
+  .whatsapp-float:hover { transform: translateY(-50%) scale(1.12); }
+  .whatsapp-float:active { transform: translateY(-50%) scale(0.92); }
+  .whatsapp-float svg { width: 28px; height: 28px; }
+  .whatsapp-tooltip { display: none; }
+
+  /* Scroll-to-top button */
+  .stb { bottom: 24px; right: 16px; }
+}
+
+/* ── Small Phones (≤480px) ──────────────────────────────────── */
+@media (max-width: 480px) {
+  .nav { padding: 0 16px; height: 70px; }
+  .nav-logo img { height: 38px; }
+
+  .nl { top: 70px; max-height: calc(100vh - 70px); }
+
+  .crumb-bar { padding: 0 14px; top: 70px; gap: 8px; }
+  .breadcrumb, .bd-bread { font-size: 12px; gap: 6px; }
+  .back-link, .bd-back { font-size: 12px; padding: 6px 12px; }
+
+  
+  .fbot {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+    padding-top: 20px;
+  }
+  
+  .fcopy {
+    text-align: center;
+    font-size: 12px;
+  }
+  
+  .fleg {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .whatsapp-float {
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    right: 10px;
+    bottom: auto;
+    left: auto;
+    transform: translateY(-50%);
+  }
+  .whatsapp-float:hover { transform: translateY(-50%) scale(1.12); }
+  .whatsapp-float:active { transform: translateY(-50%) scale(0.92); }
+  .whatsapp-float svg { width: 24px; height: 24px; }
+
+  .stb { width: 42px; height: 42px; bottom: 20px; right: 12px; border-radius: 10px; }
+}
+
+/* ── Extra Small (≤380px) ───────────────────────────────────── */
+@media (max-width: 380px) {
+  .nav { padding: 0 10px; }
+  .crumb-bar { padding: 0 10px; top: 66px; gap: 6px; }
+  .breadcrumb, .bd-bread { font-size: 11px; gap: 4px; }
+  .back-link, .bd-back { font-size: 11px; padding: 5px 10px; }
+  
+  .whatsapp-float {
+    width: 46px;
+    height: 46px;
+    top: 50%;
+    right: 8px;
+    bottom: auto;
+    left: auto;
+    transform: translateY(-50%);
+  }
+  .whatsapp-float:hover { transform: translateY(-50%) scale(1.12); }
+  .whatsapp-float:active { transform: translateY(-50%) scale(0.92); }
+  .whatsapp-float svg { width: 22px; height: 22px; }
+  .stb { width: 40px; height: 40px; bottom: 18px; right: 10px; }
+}

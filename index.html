@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -120,6 +120,7 @@
         });
       });
       </script>
+    <link rel="stylesheet" href="/assets/shared-components.css">
   <style>
     :root {
       --blue: #2563FF;
@@ -151,9 +152,14 @@
       font-family: var(--font-b);
       background: #fff;
       color: #0a0a0a;
-      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
       cursor: none;
+      position: relative;
+      width: 100%;
+      max-width: 100%;
     }
+
+
 
     img {
       max-width: 100%;
@@ -218,7 +224,7 @@
     }
 
     .loader img {
-      height: 44px;
+      height: 56px;
       -webkit-animation: ldFade .5s forwards .2s;
       animation: ldFade .5s forwards .2s;
       opacity: 0;
@@ -302,7 +308,7 @@
     }
 
     .nav-logo img {
-      height: 40px;
+      height: 44px;
     }
 
     .nl {
@@ -385,7 +391,7 @@
       flex-direction: column;
       gap: 2px;
       position: absolute;
-      top: calc(100% + 14px);
+      top: 100%;
       left: 50%;
       transform: translateX(-50%);
       background: #fff;
@@ -2293,6 +2299,8 @@
       align-items: center;
       position: relative;
       z-index: 2;
+      max-width: 1180px;
+      margin: 0 auto;
     }
 
     .cta-h {
@@ -2771,23 +2779,6 @@
     }
 
     /* FOOTER */
-    .footer{background:#050508;color:#fff;padding:72px 80px 36px;}
-    .ft{display:grid;grid-template-columns:2.5fr 1fr 1.5fr 1fr 1fr;gap:44px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.06);}
-    .fb-desc{font-size:14px;line-height:1.7;color:rgba(255,255,255,.65);max-width:250px;margin:18px 0 26px;}
-    .socials{display:flex;gap:10px;}
-    .soc{width:36px;height:36px;border:1px solid rgba(255,255,255,.1);border-radius:7px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.45);transition:all .3s;}
-    .soc:hover{border-color:var(--blue);background:rgba(37,99,255,.15);color:#fff;transform:translateY(-2px);}
-    .fc h4{font-family:var(--font-d);font-size:12px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:18px;}
-    .fl{display:flex;flex-direction:column;gap:11px;}
-    .fl a{font-size:14px;color:rgba(255,255,255,.85);transition:color .25s;}
-    .fl a:hover{color:#fff;}
-    .fbot{display:flex;align-items:center;justify-content:space-between;padding-top:30px;flex-wrap:wrap;gap:12px;}
-    .fcopy{font-size:13px;color:rgba(255,255,255,.5);}
-    .fleg{display:flex;gap:22px;flex-wrap:wrap;}
-    .fleg a{font-size:13px;color:rgba(255,255,255,.5);transition:color .25s;}
-    .fleg a:hover{color:rgba(255,255,255,.75);}
-    .fdisclaim{font-size:11px;color:rgba(255,255,255,.35);text-align:center;margin-top:22px;line-height:1.6;max-width:700px;margin-left:auto;margin-right:auto;}
-
     /* SCROLL TOP */
     .stb {
       position: fixed;
@@ -4032,10 +4023,7 @@
         grid-template-columns: 1fr;
       }
 
-      .ft {
-        grid-template-columns: 1fr 1fr 1fr;
-        gap: 28px;
-      }
+      
 
       .proc-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -4102,9 +4090,21 @@
         visibility: visible;
       }
 
-      .nav-open .nl a,
+      .nav-open .nl a {
+        color: #0a0a0a;
+      }
+
       .nav.dark.nav-open .nl a {
-        color: #0a0a0a !important;
+        color: rgba(255, 255, 255, .85) !important;
+      }
+
+      .nav.dark.nav-open .nl a:hover {
+        color: #fff !important;
+      }
+
+      .nav.dark .nl {
+        background: #0a0a0a !important;
+        border-bottom-color: rgba(255, 255, 255, .08);
       }
 
       .nav-drop a {
@@ -4215,15 +4215,7 @@
         grid-template-columns: 1fr;
       }
 
-      .ft {
-        grid-template-columns: 1fr 1fr;
-      }
-
       .cta-sec,
-      .footer {
-        padding: 60px 24px;
-      }
-
       .ind-showcase {
         flex-direction: column;
         gap: 32px;
@@ -4749,6 +4741,194 @@
     grid-template-columns: 1fr !important;
   }
 }
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  width: 100% !important;
+}
+/* ===== FIX CONTACT FORM ON iOS ===== */
+
+/* Fix the CTA grid layout */
+.cta-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 72px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Fix the form container */
+.cta-form {
+  background: rgba(255, 255, 255, .05);
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 22px;
+  padding: 38px;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Fix form inputs on iOS - prevent zoom and overflow */
+.cta-form .fi,
+.cta-form input,
+.cta-form textarea,
+.cta-form select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 16px !important; /* Prevents iOS zoom on focus */
+}
+
+/* Fix the phone input wrapper */
+.fi-phone-wrap {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix the country code selector */
+.fcc-wrap {
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  max-width: 100%;
+}
+
+/* Fix the display trigger */
+.fcc-display {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 100%;
+  background: rgba(255,255,255,.09);
+  border: 1px solid rgba(255,255,255,.12);
+  border-right: none;
+  border-radius: 10px 0 0 10px;
+  padding: 0 26px 0 10px;
+  font-size: 13px;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  min-width: 112px;
+  box-sizing: border-box;
+  user-select: none;
+  overflow: hidden;
+}
+
+/* Fix phone input */
+.fi-phone {
+  border-radius: 0 10px 10px 0 !important;
+  min-width: 0;
+  flex: 1;
+  box-sizing: border-box;
+}
+
+/* Fix the validation icon positioning */
+.fi-phone-wrap .fvi {
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Fix submit button */
+.fsub {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Mobile contact section — fix overflow */
+@media (max-width: 768px) {
+  .cta-sec {
+    padding: 60px 16px !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .cta-inner {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .cta-form {
+    padding: 28px 20px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .cta-form h3,
+  .cta-form p,
+  .cta-form form,
+  .cta-form .fg {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .fi-phone-wrap {
+    flex-wrap: nowrap !important;
+  }
+
+  .fcc-wrap {
+    flex-shrink: 0 !important;
+  }
+
+  .fcc-display {
+    min-width: 90px !important;
+    padding: 0 20px 0 8px !important;
+    font-size: 12px !important;
+  }
+
+  .fi-phone {
+    min-width: 0 !important;
+    flex: 1 !important;
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .cta-form {
+    padding: 20px 14px !important;
+  }
+  
+  .fcc-display {
+    min-width: 72px !important;
+    padding: 0 16px 0 6px !important;
+    font-size: 11px !important;
+  }
+  
+  .fcc-display .fi {
+    width: 16px !important;
+    height: 12px !important;
+  }
+  
+  .fi-phone {
+    font-size: 16px !important;
+    padding: 11px 12px !important;
+  }
+}
+
+
   </style>
 </head>
 <script>
@@ -6000,22 +6180,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         z-index: 0;
       }
 
-      .ft {
-        grid-template-columns: 1fr;
-        gap: 32px;
-      }
-
       .stats-grid {
         grid-template-columns: 1fr;
       }
 
       .nav {
         padding: 0 16px;
-        height: 60px;
+        height: 70px;
       }
 
       .nav-logo img {
-        height: 28px;
+        height: 38px;
       }
 
       .hero {
@@ -6068,38 +6243,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         grid-template-columns: 1fr;
       }
 
-      .footer {
-        padding: 40px 16px 24px;
-      }
-
-      .fbot {
-        flex-direction: column;
-        gap: 16px;
-        align-items: flex-start;
-      }
-
-      .fleg {
-        gap: 12px;
-        flex-wrap: wrap;
-      }
-
-      .fcopy {
-        font-size: 12px;
-      }
-
       .fcopy,
-      .fleg a {
-        font-size: 12px;
-      }
-
-      .fc h4 {
-        font-size: 11px;
-      }
-
-      .fl a {
-        font-size: 13px;
-      }
-
       .ind-cols {
         flex-direction: column;
       }
@@ -6152,11 +6296,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
 
       .nav-logo img {
-        height: 24px;
+        height: 38px;
       }
 
       .nav {
-        height: 56px;
+        height: 70px;
         padding: 0 12px;
       }
 
@@ -6220,53 +6364,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       .cta-h {
         font-size: clamp(20px, 4vw, 28px);
-      }
-
-      .footer {
-        padding: 30px 14px 18px;
-      }
-
-      .ft {
-        padding-bottom: 28px;
-      }
-
-      .socials {
-        gap: 8px;
-      }
-
-      .soc {
-        width: 32px;
-        height: 32px;
-        font-size: 12px;
-      }
-
-      .fc h4 {
-        margin-bottom: 12px;
-        font-size: 10px;
-      }
-
-      .fl {
-        gap: 8px;
-      }
-
-      .fl a {
-        font-size: 12px;
-      }
-
-      .fcopy {
-        font-size: 11px;
-      }
-
-      .fbot {
-        padding-top: 20px;
-      }
-
-      .fleg {
-        gap: 8px;
-      }
-
-      .fleg a {
-        font-size: 11px;
       }
 
       .csc-card {
@@ -6379,7 +6476,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       }
 
       .nav-logo img {
-        height: 20px;
+        height: 38px;
       }
 
       .sec {
@@ -6390,10 +6487,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         font-size: clamp(20px, 4vw, 28px);
       }
 
-      .footer {
-        padding: 24px 12px 16px;
       }
-    }
   </style>
 
 
@@ -7688,131 +7782,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     })();
   </script>
 
-
-
-<!-- WhatsApp Floating Button -->
-<style>
-.whatsapp-float {
-  position: fixed;
-  bottom: 100px;
-  right: 24px;
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: #25D366;
-  color: #fff;
-  box-shadow: 0 6px 30px rgba(37, 211, 102, 0.4);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  text-decoration: none;
-  cursor: pointer;
-  animation: waPulse 2.5s ease-in-out infinite;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.12) translateY(-4px);
-  box-shadow: 0 10px 40px rgba(37, 211, 102, 0.55);
-  background: #20b85a;
-}
-
-.whatsapp-float:active {
-  transform: scale(0.92);
-}
-
-.whatsapp-float svg {
-  width: 32px;
-  height: 32px;
-  fill: currentColor;
-}
-
-@keyframes waPulse {
-  0%, 100% {
-    box-shadow: 0 6px 30px rgba(37, 211, 102, 0.4);
-  }
-  50% {
-    box-shadow: 0 6px 50px rgba(37, 211, 102, 0.6), 0 0 0 15px rgba(37, 211, 102, 0.1);
-  }
-}
-
-.whatsapp-tooltip {
-  position: absolute;
-  right: 72px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.85);
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.25s;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-.whatsapp-tooltip::after {
-  content: '';
-  position: absolute;
-  right: -6px;
-  top: 50%;
-  transform: translateY(-50%);
-  border-left: 6px solid rgba(0, 0, 0, 0.85);
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-}
-
-.whatsapp-float:hover .whatsapp-tooltip {
-  opacity: 1;
-}
-
-@media screen and (max-width: 768px) {
-  .whatsapp-float {
-    width: 52px;
-    height: 52px;
-    bottom: 90px;
-    right: 16px;
-  }
-  .whatsapp-float svg {
-    width: 28px;
-    height: 28px;
-  }
-  .whatsapp-tooltip {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .whatsapp-float {
-    width: 48px;
-    height: 48px;
-    bottom: 80px;
-    right: 12px;
-  }
-  .whatsapp-float svg {
-    width: 24px;
-    height: 24px;
-  }
-}
-
-@media screen and (max-width: 380px) {
-  .whatsapp-float {
-    width: 42px;
-    height: 42px;
-    bottom: 70px;
-    right: 10px;
-  }
-  .whatsapp-float svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-</style>
-
 <a href="https://wa.me/918401481455?text=Hi%21%20I%27m%20interested%20in%20your%20services.%20Can%20you%20help%20me%3F" 
    class="whatsapp-float" 
    target="_blank" 
@@ -7836,31 +7805,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         'event_label': 'Floating Button'
       });
     }
-  });
-  
-  let lastScrollY = window.scrollY;
-  let isHidden = false;
-  
-  window.addEventListener('scroll', function() {
-    const currentScrollY = window.scrollY;
-    
-    if (currentScrollY > lastScrollY && currentScrollY > 300) {
-      if (!isHidden) {
-        waButton.style.opacity = '0';
-        waButton.style.transform = 'scale(0.8) translateY(20px)';
-        waButton.style.pointerEvents = 'none';
-        isHidden = true;
-      }
-    } else if (currentScrollY < lastScrollY || currentScrollY < 300) {
-      if (isHidden) {
-        waButton.style.opacity = '1';
-        waButton.style.transform = 'scale(1) translateY(0)';
-        waButton.style.pointerEvents = 'auto';
-        isHidden = false;
-      }
-    }
-    
-    lastScrollY = currentScrollY;
   });
 })();
 </script>
