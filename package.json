@@ -8,7 +8,10 @@
     "dev": "nodemon server/server.js",
     "init-db": "node scripts/init-db.js",
     "migrate": "node scripts/migrate-from-json.js",
-    "backup": "node scripts/backup-db.js"
+    "backup": "node scripts/backup-db.js",
+    "optimize-images": "node scripts/optimize-images.js optimize ./images/uploads ./images/blog",
+    "migrate-images": "node scripts/migrate-blog-images.js",
+    "download-image": "node scripts/optimize-images.js download"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -19,6 +22,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.8.1",
     "mongoose": "^7.5.0",
+    "multer": "^2.2.0",
     "nodemailer": "^9.0.3"
   },
   "devDependencies": {

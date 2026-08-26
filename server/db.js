@@ -24,7 +24,6 @@ async function connectDB() {
     console.log('✅ MongoDB connected successfully');
     console.log(`📊 Database: ${mongoose.connection.name}`);
     
-    // Handle connection events
     mongoose.connection.on('error', (err) => {
       console.error('❌ MongoDB connection error:', err);
       isConnected = false;
@@ -75,6 +74,10 @@ async function getBlogPostBySlug(slug) {
 async function saveBlogPost(postData) {
   await connectDB();
   try {
+    if (!postData || typeof postData !== 'object') {
+      throw new Error('Invalid post data provided to saveBlogPost');
+    }
+    
     console.log('📝 saveBlogPost called with:', {
       hasId: !!postData._id,
       slug: postData.slug,
@@ -82,28 +85,47 @@ async function saveBlogPost(postData) {
     });
     
     let existing = null;
+    let existingId = null;
     
-    // Try to find by _id first
+    // 🔥 Try to find by _id first
     if (postData._id) {
-      existing = await BlogPost.findById(postData._id);
+      try {
+        const ObjectId = mongoose.Types.ObjectId;
+        if (ObjectId.isValid(postData._id)) {
+          existing = await BlogPost.findById(postData._id);
+          console.log('🔍 Found by _id:', existing ? 'yes' : 'no');
+          if (existing) {
+            existingId = existing._id;
+          }
+        } else {
+          console.log('⚠️ Invalid ObjectId format:', postData._id);
+        }
+      } catch (err) {
+        console.log('⚠️ Error finding by _id:', err.message);
+      }
     }
     
     // If not found by _id, try by slug
     if (!existing && postData.slug) {
       existing = await BlogPost.findOne({ slug: postData.slug });
+      console.log('🔍 Found by slug:', existing ? 'yes' : 'no');
+      if (existing) {
+        existingId = existing._id;
+      }
     }
     
-    // Remove _id from update data to avoid trying to update it
+    // Remove _id from update data
     const updateData = { ...postData };
     delete updateData._id;
     delete updateData.originalSlug;
+    delete updateData.__v;
     
     if (existing) {
-      // Update existing post
-      console.log('🔄 Updating existing post:', existing.slug);
+      console.log('🔄 Updating existing post:', existing.slug, 'with _id:', existingId);
       
-      const updated = await BlogPost.findByIdAndUpdate(
-        existing._id,
+      // 🔥 CRITICAL FIX: Use findOneAndUpdate with the actual ObjectId
+      const updated = await BlogPost.findOneAndUpdate(
+        { _id: existingId },
         { 
           $set: {
             ...updateData,
@@ -113,16 +135,40 @@ async function saveBlogPost(postData) {
         { new: true, runValidators: true }
       );
       
+      if (!updated) {
+        // 🔥 Try updating by slug as a fallback
+        console.log('⚠️ Update by _id failed, trying by slug as fallback...');
+        const fallbackUpdate = await BlogPost.findOneAndUpdate(
+          { slug: postData.slug },
+          { 
+            $set: {
+              ...updateData,
+              updatedAt: new Date()
+            }
+          },
+          { new: true, runValidators: true }
+        );
+        
+        if (!fallbackUpdate) {
+          throw new Error(`Failed to update post with id ${existingId} - document may have been deleted`);
+        }
+        
+        console.log('✅ Update successful (by slug):', fallbackUpdate.title);
+        return fallbackUpdate;
+      }
+      
+      console.log('✅ Update successful:', updated.title);
       return updated;
     } else {
       // Create new post
       console.log('📝 Creating new post:', postData.slug);
       const newPost = new BlogPost(updateData);
       await newPost.save();
+      console.log('✅ Creation successful:', newPost.title);
       return newPost;
     }
   } catch (error) {
-    console.error('Error saving post:', error);
+    console.error('❌ Error in saveBlogPost:', error);
     throw error;
   }
 }
@@ -182,11 +228,10 @@ async function updateSubmissionStatus(id, status) {
   }
 }
 
-// Check database connection
 async function checkDBConnection() {
   await connectDB();
   const state = mongoose.connection.readyState;
-  return state === 1; // 1 = connected
+  return state === 1;
 }
 
 module.exports = {

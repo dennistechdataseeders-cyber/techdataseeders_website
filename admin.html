@@ -231,7 +231,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="field">
         <label>Hero image URL</label>
-        <input type="text" id="f-hero" placeholder="https://… (leave blank for none)">
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="f-hero" placeholder="https://… (leave blank for none)" style="flex: 1; margin-bottom: 0;">
+          <button type="button" class="btn" id="btn-upload-image" style="flex-shrink: 0; padding: 11px 16px; display: inline-flex; align-items: center; gap: 6px;">
+            <svg style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Upload Image
+          </button>
+        </div>
+        <input type="file" id="image-file-picker" style="display: none;" accept="image/*">
       </div>
       <div class="grid2">
         <div class="field">
@@ -598,14 +609,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
-  console.log('📝 Saving post:', { 
-    title: obj.title, 
-    slug: obj.slug, 
-    origSlug: origSlug,
-    isEdit: !!origSlug,
-    hasId: !!obj._id
-  });
-
   try {
     const saved = await savePostToAPI(obj);
     if(origSlug){
@@ -676,6 +679,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     g.addEventListener('change', updateSwatch);
   })();
 
+  /* ====== IMAGE UPLOAD ====== */
+  const uploadImageBtn = document.getElementById('btn-upload-image');
+  const imageFilePicker = document.getElementById('image-file-picker');
+
+  uploadImageBtn.addEventListener('click', function() {
+    imageFilePicker.click();
+  });
+
+  imageFilePicker.addEventListener('change', async function() {
+    if (!imageFilePicker.files || imageFilePicker.files.length === 0) return;
+    const file = imageFilePicker.files[0];
+
+    // Client-side file size verification (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      toast('❌ Image size must be less than 5MB');
+      imageFilePicker.value = '';
+      return;
+    }
+
+    const originalBtnHTML = uploadImageBtn.innerHTML;
+    uploadImageBtn.disabled = true;
+    uploadImageBtn.innerHTML = `
+      <svg style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; animation: spin 1s linear infinite;" viewBox="0 0 24 24">
+        <line x1="12" y1="2" x2="12" y2="6"></line>
+        <line x1="12" y1="18" x2="12" y2="22"></line>
+        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+        <line x1="2" y1="12" x2="6" y2="12"></line>
+        <line x1="18" y1="12" x2="22" y2="12"></line>
+        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+      </svg>
+      <span>Uploading...</span>
+    `;
+
+    // Add keyframe animation for the spinner style if not already present
+    if (!document.getElementById('spin-animation')) {
+      const style = document.createElement('style');
+      style.id = 'spin-animation';
+      style.innerHTML = '@keyframes spin { 100% { transform: rotate(360deg); } }';
+      document.head.appendChild(style);
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+
+      // Get current slug to clean the filename
+      const title = document.getElementById('f-title').value.trim();
+      const slug = document.getElementById('f-slug').value.trim() || slugify(title) || 'blog';
+
+      const headers = {};
+      if (authToken) {
+        headers['Authorization'] = 'Bearer ' + authToken;
+      }
+
+      const response = await fetch(`/api/upload-image?slug=${encodeURIComponent(slug)}`, {
+        method: 'POST',
+        headers,
+        body: formData
+      });
+
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || 'Upload failed');
+      }
+
+      if (data.success && data.imagePath) {
+        document.getElementById('f-hero').value = data.imagePath;
+        toast('✅ Image uploaded successfully!');
+      } else {
+        throw new Error('Upload failed');
+      }
+    } catch (err) {
+      console.error(err);
+      toast('❌ ' + err.message);
+    } finally {
+      uploadImageBtn.disabled = false;
+      uploadImageBtn.innerHTML = originalBtnHTML;
+      imageFilePicker.value = '';
+    }
+  });
+
   /* ====== REFRESH ====== */
   document.getElementById('refreshBtn').addEventListener('click', function(){
     loadPosts().then(function() {
@@ -704,26 +790,41 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   background: #25D366;
   color: #fff;
   box-shadow: 0 6px 30px rgba(37, 211, 102, 0.4);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+              visibility 0.3s cubic-bezier(0.25, 1, 0.5, 1),
+              background-color 0.3s ease,
+              box-shadow 0.3s ease;
   text-decoration: none;
   cursor: pointer;
   animation: waPulse 2.5s ease-in-out infinite;
-}
-
-.whatsapp-float:hover {
-  transform: scale(1.12) translateY(-4px);
-  box-shadow: 0 10px 40px rgba(37, 211, 102, 0.55);
-  background: #20b85a;
-}
-
-.whatsapp-float:active {
-  transform: scale(0.92);
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  visibility: visible;
 }
 
 .whatsapp-float svg {
   width: 32px;
   height: 32px;
   fill: currentColor;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  background-color: #20ba5a;
+  box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6);
+}
+
+.whatsapp-float:active {
+  transform: scale(0.95);
+}
+
+.whatsapp-float.hidden {
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  visibility: hidden;
 }
 
 @keyframes waPulse {
@@ -737,7 +838,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 .whatsapp-tooltip {
   position: absolute;
-  right: 72px;
+  right: 76px;
   top: 50%;
   transform: translateY(-50%);
   background: rgba(0, 0, 0, 0.85);
@@ -749,8 +850,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
-  transition: all 0.25s;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: opacity 0.25s ease;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .whatsapp-tooltip::after {
@@ -768,48 +869,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   opacity: 1;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
   .whatsapp-float {
-    width: 52px;
-    height: 52px;
     bottom: 90px;
     right: 16px;
+    width: 54px;
+    height: 54px;
   }
   .whatsapp-float svg {
     width: 28px;
     height: 28px;
   }
   .whatsapp-tooltip {
-    display: none;
+    right: 70px;
   }
 }
 
 @media screen and (max-width: 480px) {
   .whatsapp-float {
-    width: 48px;
-    height: 48px;
     bottom: 80px;
     right: 12px;
+    width: 50px;
+    height: 50px;
   }
   .whatsapp-float svg {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
+  }
+  .whatsapp-tooltip {
+    display: none;
   }
 }
-
-@media screen and (max-width: 380px) {
-  .whatsapp-float {
-    width: 42px;
-    height: 42px;
-    bottom: 70px;
-    right: 10px;
-  }
-  .whatsapp-float svg {
-    width: 20px;
-    height: 20px;
-  }
-}
-</style>
 
 <a href="https://wa.me/918401481455?text=Hi%21%20I%27m%20interested%20in%20your%20services.%20Can%20you%20help%20me%3F" 
    class="whatsapp-float" 
@@ -826,6 +916,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 (function() {
   const waButton = document.querySelector('.whatsapp-float');
   if (!waButton) return;
+  
+  let lastScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+  
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(context, args);
+      }, wait);
+    };
+  }
+  
+  function checkScroll() {
+    const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+    if (currentScrollY < 100) {
+      waButton.classList.remove('hidden');
+    } else if (currentScrollY > lastScrollY) {
+      waButton.classList.add('hidden');
+    } else {
+      waButton.classList.remove('hidden');
+    }
+    lastScrollY = currentScrollY;
+  }
+  
+  window.addEventListener('scroll', debounce(checkScroll, 15), { passive: true });
   
   waButton.addEventListener('click', function() {
     if (typeof gtag !== 'undefined') {

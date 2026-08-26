@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -663,6 +663,50 @@ includeComponent('footer-placeholder', '/components/footer.html');
   </svg>
   <span class="whatsapp-tooltip">Chat with us</span>
 </a>
+
+<script>
+(function() {
+  const waButton = document.querySelector('.whatsapp-float');
+  if (!waButton) return;
+  
+  let lastScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+  
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        func.apply(context, args);
+      }, wait);
+    };
+  }
+  
+  function checkScroll() {
+    const currentScrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+    if (currentScrollY < 100) {
+      waButton.classList.remove('hidden');
+    } else if (currentScrollY > lastScrollY) {
+      waButton.classList.add('hidden');
+    } else {
+      waButton.classList.remove('hidden');
+    }
+    lastScrollY = currentScrollY;
+  }
+  
+  window.addEventListener('scroll', debounce(checkScroll, 15), { passive: true });
+  
+  waButton.addEventListener('click', function() {
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'click', {
+        'event_category': 'WhatsApp',
+        'event_label': 'Floating Button'
+      });
+    }
+  });
+})();
+</script>
 
 </body>
 </html>

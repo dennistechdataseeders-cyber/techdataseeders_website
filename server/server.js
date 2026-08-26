@@ -8,6 +8,23 @@ const { connectDB, checkDBConnection, getBlogPosts, getBlogPostBySlug } = requir
 const { login, authMiddleware } = require('./auth');
 const blogAPI = require('./blog');
 const contactAPI = require('./contact');
+const multer = require('multer');
+const sharp = require('sharp');
+
+// Configure multer for memory storage, 5MB file size limit, and image format filtering
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      const error = new Error('Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.');
+      error.status = 400;
+      return cb(error, false);
+    }
+    cb(null, true);
+  }
+});
 
 // Helper to check if a file or directory exists on disk safely
 function checkFileExists(filePath) {
@@ -269,6 +286,57 @@ app.get('/api/blog/:slug', blogAPI.getPostBySlug);
 // Blog routes (protected)
 app.post('/api/blog', authMiddleware, blogAPI.createOrUpdatePost);
 app.delete('/api/blog/:slug', authMiddleware, blogAPI.deletePost);
+
+// Blog image upload endpoint (protected, limits to 5MB and processes using Sharp)
+app.post('/api/upload-image', authMiddleware, (req, res, next) => {
+  upload.single('image')(req, res, (err) => {
+    if (err) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ success: false, message: 'File size limit exceeded (max 5MB)' });
+      }
+      return res.status(400).json({ success: false, message: err.message });
+    }
+    next();
+  });
+}, async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'No file uploaded' });
+    }
+
+    const blogImagesDir = path.join(__dirname, '..', 'images', 'blog');
+    if (!fs.existsSync(blogImagesDir)) {
+      fs.mkdirSync(blogImagesDir, { recursive: true });
+    }
+
+    const slug = req.query.slug || req.body.slug || 'blog';
+    const cleanSlug = slug.toString()
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/[^\w\-]+/g, '')
+      .replace(/\-\-+/g, '-')
+      .replace(/^-+/, '')
+      .replace(/-+$/, '');
+
+    const filename = `${cleanSlug || 'blog'}-${Date.now()}.webp`;
+    const outputPath = path.join(blogImagesDir, filename);
+
+    await sharp(req.file.buffer)
+      .rotate() // preserve EXIF orientation
+      .resize({ width: 1200, withoutEnlargement: true }) // resize to max 1200px width, maintain aspect ratio
+      .webp({ quality: 85 })
+      .toFile(outputPath);
+
+    res.json({
+      success: true,
+      imagePath: `/images/blog/${filename}`
+    });
+  } catch (error) {
+    console.error('Error in /api/upload-image:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
 
 // Contact routes (public)
 app.post('/api/contact', contactAPI.submitContact);

@@ -5,6 +5,7 @@ async function getAllPosts(req, res) {
     const posts = await getBlogPosts();
     res.json({ success: true, data: posts });
   } catch (error) {
+    console.error('❌ Error in getAllPosts:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 }
@@ -20,6 +21,7 @@ async function getPostBySlug(req, res) {
     
     res.json({ success: true, data: post });
   } catch (error) {
+    console.error('❌ Error in getPostBySlug:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 }
@@ -28,10 +30,19 @@ async function createOrUpdatePost(req, res) {
   try {
     const post = req.body;
     
+    // 🔥 CRITICAL FIX: Check if post body exists
+    if (!post || typeof post !== 'object') {
+      console.error('❌ Invalid or missing request body:', post);
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid request body. Please check your data.'
+      });
+    }
+    
     console.log('📝 Received post data:', {
       title: post.title,
       slug: post.slug,
-      originalSlug: post.originalSlug || post._id ? 'has _id' : 'new',
+      originalSlug: post.originalSlug || (post._id ? 'has _id' : 'new'),
       hasExcerpt: !!post.excerpt,
       hasBody: !!post.body,
       hasId: !!post._id
@@ -112,7 +123,16 @@ async function createOrUpdatePost(req, res) {
       });
     }
     
+    // 🔥 CRITICAL FIX: Handle null return from saveBlogPost
     const savedPost = await saveBlogPost(cleanPost);
+    
+    if (!savedPost) {
+      console.error('❌ saveBlogPost returned null or undefined');
+      return res.status(500).json({
+        success: false,
+        message: 'Failed to save post - database operation returned no result'
+      });
+    }
     
     console.log('✅ Post saved successfully:', savedPost.title);
     
@@ -124,6 +144,7 @@ async function createOrUpdatePost(req, res) {
   } catch (error) {
     console.error('❌ Error in createOrUpdatePost:', error);
     
+    // Handle validation errors
     if (error.name === 'ValidationError') {
       const errors = Object.keys(error.errors).map(key => ({
         field: key,
@@ -136,6 +157,15 @@ async function createOrUpdatePost(req, res) {
       });
     }
     
+    // Handle duplicate key errors (MongoDB)
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: 'A post with this slug already exists in the database'
+      });
+    }
+    
+    // Send the error message back to the client
     res.status(500).json({ 
       success: false, 
       message: error.message || 'Failed to save post'
@@ -160,6 +190,7 @@ async function deletePost(req, res) {
       message: 'Post deleted successfully'
     });
   } catch (error) {
+    console.error('❌ Error in deletePost:', error);
     res.status(500).json({ success: false, message: error.message });
   }
 }
