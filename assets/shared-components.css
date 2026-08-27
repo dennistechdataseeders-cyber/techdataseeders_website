@@ -171,7 +171,36 @@ img, video, svg {
 
 .nav-cta::after { display: none !important; }
 
-/* Dropdown menu */
+/* ── HOVER-BASED DROPDOWNS (Desktop) ── */
+@media (min-width: 961px) {
+  .nl .has-drop:hover > .nav-drop {
+    display: flex !important;
+  }
+
+  .nl .has-drop:not(:hover) > .nav-drop {
+    display: none !important;
+  }
+
+  /* Override the .open class behavior on desktop */
+  .nl .has-drop.open > .nav-drop {
+    display: none !important;
+  }
+
+  .nl .has-drop.open:hover > .nav-drop {
+    display: flex !important;
+  }
+
+  /* ── Rotate arrow on hover ── */
+  .nl .has-drop:hover > a span {
+    transform: rotate(180deg);
+  }
+
+  .nl .has-drop:not(:hover) > a span {
+    transform: rotate(0deg);
+  }
+}
+
+/* Dropdown menu styles */
 .nl .has-drop { position: relative; }
 .nl .has-drop > a::after { display: none; }
 .nl .has-drop > a { cursor: pointer; }
@@ -629,6 +658,11 @@ img, video, svg {
 @media (max-width: 960px) {
   .nav { padding: 0 20px; }
   .nav-toggle { display: flex; }
+
+  /* Remove hover-based dropdown on mobile */
+  .nl .has-drop:hover > .nav-drop {
+    display: none !important;
+  }
 
   /* Mobile menu dropdown panel (Default: Unscrolled / White Theme) */
   .nl {
