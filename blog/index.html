@@ -255,9 +255,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
   // ============================================================
   // BLOG PAGE - FETCHES FROM NODE.JS API / MONGODB
+  // WITH PAGINATION (10 blogs per page)
   // ============================================================
   
   const API_URL = window.location.origin + '/api';
+  const POSTS_PER_PAGE = 10;
+  
+  let allPosts = [];
+  let currentPage = 1;
+  let filteredPosts = [];
+  let currentCategory = 'all';
   
   // Icon mapping for blog cards
   const ICONS = {
@@ -343,23 +350,100 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
-  function renderPosts(list) {
+  // ============================================================
+  // PAGINATION RENDER ENGINE
+  // ============================================================
+  
+  function renderPage() {
     const grid = document.getElementById('blogGrid');
+    const start = (currentPage - 1) * POSTS_PER_PAGE;
+    const end = start + POSTS_PER_PAGE;
+    const pagePosts = filteredPosts.slice(start, end);
     
-    if (!list || !list.length) {
-      grid.innerHTML = '<div class="bl-empty">No articles published yet.</div>';
+    if (!pagePosts || !pagePosts.length) {
+      grid.innerHTML = '<div class="bl-empty">No articles found.</div>';
+      renderPagination();
       return;
     }
 
-    // Sort by date (newest first)
-    const sorted = list.slice().sort((a, b) => {
-      return new Date(b.date) - new Date(a.date);
-    });
-
-    grid.innerHTML = sorted.map(createCardHTML).join('');
+    grid.innerHTML = pagePosts.map(createCardHTML).join('');
+    renderPagination();
+    
+    // Scroll to top of blog section
+    document.querySelector('.sec-grid').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function setupFilters(posts) {
+  function renderPagination() {
+    const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+    const paginationContainer = document.getElementById('paginationContainer');
+    
+    if (!paginationContainer) return;
+    
+    if (totalPages <= 1) {
+      paginationContainer.innerHTML = '';
+      return;
+    }
+
+    let html = '<div class="pagination">';
+    
+    // Previous button
+    if (currentPage > 1) {
+      html += '<button class="page-btn" data-page="' + (currentPage - 1) + '">‹ Prev</button>';
+    } else {
+      html += '<span class="page-btn disabled">‹ Prev</span>';
+    }
+    
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+      if (i === currentPage) {
+        html += '<span class="page-btn active">' + i + '</span>';
+      } else {
+        html += '<button class="page-btn" data-page="' + i + '">' + i + '</button>';
+      }
+    }
+    
+    // Next button
+    if (currentPage < totalPages) {
+      html += '<button class="page-btn" data-page="' + (currentPage + 1) + '">Next ›</button>';
+    } else {
+      html += '<span class="page-btn disabled">Next ›</span>';
+    }
+    
+    html += '</div>';
+    paginationContainer.innerHTML = html;
+    
+    // Attach click events to page buttons
+    paginationContainer.querySelectorAll('.page-btn[data-page]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const page = parseInt(this.getAttribute('data-page'));
+        if (page !== currentPage) {
+          currentPage = page;
+          renderPage();
+        }
+      });
+    });
+  }
+
+  // ============================================================
+  // FILTER LOGIC
+  // ============================================================
+
+  function applyFilter(category) {
+    currentCategory = category;
+    currentPage = 1;
+    
+    if (category === 'all') {
+      filteredPosts = allPosts.slice();
+    } else {
+      filteredPosts = allPosts.filter(function(post) {
+        return post.category === category;
+      });
+    }
+    
+    renderPage();
+  }
+
+  function setupFilters() {
     document.querySelectorAll('.blog-filter-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         document.querySelectorAll('.blog-filter-btn').forEach(function(b) {
@@ -368,27 +452,98 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         btn.classList.add('active');
         
         const cat = btn.getAttribute('data-cat');
-        const cards = document.querySelectorAll('#blogGrid .blog-card');
-        
-        cards.forEach(function(card) {
-          const catEl = card.querySelector('.blog-cat');
-          if (cat === 'all' || (catEl && catEl.textContent.trim() === cat)) {
-            card.style.display = '';
-          } else {
-            card.style.display = 'none';
-          }
-        });
+        applyFilter(cat);
       });
     });
   }
 
   // ============================================================
-  // MAIN EXECUTION - Fetch from API and render
+  // ADD PAGINATION CONTAINER TO DOM
   // ============================================================
+
+  function addPaginationContainer() {
+    const grid = document.getElementById('blogGrid');
+    const container = document.createElement('div');
+    container.id = 'paginationContainer';
+    container.style.marginTop = '40px';
+    container.style.display = 'flex';
+    container.style.justifyContent = 'center';
+    grid.parentNode.insertBefore(container, grid.nextSibling);
+  }
+
+  // ============================================================
+  // PAGINATION STYLES (injected dynamically)
+  // ============================================================
+
+  function addPaginationStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+      .pagination {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .page-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+        height: 40px;
+        padding: 0 14px;
+        border: 1.5px solid rgba(0,0,0,0.1);
+        border-radius: 8px;
+        background: #fff;
+        color: #333;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        font-family: var(--font-b);
+      }
+      .page-btn:hover:not(.disabled):not(.active) {
+        border-color: var(--blue);
+        color: var(--blue);
+      }
+      .page-btn.active {
+        background: var(--blue);
+        border-color: var(--blue);
+        color: #fff;
+      }
+      .page-btn.disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      @media (max-width: 600px) {
+        .page-btn {
+          min-width: 36px;
+          height: 36px;
+          padding: 0 10px;
+          font-size: 13px;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // ============================================================
+  // MAIN EXECUTION
+  // ============================================================
+
   (async function() {
-    const posts = await fetchPosts();
-    renderPosts(posts);
-    setupFilters(posts);
+    allPosts = await fetchPosts();
+    
+    // Sort by date (newest first)
+    allPosts.sort(function(a, b) {
+      return new Date(b.date) - new Date(a.date);
+    });
+    
+    filteredPosts = allPosts.slice();
+    addPaginationContainer();
+    addPaginationStyles();
+    renderPage();
+    setupFilters();
   })();
 </script>
 
@@ -508,9 +663,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 })();
 </script>
-
-
-
 
   <!-- Dynamic Component Loader Script -->
   <script>
