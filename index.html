@@ -74,7 +74,18 @@
   <meta name="twitter:title" content="Techdataseeders - Web Data Scraping & Intelligence Company">
   <meta name="twitter:description" content="AI-powered web scraping and data extraction services for businesses worldwide. Transform raw web data into actionable intelligence.">
   <meta name="twitter:image" content="https://res.cloudinary.com/dhcwcyqke/image/upload/v1787127332/tds-icon_jflapc.webp">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- Script to mark JS enabled before CSS paint -->
+  <script>
+    document.documentElement.classList.add('js-enabled');
+  </script>
+  <noscript>
+    <style>
+      .loader { display: none !important; }
+      .rv, .hero-sub, .hero-stats { opacity: 1 !important; transform: none !important; }
+      .hero-h1 .line span { transform: none !important; }
+    </style>
+  </noscript>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -209,7 +220,7 @@
       inset: 0;
       background: var(--black);
       z-index: 99999;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
       flex-direction: column;
@@ -217,6 +228,12 @@
       transition: opacity .6s, visibility .6s;
     }
 
+    /* Loader is only shown when JS is enabled */
+    .js-enabled .loader {
+      display: flex;
+    }
+
+    /* When JS adds .gone, keep the existing fade-out behavior */
     .loader.gone {
       opacity: 0;
       visibility: hidden;
@@ -827,6 +844,10 @@
 
     .hero-h1 .line span {
       display: block;
+      transform: none;
+    }
+
+    .js-enabled .hero-h1 .line span {
       transform: translateY(110%);
     }
 
@@ -849,6 +870,11 @@
       color: #666;
       max-width: 520px;
       margin-bottom: 14px;
+      opacity: 1;
+      transform: none;
+    }
+
+    .js-enabled .hero-sub {
       opacity: 0;
       transform: translateY(20px);
     }
@@ -858,12 +884,17 @@
       display: flex;
       align-items: center;
       gap: 0;
-      opacity: 0;
-      transform: translateY(20px);
+      opacity: 1;
+      transform: none;
       flex-wrap: wrap;
       justify-content: center;
       gap:10px;
        margin-top: 30px;
+    }
+
+    .js-enabled .hero-stats {
+      opacity: 0;
+      transform: translateY(20px);
     }
 
     .h-stat {
@@ -1129,9 +1160,14 @@
 
     /* REVEAL */
     .rv {
+      opacity: 1;
+      transform: none;
+      transition: opacity .75s cubic-bezier(.16, 1, .3, 1), transform .75s cubic-bezier(.16, 1, .3, 1);
+    }
+
+    .js-enabled .rv {
       opacity: 0;
       transform: translateY(36px);
-      transition: opacity .75s cubic-bezier(.16, 1, .3, 1), transform .75s cubic-bezier(.16, 1, .3, 1);
     }
 
     .rv.on {
@@ -4138,7 +4174,12 @@
         padding: 2px 0 10px 14px;
         min-width: 0;
       }
-
+      .nl .has-drop.open > .nav-drop {
+        display: flex !important;
+      }
+      .nl .has-drop:not(.open) > .nav-drop {
+        display: none !important;
+      }
       .nav-drop a {
         font-size: 14px;
         padding: 9px 8px;
@@ -4964,7 +5005,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="cur-ring" id="cr"></div>
 
   <!-- NAVBAR -->
-  <div id="navbar-placeholder"></div>
+  <%- include('components/navbar.html') %>
+  <script src="/assets/navbar.js"></script>
 
   <!-- ======================== HERO ======================== -->
   <section class="hero" id="home">
@@ -6662,10 +6704,34 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="blog-grid" id="homeBlogGrid">
-    <!-- Loading state -->
-    <div class="bl-loading" style="grid-column:1/-1;text-align:center;padding:40px 0;color:#999;font-size:14px;">
-      Loading articles...
-    </div>
+    <% if (typeof posts !== 'undefined' && posts && posts.length) { %>
+      <% posts.slice(0, 3).forEach(function(post) { %>
+        <a href="/blog/<%= post.slug %>/" class="blog-card">
+          <div class="blog-art"<%= post.heroImage ? '' : ' style="background:' + (gradients[post.gradient] || gradients.blue) + ';"' %>>
+            <% if (post.heroImage) { %>
+              <img src="<%= post.heroImage %>" alt="<%= post.title %>" class="blog-art-img" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+              <div class="blog-art-ico" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><svg viewBox="0 0 24 24"><%- icons[post.icon] || icons.database %></svg></div>
+            <% } else { %>
+              <div class="blog-art-ico"><svg viewBox="0 0 24 24"><%- icons[post.icon] || icons.database %></svg></div>
+            <% } %>
+          </div>
+          <div class="blog-body">
+            <span class="blog-cat"><%= post.category %></span>
+            <h3 class="blog-title"><%= post.title %></h3>
+            <p class="blog-exc"><%= post.excerpt %></p>
+            <div class="blog-foot">
+              <span class="blog-date"><%= post.date %></span>
+              <span class="blog-read">Read more <svg viewBox="0 0 14 14"><path d="M1 7h12M7 1l6 6-6 6"/></svg></span>
+            </div>
+          </div>
+        </a>
+      <% }); %>
+    <% } else { %>
+      <!-- Loading state -->
+      <div class="bl-loading" style="grid-column:1/-1;text-align:center;padding:40px 0;color:#999;font-size:14px;">
+        Loading articles...
+      </div>
+    <% } %>
   </div>
 </section>
 
@@ -6927,7 +6993,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ======================== FOOTER ======================== -->
-<div id="footer-placeholder"></div>
+<%- include('components/footer.html') %>
 
   <!-- Scroll to top -->
   <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
@@ -7256,24 +7322,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   });
 })();
-    /* ==== NAVBAR ==== */
-    const nav = document.getElementById('nav'), navLogo = document.getElementById('navLogo');
-    const stb = document.getElementById('stb');
-    window.addEventListener('scroll', () => {
-      const s = window.scrollY;
-      nav.classList.toggle('dark', s > 80);
-      navLogo.src = s > 80 ? '/logo/TDS Logo Set/Tech DataSeeders Logo white.png' : '/logo/Tech DataSeeders Logo.png';
-      stb.classList.toggle('on', s > 400);
-    });
-
     /* ==== HERO ANIMATION ==== */
     function heroAnim() {
-      gsap.to('.hero-h1 .line span', { y: 0, duration: 1.1, stagger: .14, ease: 'power3.out', delay: .1 });
-      gsap.to('.hero-sub', { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .55 });
-      gsap.to('.hero-stats', { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .82 });
-      gsap.from('.hero-arc', { scale: .8, opacity: 0, duration: 1.2, ease: 'power2.out', delay: .3 });
-      gsap.from('.hero-squiggle', { x: 30, opacity: 0, duration: 1, ease: 'power2.out', delay: .8 });
-      gsap.from('.clutch-badge', { opacity: 0, y: 10, duration: .8, ease: 'power2.out', delay: 1.1 });
+      if (typeof gsap !== 'undefined') {
+        gsap.to('.hero-h1 .line span', { y: 0, duration: 1.1, stagger: .14, ease: 'power3.out', delay: .1 });
+        gsap.to('.hero-sub', { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .55 });
+        gsap.to('.hero-stats', { opacity: 1, y: 0, duration: .9, ease: 'power3.out', delay: .82 });
+        gsap.from('.hero-arc', { scale: .8, opacity: 0, duration: 1.2, ease: 'power2.out', delay: .3 });
+        gsap.from('.hero-squiggle', { x: 30, opacity: 0, duration: 1, ease: 'power2.out', delay: .8 });
+        gsap.from('.clutch-badge', { opacity: 0, y: 10, duration: .8, ease: 'power2.out', delay: 1.1 });
+      }
     }
 
     /* ==== CASE STUDIES TABS ==== */
@@ -7536,14 +7594,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
 
     /* ==== GSAP PARALLAX BG TEXT ==== */
-    gsap.registerPlugin(ScrollTrigger);
-    document.querySelectorAll('.bgt').forEach(el => {
-      gsap.to(el, {
-        x: '-8%',
-        ease: 'none',
-        scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1 }
+    if (typeof gsap !== 'undefined') {
+      if (typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+      }
+      document.querySelectorAll('.bgt').forEach(el => {
+        gsap.to(el, {
+          x: '-8%',
+          ease: 'none',
+          scrollTrigger: typeof ScrollTrigger !== 'undefined' ? { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1 } : undefined
+        });
       });
-    });
+    }
 
     /* ==== HERO ARC PARALLAX ==== */
     const heroArc = document.querySelector('.hero-arc');
@@ -7567,7 +7629,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </script>
 
   <!-- Nav: mobile toggle + click-to-open dropdowns -->
-  <script>
+  <!-- <script>
     (function () {
       var nav = document.getElementById('nav');
       var toggle = document.getElementById('navToggle');
@@ -7619,7 +7681,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
       }
     })();
-  </script>
+  </script> -->
   <!-- Dynamic blog cards (latest 3 from data/blogs.json or Sanity CMS) -->
   <script>window.BLOGS_PATH = './data/blogs.json'; window.POST_BASE = './blog/';</script>
   <script src="/assets/sanity-client.js"></script>
@@ -7835,84 +7897,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 })();
 </script>
-
-
-
-
-  <!-- Dynamic Component Loader Script -->
-  <script>
-  function includeComponent(id, url, callback) {
-    const element = document.getElementById(id);
-    if (!element) return;
-    fetch(url)
-      .then(response => response.text())
-      .then(data => {
-        element.innerHTML = data;
-        if (callback) callback();
-      })
-      .catch(error => console.warn(`Failed to load component ${url}:`, error));
-  }
-
-  function initNavbar() {
-    const nav = document.getElementById('nav');
-    const toggle = document.getElementById('navToggle');
-    if (!nav) return;
-    
-    const drops = nav.querySelectorAll('.nl .has-drop');
-    function closeDrops(except) {
-      drops.forEach(function(li) {
-        if (li !== except) li.classList.remove('open');
-      });
-    }
-
-    drops.forEach(function(li) {
-      const link = li.querySelector(':scope > a');
-      if (link) {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          const willOpen = !li.classList.contains('open');
-          closeDrops(li);
-          li.classList.toggle('open', willOpen);
-        });
-      }
-    });
-
-    document.addEventListener('click', function(e) {
-      if (!e.target.closest('.has-drop')) closeDrops(null);
-    });
-
-    if (toggle) {
-      toggle.addEventListener('click', function(e) {
-        e.stopPropagation();
-        const open = nav.classList.toggle('nav-open');
-        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-        if (!open) closeDrops(null);
-      });
-    }
-
-    nav.querySelectorAll('.nl a').forEach(function(a) {
-      if (a.parentElement && a.parentElement.classList.contains('has-drop')) return;
-      a.addEventListener('click', function() {
-        nav.classList.remove('nav-open');
-        if (toggle) toggle.setAttribute('aria-expanded', 'false');
-        closeDrops(null);
-      });
-    });
-
-    window.addEventListener('scroll', function() {
-      const navLogo = document.getElementById('navLogo');
-      const s = window.scrollY;
-      nav.classList.toggle('dark', s > 80);
-      if (navLogo) {
-        navLogo.src = s > 80 ? '/logo/TDS Logo Set/Tech DataSeeders Logo white.png' : '/logo/Tech DataSeeders Logo.png';
-      }
-    });
-  }
-
-  includeComponent('navbar-placeholder', '/components/navbar.html', initNavbar);
-  includeComponent('footer-placeholder', '/components/footer.html');
-  </script>
 
 </body>
 

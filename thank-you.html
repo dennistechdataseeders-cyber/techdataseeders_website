@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -467,7 +467,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="cur-ring" id="cr"></div>
 
 <!-- Navbar -->
-<div id="navbar-placeholder"></div>
+<%- include('components/navbar.html') %>
+  <script src="/assets/navbar.js"></script>
 
 <!-- ======================== THANK YOU HERO ======================== -->
 <main class="ty-hero">
@@ -536,126 +537,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </main>
 
 <!-- Footer -->
-<div id="footer-placeholder"></div>
+<%- include('components/footer.html') %>
 
 <!-- Scroll to top -->
 <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
-
-<script>
-/* ---- COUNTDOWN & REDIRECT ---- */
-(function() {
-  var count = 3;
-  var el = document.getElementById('countNum');
-  var timer = setInterval(function() {
-    count--;
-    if (el) el.textContent = count;
-    if (count <= 0) {
-      clearInterval(timer);
-      window.location.href = '/#contact';
-    }
-  }, 1000);
-
-  // Cancel auto-redirect if user clicks a button manually
-  document.getElementById('backBtn').addEventListener('click', function() {
-    clearInterval(timer);
-  });
-})();
-
-/* ---- CURSOR ---- */
-(function() {
-  var cd = document.getElementById('cd'), cr = document.getElementById('cr');
-  if (!cd || !cr) return;
-  var mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', function(e) {
-    mx = e.clientX; my = e.clientY;
-    cd.style.left = mx + 'px'; cd.style.top = my + 'px';
-  });
-  (function loop() {
-    rx += (mx - rx) * .12; ry += (my - ry) * .12;
-    cr.style.left = rx + 'px'; cr.style.top = ry + 'px';
-    requestAnimationFrame(loop);
-  })();
-  document.querySelectorAll('a, button').forEach(function(el) {
-    el.addEventListener('mouseenter', function() { cd.style.width = cd.style.height = '12px'; cr.style.width = cr.style.height = '52px'; cr.style.opacity = '.45'; });
-    el.addEventListener('mouseleave', function() { cd.style.width = cd.style.height = '8px'; cr.style.width = cr.style.height = '36px'; cr.style.opacity = '1'; });
-  });
-})();
-
-/* ---- SCROLL TO TOP ---- */
-window.addEventListener('scroll', function() {
-  document.getElementById('stb').classList.toggle('on', window.scrollY > 300);
-});
-
-/* ---- DYNAMIC COMPONENT LOADER ---- */
-function includeComponent(id, url, callback) {
-  var element = document.getElementById(id);
-  if (!element) return;
-  fetch(url)
-    .then(function(r) { return r.text(); })
-    .then(function(data) {
-      element.innerHTML = data;
-      if (callback) callback();
-    })
-    .catch(function(e) { console.warn('Failed to load component ' + url + ':', e); });
-}
-
-function initNavbar() {
-  var nav = document.getElementById('nav');
-  var toggle = document.getElementById('navToggle');
-  if (!nav) return;
-
-  var drops = nav.querySelectorAll('.nl .has-drop');
-  function closeDrops(except) {
-    drops.forEach(function(li) { if (li !== except) li.classList.remove('open'); });
-  }
-  drops.forEach(function(li) {
-    var link = li.querySelector(':scope > a');
-    if (link) {
-      link.addEventListener('click', function(e) {
-        e.preventDefault(); e.stopPropagation();
-        var willOpen = !li.classList.contains('open');
-        closeDrops(li);
-        li.classList.toggle('open', willOpen);
-      });
-    }
-  });
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.has-drop')) closeDrops(null);
-  });
-
-  if (toggle) {
-    toggle.addEventListener('click', function(e) {
-      e.stopPropagation();
-      var open = nav.classList.toggle('nav-open');
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      if (!open) closeDrops(null);
-    });
-  }
-
-  nav.querySelectorAll('.nl a').forEach(function(a) {
-    if (a.parentElement && a.parentElement.classList.contains('has-drop')) return;
-    a.addEventListener('click', function() {
-      nav.classList.remove('nav-open');
-      if (toggle) toggle.setAttribute('aria-expanded', 'false');
-      closeDrops(null);
-    });
-  });
-
-  window.addEventListener('scroll', function() {
-    var navLogo = document.getElementById('navLogo');
-    var s = window.scrollY;
-    nav.classList.toggle('dark', s > 80);
-    if (navLogo) {
-      navLogo.src = s > 80
-        ? '/logo/TDS Logo Set/Tech DataSeeders Logo white.png'
-        : '/logo/Tech DataSeeders Logo.png';
-    }
-  });
-}
-
-includeComponent('navbar-placeholder', '/components/navbar.html', initNavbar);
-includeComponent('footer-placeholder', '/components/footer.html');
-</script>
 <a href="https://wa.me/918401481455?text=Hi%21%20I%27m%20interested%20in%20your%20services.%20Can%20you%20help%20me%3F"
    class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

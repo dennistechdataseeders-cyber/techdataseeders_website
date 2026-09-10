@@ -721,7 +721,12 @@ img, video, svg {
     padding: 2px 0 10px 14px;
     min-width: 0;
   }
-
+  .nl .has-drop.open > .nav-drop {
+  display: flex !important;
+}
+.nl .has-drop:not(.open) > .nav-drop {
+  display: none !important;
+}
   .nav-drop a {
     font-size: 14px;
     padding: 11px 8px;

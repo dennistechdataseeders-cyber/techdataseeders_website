@@ -2,12 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
+const ejs = require('ejs');
 require('dotenv').config();
 
 const { connectDB, checkDBConnection, getBlogPosts, getBlogPostBySlug } = require('./db');
 const { login, authMiddleware } = require('./auth');
 const blogAPI = require('./blog');
 const contactAPI = require('./contact');
+const { ICONS, GRADIENTS, renderBody, getIcon, getGradient, getPostUrl } = require('./blogRenderer');
+const { CASE_STUDIES } = require('./caseStudiesData');
 const multer = require('multer');
 const sharp = require('sharp');
 
@@ -95,6 +98,18 @@ const urlMap = {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const baseDir = path.join(__dirname, '..');
+
+// Configure EJS view engine for .html files
+app.engine('html', ejs.renderFile);
+app.set('view engine', 'html');
+app.set('views', baseDir);
+app.locals.icons = ICONS;
+app.locals.gradients = GRADIENTS;
+app.locals.getIcon = getIcon;
+app.locals.getGradient = getGradient;
+app.locals.getPostUrl = getPostUrl;
+app.locals.renderBody = renderBody;
 
 // Connect to MongoDB immediately
 connectDB();
@@ -119,12 +134,23 @@ app.get('/blog/index.html', (req, res) => {
   return res.redirect(301, '/blog/');
 });
 
+app.get('/case-studies.html', (req, res) => {
+  res.render('case-studies.html', { caseStudies: CASE_STUDIES });
+});
+
 // ---------------------------------------------------------------
 // ROUTE: /blog and /blog/ → blog/index.html
 // Ensures the blog index page is served correctly when requested
 // ---------------------------------------------------------------
-app.get(['/blog', '/blog/'], (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'blog', 'index.html'));
+app.get(['/blog', '/blog/'], async (req, res) => {
+  try {
+    const posts = await getBlogPosts();
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    res.render('blog/index.html', { posts });
+  } catch (err) {
+    console.error('Error rendering blog index:', err.message);
+    res.render('blog/index.html', { posts: [] });
+  }
 });
 
 // ---------------------------------------------------------------
@@ -241,7 +267,7 @@ app.get('/sitemap.xml', async (req, res) => {
 // Serve blog post HTML for SEO-friendly URLs: /blog/:slug and /blog/:slug/
 // Also handles old slugs that are in urlMap
 // ---------------------------------------------------------------
-app.get(['/blog/:slug', '/blog/:slug/'], (req, res, next) => {
+app.get(['/blog/:slug', '/blog/:slug/'], async (req, res, next) => {
   const { slug } = req.params;
   // Let express.static handle actual files (blog/index.html, etc.)
   if (slug === 'index.html' || slug === 'post.html') {
@@ -251,18 +277,46 @@ app.get(['/blog/:slug', '/blog/:slug/'], (req, res, next) => {
   if (urlMap[slug] && urlMap[slug] !== slug) {
     return res.redirect(301, `/blog/${urlMap[slug]}/`);
   }
-  res.sendFile(path.join(__dirname, '..', 'blog', 'post.html'));
+  try {
+    const post = await getBlogPostBySlug(slug);
+    if (!post) {
+      return res.redirect(301, '/blog/');
+    }
+    const allPosts = await getBlogPosts();
+    const others = allPosts.filter(p => p.slug !== post.slug);
+    const popular = others.slice(0, 3);
+
+    const postTags = post.tags || [];
+    const scored = others.map(p => {
+      let score = 0;
+      if (p.category === post.category) score += 3;
+      (p.tags || []).forEach(t => {
+        if (postTags.indexOf(t) !== -1) score += 1;
+      });
+      return { post: p, score };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    const rel = scored.slice(0, 3).map(s => s.post);
+
+    const renderedBody = renderBody(post.body);
+
+    res.render('blog/post.html', {
+      post,
+      popular,
+      rel,
+      renderedBody,
+      metaTitle: (post.metaTitle && post.metaTitle.trim()) || post.title,
+      metaDescription: (post.metaDescription && post.metaDescription.trim()) || post.excerpt || '',
+      canonicalUrl: `https://techdataseeders.com/blog/${post.slug}/`,
+      ogImage: 'https://res.cloudinary.com/dhcwcyqke/image/upload/v1787127332/tds-icon_jflapc.webp'
+    });
+  } catch (err) {
+    console.error('Error rendering blog post:', err.message);
+    res.redirect(302, '/blog/');
+  }
 });
 
-// Static files (CSS, images, JS, HTML pages)
-app.use(express.static(path.join(__dirname, '..'), {
-  // Do not serve index.html automatically — we handle it via the catch-all
-  index: false
-}));
-
-// ---------------------------------------------------------------
 // Health check
-// ---------------------------------------------------------------
 app.get('/api/health', async (req, res) => {
   const dbConnected = await checkDBConnection();
   res.json({ 
@@ -350,24 +404,42 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'admin.html'));
 });
 
-// ---------------------------------------------------------------
-// Catch-all: resolves clean URLs, serves directory indexes, or falls back to root index.html
-// Returns 404 status for non-existent API paths to avoid soft 404s
-// ---------------------------------------------------------------
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'index.html'));
+// Homepage route
+app.get('/', async (req, res) => {
+  try {
+    const posts = await getBlogPosts();
+    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    res.render('index.html', { posts });
+  } catch (err) {
+    console.error('Error rendering homepage:', err.message);
+    res.render('index.html', { posts: [] });
+  }
 });
 
+// Serve static assets (CSS, images, JS, etc.) - explicitly skips .html files
+const staticHandler = express.static(baseDir, {
+  index: false // prevent serving index.html automatically
+});
+
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html')) {
+    return next();
+  }
+  staticHandler(req, res, next);
+});
+
+// ---------------------------------------------------------------
+// Catch-all: renders existing .html files via EJS, returns 404 for unknown URLs
+// Never falls back to homepage for non-existent URLs
+// ---------------------------------------------------------------
 app.use((req, res) => {
   const reqPath = req.path;
 
-  // 1. API routes that don't exist get a real 404 JSON response
+  // 1. API routes that don't exist get a 404 JSON response
   if (reqPath.startsWith('/api/')) {
     return res.status(404).json({ success: false, message: 'Not found' });
   }
 
-  const baseDir = path.join(__dirname, '..');
-  
   // Resolve the physical path on disk (safely handling URL encoding)
   let decodedPath = '';
   try {
@@ -375,38 +447,55 @@ app.use((req, res) => {
   } catch (err) {
     decodedPath = reqPath;
   }
-  
-  const targetPath = path.join(baseDir, decodedPath);
 
-  // 2. Check if a directory exists on disk and has an index.html file
+  // Clean relative path without leading slash
+  const cleanRel = decodedPath.replace(/^\/+/, '');
+  const targetPath = path.join(baseDir, cleanRel);
+
+  // Check if target is within baseDir (prevent directory traversal)
+  if (!targetPath.startsWith(baseDir)) {
+    return res.status(404).send('404 Not Found');
+  }
+
+  // 2. Direct .html file request (e.g. /about.html, /services/enterprise-web-scraping.html)
+  if (cleanRel.endsWith('.html') && checkFileExists(targetPath)) {
+    if (path.basename(targetPath) === 'admin.html') {
+      return res.sendFile(targetPath);
+    }
+    const relPath = path.relative(baseDir, targetPath).replace(/\\/g, '/');
+    return res.render(relPath);
+  }
+
+  // 3. Clean URL without extension (e.g. /about -> /about.html)
+  if (!reqPath.endsWith('/') && !path.extname(reqPath)) {
+    const htmlFilePath = targetPath + '.html';
+    if (checkFileExists(htmlFilePath)) {
+      if (path.basename(htmlFilePath) === 'admin.html') {
+        return res.sendFile(htmlFilePath);
+      }
+      const relPath = path.relative(baseDir, htmlFilePath).replace(/\\/g, '/');
+      return res.render(relPath);
+    }
+  }
+
+  // 4. Directory with index.html (e.g. /blog/ -> blog/index.html)
   if (checkFileExists(targetPath)) {
     try {
       const stats = fs.statSync(targetPath);
       if (stats.isDirectory()) {
         const indexHtmlPath = path.join(targetPath, 'index.html');
         if (checkFileExists(indexHtmlPath)) {
-          return res.sendFile(indexHtmlPath);
+          const relPath = path.relative(baseDir, indexHtmlPath).replace(/\\/g, '/');
+          return res.render(relPath);
         }
-      } else if (stats.isFile()) {
-        // Direct file match
-        return res.sendFile(targetPath);
       }
     } catch (err) {
       console.error('Error reading path stats:', err.message);
     }
   }
 
-  // 3. Clean URL resolution: if a path doesn't end with a slash and has no extension,
-  // check if appending '.html' yields a valid file (e.g. /about → /about.html)
-  if (!reqPath.endsWith('/') && !path.extname(reqPath)) {
-    const htmlFilePath = targetPath + '.html';
-    if (checkFileExists(htmlFilePath)) {
-      return res.sendFile(htmlFilePath);
-    }
-  }
-
-  // 4. Fallback to homepage index.html as a last resort
-  res.sendFile(path.join(baseDir, 'index.html'));
+  // 5. Unknown URL: Return proper 404, NEVER fall back to homepage
+  res.status(404).send('404 Not Found');
 });
 
 app.listen(PORT, '0.0.0.0', () => {
