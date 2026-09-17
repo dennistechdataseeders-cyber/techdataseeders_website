@@ -359,7 +359,7 @@ img, video, svg {
 
 .ft-regions {
   font-size: 12px;
-  color: #f0f4ff;
+  color: rgba(255, 255, 255, .75);
   line-height: 1.5;
   margin-bottom: 20px;
 }

@@ -266,6 +266,58 @@ function renderBody(md) {
   return html;
 }
 
+const {
+  SITE_URL,
+  DEFAULT_LOGO,
+  formatDate,
+  resolveImageUrl,
+  cleanQuestionText,
+  cleanAnswerText,
+  extractFaqs,
+  buildArticleSchema,
+  buildFaqSchema,
+  buildBreadcrumbSchema,
+  buildServiceSchema,
+  buildWebPageSchema,
+  buildCollectionPageSchema,
+  buildItemListSchema
+} = require('./schemaBuilder');
+
+/**
+ * Builds Article Schema specifically for a blog post
+ */
+function buildBlogArticleSchema(post, canonicalUrl) {
+  const url = canonicalUrl || `${SITE_URL}/blog/${post.slug}/`;
+  return buildArticleSchema({
+    title: (post.metaTitle && post.metaTitle.trim()) || post.title,
+    description: (post.metaDescription && post.metaDescription.trim()) || post.excerpt || '',
+    canonicalUrl: url,
+    imageUrl: resolveImageUrl(post.heroImage),
+    datePublished: formatDate(post.date || post.createdAt),
+    dateModified: post.updatedAt ? formatDate(post.updatedAt) : formatDate(post.date || post.createdAt)
+  });
+}
+
+/**
+ * Builds FAQ Schema specifically for a blog post
+ */
+function buildBlogFaqSchema(post) {
+  const faqs = extractFaqs(post.body);
+  return buildFaqSchema(faqs);
+}
+
+/**
+ * Builds Breadcrumb Schema specifically for a blog post
+ */
+function buildBlogBreadcrumbSchema(post, canonicalUrl) {
+  const url = canonicalUrl || `${SITE_URL}/blog/${post.slug}/`;
+  return buildBreadcrumbSchema([
+    { name: 'Home', item: `${SITE_URL}/` },
+    { name: 'Blog', item: `${SITE_URL}/blog/` },
+    { name: post.title, item: url }
+  ]);
+}
+
 module.exports = {
   ICONS,
   GRADIENTS,
@@ -276,5 +328,24 @@ module.exports = {
   getPostUrl,
   parseTableRow,
   renderTable,
-  renderBody
+  renderBody,
+  // Schema helpers
+  SITE_URL,
+  DEFAULT_LOGO,
+  formatDate,
+  resolveImageUrl,
+  cleanQuestionText,
+  cleanAnswerText,
+  extractFaqs,
+  buildArticleSchema,
+  buildFaqSchema,
+  buildBreadcrumbSchema,
+  buildServiceSchema,
+  buildWebPageSchema,
+  buildCollectionPageSchema,
+  buildItemListSchema,
+  buildBlogArticleSchema,
+  buildBlogFaqSchema,
+  buildBlogBreadcrumbSchema
 };
+

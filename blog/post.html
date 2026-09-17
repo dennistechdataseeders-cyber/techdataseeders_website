@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -53,6 +53,24 @@
     ]
   }
   </script>
+
+  <% if (typeof articleSchema !== 'undefined' && articleSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(articleSchema, null, 2) %>
+  </script>
+  <% } %>
+
+  <% if (typeof faqSchema !== 'undefined' && faqSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(faqSchema, null, 2) %>
+  </script>
+  <% } %>
+
+  <% if (typeof breadcrumbSchema !== 'undefined' && breadcrumbSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(breadcrumbSchema, null, 2) %>
+  </script>
+  <% } %>
   <title><%= typeof metaTitle !== 'undefined' ? metaTitle : 'Article | Techdataseeders' %></title>
   <meta name="description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Techdataseeders blog article' %>">
   <link rel="canonical" href="<%= typeof canonicalUrl !== 'undefined' ? canonicalUrl : 'https://techdataseeders.com/blog/' %>">

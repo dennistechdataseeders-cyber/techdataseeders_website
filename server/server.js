@@ -10,6 +10,18 @@ const { login, authMiddleware } = require('./auth');
 const blogAPI = require('./blog');
 const contactAPI = require('./contact');
 const { ICONS, GRADIENTS, renderBody, getIcon, getGradient, getPostUrl } = require('./blogRenderer');
+const {
+  formatDate,
+  resolveImageUrl,
+  extractFaqs,
+  buildArticleSchema,
+  buildFaqSchema,
+  buildBreadcrumbSchema,
+  buildServiceSchema,
+  buildWebPageSchema,
+  buildCollectionPageSchema,
+  buildItemListSchema
+} = require('./schemaBuilder');
 const { CASE_STUDIES } = require('./caseStudiesData');
 const multer = require('multer');
 const sharp = require('sharp');
@@ -135,7 +147,19 @@ app.get('/blog/index.html', (req, res) => {
 });
 
 app.get('/case-studies.html', (req, res) => {
-  res.render('case-studies.html', { caseStudies: CASE_STUDIES });
+  const collectionPageSchema = buildCollectionPageSchema({
+    name: "Case Studies | Web Scraping & Data Solutions | Techdataseeders",
+    description: "Explore Techdataseeders case studies and see how our data solutions solve real business challenges across industries. Discover our success stories and contact us today.",
+    canonicalUrl: "https://techdataseeders.com/case-studies.html"
+  });
+  const itemListSchema = buildItemListSchema({
+    name: "Techdataseeders Case Studies",
+    items: CASE_STUDIES.map(cs => ({
+      name: cs.title,
+      url: `https://techdataseeders.com/${cs.href.replace(/^\.?\//, '')}`
+    }))
+  });
+  res.render('case-studies.html', { caseStudies: CASE_STUDIES, collectionPageSchema, itemListSchema });
 });
 
 // ---------------------------------------------------------------
@@ -146,10 +170,22 @@ app.get(['/blog', '/blog/'], async (req, res) => {
   try {
     const posts = await getBlogPosts();
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-    res.render('blog/index.html', { posts });
+    const collectionPageSchema = buildCollectionPageSchema({
+      name: "Data Extraction & Scraping Insights Blog | Techdataseeders",
+      description: "Explore Techdataseeders' blog for expert insights on web scraping, data extraction & analytics across industries. Read the latest articles now.",
+      canonicalUrl: "https://techdataseeders.com/blog/"
+    });
+    const itemListSchema = buildItemListSchema({
+      name: "Techdataseeders Blog Posts",
+      items: posts.map(p => ({
+        name: p.title,
+        url: `https://techdataseeders.com/blog/${p.slug}/`
+      }))
+    });
+    res.render('blog/index.html', { posts, collectionPageSchema, itemListSchema });
   } catch (err) {
     console.error('Error rendering blog index:', err.message);
-    res.render('blog/index.html', { posts: [] });
+    res.render('blog/index.html', { posts: [], collectionPageSchema: null, itemListSchema: null });
   }
 });
 
@@ -299,6 +335,26 @@ app.get(['/blog/:slug', '/blog/:slug/'], async (req, res, next) => {
     const rel = scored.slice(0, 3).map(s => s.post);
 
     const renderedBody = renderBody(post.body);
+    const canonicalUrl = `https://techdataseeders.com/blog/${post.slug}/`;
+    const heroImgUrl = resolveImageUrl(post.heroImage);
+
+    const articleSchema = buildArticleSchema({
+      title: (post.metaTitle && post.metaTitle.trim()) || post.title,
+      description: (post.metaDescription && post.metaDescription.trim()) || post.excerpt || '',
+      canonicalUrl,
+      imageUrl: heroImgUrl,
+      datePublished: formatDate(post.date || post.createdAt),
+      dateModified: post.updatedAt ? formatDate(post.updatedAt) : formatDate(post.date || post.createdAt)
+    });
+
+    const faqs = extractFaqs(post.body);
+    const faqSchema = buildFaqSchema(faqs);
+
+    const breadcrumbSchema = buildBreadcrumbSchema([
+      { name: 'Home', item: 'https://techdataseeders.com/' },
+      { name: 'Blog', item: 'https://techdataseeders.com/blog/' },
+      { name: post.title, item: canonicalUrl }
+    ]);
 
     res.render('blog/post.html', {
       post,
@@ -307,8 +363,11 @@ app.get(['/blog/:slug', '/blog/:slug/'], async (req, res, next) => {
       renderedBody,
       metaTitle: (post.metaTitle && post.metaTitle.trim()) || post.title,
       metaDescription: (post.metaDescription && post.metaDescription.trim()) || post.excerpt || '',
-      canonicalUrl: `https://techdataseeders.com/blog/${post.slug}/`,
-      ogImage: 'https://res.cloudinary.com/dhcwcyqke/image/upload/v1787127332/tds-icon_jflapc.webp'
+      canonicalUrl,
+      ogImage: heroImgUrl,
+      articleSchema,
+      faqSchema,
+      breadcrumbSchema
     });
   } catch (err) {
     console.error('Error rendering blog post:', err.message);
@@ -409,10 +468,17 @@ app.get('/', async (req, res) => {
   try {
     const posts = await getBlogPosts();
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-    res.render('index.html', { posts });
+    const itemListSchema = buildItemListSchema({
+      name: "Latest Blog Posts",
+      items: posts.slice(0, 10).map(p => ({
+        name: p.title,
+        url: `https://techdataseeders.com/blog/${p.slug}/`
+      }))
+    });
+    res.render('index.html', { posts, itemListSchema });
   } catch (err) {
     console.error('Error rendering homepage:', err.message);
-    res.render('index.html', { posts: [] });
+    res.render('index.html', { posts: [], itemListSchema: null });
   }
 });
 

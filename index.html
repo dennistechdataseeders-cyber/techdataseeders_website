@@ -54,6 +54,12 @@
     ]
   }
   </script>
+
+  <% if (typeof itemListSchema !== 'undefined' && itemListSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(itemListSchema, null, 2) %>
+  </script>
+  <% } %>
   <title>Web Data Scraping Company in the USA | Techdataseeders</title>
   <meta name="description" content="Partner with a trusted web data scraping company in the USA. AI-powered extraction, custom pipelines & 24/7 support. Request a free quote today!">
   <link rel="canonical" href="https://techdataseeders.com/">
@@ -830,7 +836,7 @@
     .hero-h1 {
       font-family: 'Plus Jakarta Sans', sans-serif;
       font-size: clamp(40px, 5.8vw, 85px);
-      line-height: 1.08;
+      line-height: 1.10;
       letter-spacing: -0.03em;
       color: #0a0a0a;
       margin-bottom: 24px;
@@ -839,7 +845,7 @@
 
     .hero-h1 .line {
       display: block;
-      overflow: hidden;
+      overflow: visible;
     }
 
     .hero-h1 .line span {

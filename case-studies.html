@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -53,6 +53,18 @@
     ]
   }
   </script>
+
+  <% if (typeof collectionPageSchema !== 'undefined' && collectionPageSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(collectionPageSchema, null, 2) %>
+  </script>
+  <% } %>
+
+  <% if (typeof itemListSchema !== 'undefined' && itemListSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(itemListSchema, null, 2) %>
+  </script>
+  <% } %>
   <title>Case Studies | Web Scraping & Data Solutions | Techdataseeders</title>
   <meta name="description" content="Explore Techdataseeders case studies and see how our data solutions solve real business challenges across industries. Discover our success stories and contact us today.">
   <link rel="canonical" href="https://techdataseeders.com/case-studies.html">

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -53,6 +53,18 @@
     ]
   }
   </script>
+
+  <% if (typeof collectionPageSchema !== 'undefined' && collectionPageSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(collectionPageSchema, null, 2) %>
+  </script>
+  <% } %>
+
+  <% if (typeof itemListSchema !== 'undefined' && itemListSchema) { %>
+  <script type="application/ld+json">
+  <%- JSON.stringify(itemListSchema, null, 2) %>
+  </script>
+  <% } %>
   <title>Data Extraction & Scraping Insights Blog | Techdataseeders</title>
   <meta name="description" content="Explore Techdataseeders' blog for expert insights on web scraping, data extraction & analytics across industries. Read the latest articles now.">
   <link rel="canonical" href="https://techdataseeders.com/blog/">
