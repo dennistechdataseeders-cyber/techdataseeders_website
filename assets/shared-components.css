@@ -27,7 +27,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-
 img, video, svg {
   max-width: 100%;
   height: auto;
@@ -116,7 +115,6 @@ img, video, svg {
   display: block;
 }
 
-/* Desktop nav links */
 .nl {
   display: flex;
   align-items: center;
@@ -171,36 +169,15 @@ img, video, svg {
 
 .nav-cta::after { display: none !important; }
 
-/* ── HOVER-BASED DROPDOWNS (Desktop) ── */
 @media (min-width: 961px) {
-  .nl .has-drop:hover > .nav-drop {
-    display: flex !important;
-  }
-
-  .nl .has-drop:not(:hover) > .nav-drop {
-    display: none !important;
-  }
-
-  /* Override the .open class behavior on desktop */
-  .nl .has-drop.open > .nav-drop {
-    display: none !important;
-  }
-
-  .nl .has-drop.open:hover > .nav-drop {
-    display: flex !important;
-  }
-
-  /* ── Rotate arrow on hover ── */
-  .nl .has-drop:hover > a span {
-    transform: rotate(180deg);
-  }
-
-  .nl .has-drop:not(:hover) > a span {
-    transform: rotate(0deg);
-  }
+  .nl .has-drop:hover > .nav-drop { display: flex !important; }
+  .nl .has-drop:not(:hover) > .nav-drop { display: none !important; }
+  .nl .has-drop.open > .nav-drop { display: none !important; }
+  .nl .has-drop.open:hover > .nav-drop { display: flex !important; }
+  .nl .has-drop:hover > a span { transform: rotate(180deg); }
+  .nl .has-drop:not(:hover) > a span { transform: rotate(0deg); }
 }
 
-/* Dropdown menu styles */
 .nl .has-drop { position: relative; }
 .nl .has-drop > a::after { display: none; }
 .nl .has-drop > a { cursor: pointer; }
@@ -242,7 +219,6 @@ img, video, svg {
 .nav-drop a:hover { background: #f0f4ff; color: var(--blue) !important; }
 .nav-drop a::after { display: none !important; }
 
-/* Hamburger Button */
 .nav-toggle {
   display: none;
   flex-direction: column;
@@ -286,10 +262,9 @@ img, video, svg {
   box-sizing: border-box;
 }
 
-/* ── Desktop: 5-column grid (brand + 4 link cols) ── */
 .ft {
   display: grid;
-  grid-template-columns: 1.8fr 1fr 1.2fr 1fr 1fr;
+  grid-template-columns: 2.2fr 1.2fr 1.4fr 1fr 1.8fr;
   gap: 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid rgba(255, 255, 255, .06);
@@ -298,7 +273,7 @@ img, video, svg {
   align-items: start;
 }
 
-/* Brand column - left-aligned on desktop */
+/* Brand Column */
 .ft-brand {
   display: flex;
   flex-direction: column;
@@ -355,7 +330,7 @@ img, video, svg {
   transform: translateY(-2px);
 }
 
-/* Link columns */
+/* Link Columns */
 .fc h4 {
   font-family: var(--font-d);
   font-size: 11px;
@@ -380,34 +355,278 @@ img, video, svg {
   line-height: 1.4;
 }
 
-.fl a:hover {
-  color: #fff;
-}
+.fl a:hover { color: #fff; }
 
 .ft-regions {
   font-size: 12px;
-  color: rgba(255, 255, 255, .35);
+  color: #f0f4ff;
   line-height: 1.5;
+  margin-bottom: 20px;
 }
 
-.fbot {
+/* ============ WORLD MAP ============ */
+.footer-map-wrap {
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 2 / 1;
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  margin-top: auto;
+}
+
+.footer-map-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #000000;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.footer-map-img.is-loaded { opacity: 1; }
+
+/* ============ MARKER ============ */
+.map-marker {
+  position: absolute;
+  left: var(--mx);
+  top: var(--my);
+  transform: translate(-50%, -100%);
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  cursor: pointer;
+  outline: none;
+}
+.map-marker:hover,
+.map-marker:focus { z-index: 10; }
+
+.map-pin-label {
+  position: relative;
+  margin-bottom: 7px;
+  padding: 2px 6px;
+  background: transparent;
+  color: #ffffff;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* India marker: reduce distance between label and dot by 10% */
+.map-marker--raised .map-pin-label { margin-bottom: 1.0px; }
+
+.map-pin-stem {
+  display: block;
+  width: 1px;
+  height: 16.2px; /* reduced from 18px by 10% */
+  margin-bottom: 3.6px; /* reduced from 4px by 10% */
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* BLUE PULSE DOT — matches reference image */
+.map-pin-dot {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(0, 100, 255, 0.55),
+    0 0 8px 2px rgba(0, 150, 255, 0.7);
+  animation: map-pulse 2s infinite;
+}
+
+.map-pin-dot::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 130, 255, 0.6) 0%, rgba(0, 130, 255, 0) 70%);
+  animation: pulse-ring 2s infinite;
+}
+
+@keyframes map-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 4px rgba(0, 100, 255, 0.55), 0 0 8px 2px rgba(0, 150, 255, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(0, 100, 255, 0.35), 0 0 14px 4px rgba(0, 150, 255, 0.9);
+  }
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* ============ MAP POPOVER ============ */
+.map-popover {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  width: 220px;
+  padding: 12px 14px;
+  background: #0d0d1a;
+  color: #d8e6ff;
+  font-size: 10.5px;
+  line-height: 1.7;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 200, 255, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.85), 0 0 20px rgba(0, 200, 255, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s;
+  z-index: 30;
+  white-space: normal;
+  text-align: left;
+}
+
+.map-popover strong {
+  display: block;
+  font-size: 11px;
+  color: #ffffff;
+  margin-bottom: 6px;
+  font-family: 'SF Mono', 'Monaco', 'Menlo', 'Consolas', monospace;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.map-popover a {
+  display: inline-block;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.map-popover::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #0d0d1a;
+  filter: drop-shadow(0 1px 0 rgba(0, 200, 255, 0.35));
+}
+
+.map-marker:hover .map-popover,
+.map-marker:focus .map-popover,
+.map-marker:focus-within .map-popover {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============ OUR OFFICES BAND (Always 3 Columns) ============ */
+.ft-offices {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: start;
+  gap: 40px;
+  padding: 40px 0 36px;
+  margin-top: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+.ft-office,
+.ft-office-left,
+.ft-office-center,
+.ft-office-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.ft-office-left   { justify-self: start;  }
+.ft-office-center { justify-self: center; }
+.ft-office-right  { justify-self: end;    }
+
+.ft-office-info { text-align: center; }
+
+.ft-flag-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35),
+              inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+  object-fit: cover;
+}
+
+.ft-office-info address {
+  font-style: normal;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 8px;
+}
+
+.ft-phone {
+  display: block;
+  font-family: var(--font-d);
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  transition: color .25s;
+  margin-bottom: 4px;
+}
+.ft-phone:hover { color: var(--blue-light); }
+
+.ft-email {
+  display: block;
+  font-size: 12.5px;
+  color: #5b8fff;
+  text-decoration: none;
+  transition: color .25s;
+  word-break: break-all;
+}
+.ft-email:hover { color: #8aacf6; }
+
+/* ============ BOTTOM BAR ============ */
+.fbot {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
   justify-content: space-between;
   padding-top: 26px;
-  flex-wrap: wrap;
-  gap: 12px;
+  gap: 24px;
 }
 
 .fcopy {
   font-size: 13px;
   color: rgba(255, 255, 255, .5);
+  text-align: left;
+}
+
+.fdisclaim {
+  font-size: 11px;
+  color: rgba(255, 255, 255, .35);
+  text-align: center;
+  line-height: 1.6;
+  max-width: 700px;
 }
 
 .fleg {
   display: flex;
-  gap: 22px;
+  gap: 12px;
   flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .fleg a {
@@ -417,107 +636,237 @@ img, video, svg {
   text-decoration: none;
 }
 
-.fleg a:hover {
-  color: rgba(255, 255, 255, .75);
-}
+.fleg a:hover { color: rgba(255, 255, 255, .75); }
+.fleg-sep { color: rgba(255, 255, 255, .2); }
 
-.fdisclaim {
-  font-size: 11px;
-  color: rgba(255, 255, 255, .35);
-  text-align: center;
-  margin-top: 20px;
-  line-height: 1.6;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-}
+/* ============================================================
+   FOOTER — RESPONSIVE
+   ============================================================ */
 
-/* ── Tablet (≤1024px): tighten columns ── */
+/* ── Tablet (≤1024px) ── */
 @media (max-width: 1024px) {
   .footer { padding: 52px 40px 32px; }
-  .ft { gap: 28px; grid-template-columns: 1.6fr 1fr 1.1fr 1fr 1fr; }
+  .ft { gap: 28px; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.5fr; }
   .ft-desc { max-width: 200px; }
 }
 
-/* ── Mobile (≤768px): brand on top centered, 2-col links below ── */
-@media (max-width: 768px) {
-  .footer { padding: 40px 20px 24px; }
+/* ── Tablet / Large Mobile (≤900px) ── */
+@media (max-width: 900px) {
+  .footer { padding: 48px 28px 28px; }
 
-  /* Stack all 5 grid children vertically */
   .ft {
-    grid-template-columns: 1fr;
-    gap: 0;
+    grid-template-columns: 2fr 1fr 1.2fr 1fr 1.5fr;
+    gap: 20px;
   }
 
-  /* Brand goes full-width and centers */
   .ft-brand {
-    align-items: center;
-    text-align: center;
-    padding-bottom: 28px;
-    border-bottom: 1px solid rgba(255, 255, 255, .06);
-    margin-bottom: 24px;
-  }
-
-  .ft-logo { margin-bottom: 10px; }
-
-  .ft-tagline {
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    margin-bottom: 10px;
+    align-items: flex-start;
+    text-align: left;
   }
 
   .ft-desc {
-    max-width: 340px;
-    font-size: 12px;
-    text-align: center;
+    max-width: 180px;
+    text-align: left;
   }
 
-  .socials { justify-content: center; }
+  .socials { justify-content: flex-start; }
 
-  /* 4 link columns → 2×2 grid */
-  .ft-brand ~ .fc {
-    /* auto-flow will create 2-col rows from the ft grid */
+  .ft-offices {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
   }
 
+  .ft-flag-img {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ft-office-info address { font-size: 12px; }
+  .ft-phone { font-size: 13px; }
+  .ft-email { font-size: 11.5px; }
+}
+
+/* ── Mobile (≤768px) ── */
+@media (max-width: 768px) {
+  .footer { padding: 40px 18px 24px; }
+
+  /* Keep 4 link columns in a row below the brand */
   .ft {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-areas:
-      "brand brand"
-      "s1    s2"
-      "s3    s4";
-    grid-template-columns: 1fr 1fr;
+      "brand brand brand brand"
+      "s1    s2    s3    s4";
+    gap: 22px;
   }
 
-  .ft-brand  { grid-area: brand; }
+  .ft-brand  { grid-area: brand; align-items: center; text-align: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.06); }
   .ft > .fc:nth-child(2) { grid-area: s1; }
   .ft > .fc:nth-child(3) { grid-area: s2; }
   .ft > .fc:nth-child(4) { grid-area: s3; }
   .ft > .fc:nth-child(5) { grid-area: s4; }
 
-  /* Center each link column on mobile */
-  .fc { text-align: center; padding-bottom: 20px; }
-  .fl { align-items: center; gap: 8px; }
-  .fc h4 { margin-bottom: 10px; }
+  .ft-logo { height: 38px; }
+  .ft-desc { max-width: 340px; text-align: center; }
+  .socials { justify-content: center; }
 
+  .fc { text-align: left; }
+  .fc h4 { font-size: 10px; margin-bottom: 12px; }
+  .fl { align-items: flex-start; gap: 8px; }
+  .fl a { font-size: 11.5px; }
+
+  .ft-global {
+    text-align: left;
+  }
+
+  .ft-global .footer-map-wrap {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+  }
+
+  .ft-regions {
+    font-size: 10px;
+    text-align: left;
+    line-height: 1.45;
+  }
+
+  /* Offices: keep 3-column layout on mobile */
+  .ft-offices {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 24px 0 22px;
+  }
+
+  .ft-office,
+  .ft-office-left,
+  .ft-office-center,
+  .ft-office-right {
+    justify-self: stretch;
+    gap: 8px;
+  }
+
+  .ft-flag-img {
+    width: 36px;
+    height: 36px;
+  }
+
+  .ft-office-info address {
+    font-size: 10.5px;
+    line-height: 1.5;
+  }
+
+  .ft-phone { font-size: 11.5px; }
+  .ft-email { font-size: 10.5px; word-break: break-word; }
+
+  /* Bottom bar stacks */
   .fbot {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    grid-template-columns: 1fr;
+    justify-items: center;
     text-align: center;
-    gap: 12px;
-    padding-top: 24px;
+    gap: 14px;
+    padding-top: 22px;
   }
 
   .fcopy { text-align: center; font-size: 12px; }
-  .fleg { justify-content: center; gap: 16px; }
+  .fdisclaim { font-size: 10.5px; padding: 0 6px; }
+  .fleg { justify-content: center; gap: 14px; }
+  .fleg a { font-size: 12px; }
+
+  /* Smaller map */
+  .map-popover {
+    width: 170px;
+    font-size: 9.5px;
+    padding: 9px 10px;
+  }
+  .map-popover strong { font-size: 9.5px; }
+  .map-pin-label { font-size: 7.5px; }
+  .map-pin-dot { width: 8px; height: 8px; }
+  .map-pin-stem { height: 14.4px; }
 }
 
 /* ── Small Phones (≤480px) ── */
 @media (max-width: 480px) {
-  .footer { padding: 30px 14px 20px; }
-  .ft { gap: 0; }
-  .fl a { font-size: 12px; }
-  .fc h4 { font-size: 10px; margin-bottom: 8px; }
-  .ft-desc { font-size: 12px; }
+  .footer { padding: 32px 12px 20px; }
+
+  /* Keep 4 link columns in 2×2 grid below the brand */
+  .ft {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "brand brand"
+      "s1    s2"
+      "s3    s4";
+    gap: 20px;
+  }
+
+  .ft-logo { height: 34px; }
+  .ft-desc { font-size: 12px; max-width: 300px; }
+  .fc h4 { font-size: 10px; margin-bottom: 10px; }
+  .fl a { font-size: 11.5px; }
+
+  .ft-regions { font-size: 10px; }
+
+  /* Offices remain 3-column */
+  .ft-offices {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    padding: 22px 0 18px;
+  }
+
+  .ft-flag-img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .ft-office-info address {
+    font-size: 9.5px;
+    line-height: 1.45;
+  }
+
+  .ft-phone { font-size: 10.5px; }
+  .ft-email { font-size: 9.5px; word-break: break-all; }
+
+  .fcopy { font-size: 11.5px; }
+  .fdisclaim { font-size: 10px; }
+  .fleg { gap: 12px; }
+  .fleg a { font-size: 11.5px; }
+
+  .map-popover {
+    width: 150px;
+    font-size: 9px;
+    padding: 8px 9px;
+  }
+  .map-popover strong { font-size: 9px; }
+  .map-pin-label { font-size: 6.5px; }
+  .map-pin-dot { width: 7px; height: 7px; }
+  .map-pin-stem { height: 12.6px; }
+}
+
+/* ── Extra Small (≤380px) ── */
+@media (max-width: 380px) {
+  .footer { padding: 28px 10px 18px; }
+
+  .ft-logo { height: 30px; }
+  .ft-desc { font-size: 11px; }
+  .fc h4 { font-size: 9px; }
+  .fl a { font-size: 11px; }
+
+  .ft-flag-img { width: 26px; height: 26px; }
+  .ft-office-info address { font-size: 9px; }
+  .ft-phone { font-size: 10px; }
+  .ft-email { font-size: 9px; }
+
+  .ft-offices { gap: 4px; }
+
+  .map-popover {
+    width: 135px;
+    font-size: 8.5px;
+    padding: 7px 8px;
+  }
+  .map-popover strong { font-size: 8.5px; }
+  .map-pin-label { font-size: 6px; }
+  .map-pin-dot { width: 6px; height: 6px; }
+  .map-pin-stem { height: 10.8px; }
 }
 
 /* ------------------------------------------------------------
@@ -591,9 +940,7 @@ img, video, svg {
   background-color: #20ba5a;
 }
 
-.whatsapp-float:active {
-  transform: scale(0.95);
-}
+.whatsapp-float:active { transform: scale(0.95); }
 
 .whatsapp-float.hidden {
   opacity: 0 !important;
@@ -651,20 +998,14 @@ img, video, svg {
    9. STANDARDIZED RESPONSIVE MEDIA QUERIES
    ------------------------------------------------------------ */
 
-/* ── Tablets (≤1024px) ──────────────────────────────────────── */
 @media (max-width: 1024px) { .nav { padding: 0 32px; } }
 
-/* ── Mobile & Small Tablets (≤960px) ────────────────────────── */
 @media (max-width: 960px) {
   .nav { padding: 0 20px; }
   .nav-toggle { display: flex; }
 
-  /* Remove hover-based dropdown on mobile */
-  .nl .has-drop:hover > .nav-drop {
-    display: none !important;
-  }
+  .nl .has-drop:hover > .nav-drop { display: none !important; }
 
-  /* Mobile menu dropdown panel (Default: Unscrolled / White Theme) */
   .nl {
     position: fixed;
     top: 70px;
@@ -693,7 +1034,6 @@ img, video, svg {
 
   .nl li { width: 100%; }
 
-  /* Unscrolled menu link colors (Dark text on light background) */
   .nl > li > a {
     display: flex;
     align-items: center;
@@ -705,9 +1045,7 @@ img, video, svg {
     text-decoration: none;
   }
 
-  .nav-open .nl a {
-    color: #0a0a0a;
-  }
+  .nav-open .nl a { color: #0a0a0a; }
 
   .nl a::after { display: none !important; }
   .nl .has-drop > a span { float: right; }
@@ -721,12 +1059,9 @@ img, video, svg {
     padding: 2px 0 10px 14px;
     min-width: 0;
   }
-  .nl .has-drop.open > .nav-drop {
-  display: flex !important;
-}
-.nl .has-drop:not(.open) > .nav-drop {
-  display: none !important;
-}
+  .nl .has-drop.open > .nav-drop { display: flex !important; }
+  .nl .has-drop:not(.open) > .nav-drop { display: none !important; }
+
   .nav-drop a {
     font-size: 14px;
     padding: 11px 8px;
@@ -745,11 +1080,6 @@ img, video, svg {
     color: #fff !important;
   }
 
-  /* ───────────────────────────────────────────────────────────
-     CONFIRMED BUG #1 FIX: SCROLLED DARK NAVBAR MOBILE MENU
-     When .nav.dark is active, the mobile drawer turns solid dark
-     and links become crisp light text with proper contrast!
-     ─────────────────────────────────────────────────────────── */
   .nav.dark .nl {
     background: #0a0a0a;
     border-bottom-color: rgba(255, 255, 255, .08);
@@ -760,38 +1090,23 @@ img, video, svg {
     border-bottom-color: rgba(255, 255, 255, .06);
   }
 
-  .nav.dark.nav-open .nl a {
-    color: rgba(255, 255, 255, .85);
-  }
+  .nav.dark.nav-open .nl a { color: rgba(255, 255, 255, .85); }
+  .nav.dark.nav-open .nl a:hover { color: #fff; }
 
-  .nav.dark.nav-open .nl a:hover {
-    color: #fff;
-  }
-
-  .nav.dark .nav-drop a {
-    color: rgba(255, 255, 255, .65) !important;
-  }
-
+  .nav.dark .nav-drop a { color: rgba(255, 255, 255, .65) !important; }
   .nav.dark .nav-drop a:hover {
     color: #fff !important;
     background: rgba(255, 255, 255, .06);
   }
 }
 
-/* ── Mobile Phones (≤768px) ─────────────────────────────────── */
 @media (max-width: 768px) {
-  /* Breadcrumbs on mobile */
   .crumb-bar { padding: 0 20px; top: 80px; }
-
-  
-
-  /* Contact form */
   .cta-inner { grid-template-columns: 1fr; gap: 32px; }
   .cta-sec { padding: 60px 20px; }
   .fi-phone-wrap { display: flex; gap: 8px; }
   .fcc-wrap { flex-shrink: 0; }
 
-  /* WhatsApp button: tablet view */
   .whatsapp-float {
     width: 54px;
     height: 54px;
@@ -803,11 +1118,9 @@ img, video, svg {
   .whatsapp-float svg { width: 28px; height: 28px; }
   .whatsapp-tooltip { right: 70px; }
 
-  /* Scroll-to-top button */
   .stb { bottom: 24px; right: 16px; }
 }
 
-/* ── Small Phones (≤480px) ──────────────────────────────────── */
 @media (max-width: 480px) {
   .nav { padding: 0 16px; height: 70px; }
   .nav-logo img { height: 38px; }
@@ -817,26 +1130,6 @@ img, video, svg {
   .crumb-bar { padding: 0 14px; top: 70px; gap: 8px; }
   .breadcrumb, .bd-bread { font-size: 12px; gap: 6px; }
   .back-link, .bd-back { font-size: 12px; padding: 6px 12px; }
-
-  
-  .fbot {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 10px;
-    padding-top: 20px;
-  }
-  
-  .fcopy {
-    text-align: center;
-    font-size: 12px;
-  }
-  
-  .fleg {
-    justify-content: center;
-    gap: 16px;
-  }
 
   .whatsapp-float {
     width: 50px;
@@ -852,13 +1145,12 @@ img, video, svg {
   .stb { width: 42px; height: 42px; bottom: 20px; right: 12px; border-radius: 10px; }
 }
 
-/* ── Extra Small (≤380px) ───────────────────────────────────── */
 @media (max-width: 380px) {
   .nav { padding: 0 10px; }
   .crumb-bar { padding: 0 10px; top: 66px; gap: 6px; }
   .breadcrumb, .bd-bread { font-size: 11px; gap: 4px; }
   .back-link, .bd-back { font-size: 11px; padding: 5px 10px; }
-  
+
   .whatsapp-float {
     width: 46px;
     height: 46px;
