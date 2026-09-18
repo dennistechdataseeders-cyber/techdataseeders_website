@@ -1162,3 +1162,37 @@ img, video, svg {
   .whatsapp-float svg { width: 22px; height: 22px; }
   .stb { width: 40px; height: 40px; bottom: 18px; right: 10px; }
 }
+
+/* ============================================================
+   FOOTER SPACING REDUCTION (DESKTOP ONLY)
+   Targets screens wider than 1024px to avoid affecting tablet
+   and mobile layouts.
+   ============================================================ */
+@media (min-width: 1025px) {
+  /* Remove the white line between the main footer and the offices band */
+  .ft-offices {
+    border-bottom: none;
+  }
+
+  .footer {
+    /* Further reduced top and bottom padding */
+    padding-top: 36px;
+    padding-bottom: 18px;
+  }
+
+  .ft {
+    /* Significantly reduced space between the top grid and the offices band */
+    padding-bottom: 24px;
+  }
+
+  .ft-offices {
+    /* Reduced vertical space around the offices band */
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+
+  .fbot {
+    /* Reduced space above the bottom copyright bar */
+    padding-top: 20px;
+  }
+}
