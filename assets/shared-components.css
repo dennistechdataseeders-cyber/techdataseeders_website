@@ -252,25 +252,25 @@ img, video, svg {
    5. CANONICAL FOOTER
    ============================================================ */
 .footer {
-  background: #050508;
-  color: #fff;
-  padding: 60px 80px 36px;
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
+  background: #050508 !important;
+  color: #fff !important;
+  padding: 60px 80px 36px !important;
+  position: relative !important;
+  z-index: 10 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .ft {
-  display: grid;
-  grid-template-columns: 2.2fr 1.2fr 1.4fr 1fr 1.8fr;
-  gap: 40px;
-  padding-bottom: 40px;
-  border-bottom: 1px solid rgba(255, 255, 255, .06);
-  width: 100%;
-  box-sizing: border-box;
-  align-items: start;
+  display: grid !important;
+  grid-template-columns: 2.2fr 1.2fr 1.4fr 1fr 1.8fr !important;
+  gap: 40px !important;
+  padding-bottom: 40px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, .06) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  align-items: start !important;
 }
 
 /* Brand Column */
@@ -366,13 +366,13 @@ img, video, svg {
 
 /* ============ WORLD MAP ============ */
 .footer-map-wrap {
-  width: 100%;
-  max-width: 440px;
-  aspect-ratio: 2 / 1;
-  position: relative;
-  isolation: isolate;
-  overflow: visible;
-  margin-top: auto;
+  width: 100% !important;
+  max-width: 440px !important;
+  aspect-ratio: 2 / 1 !important;
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: visible !important;
+  margin-top: auto !important;
 }
 
 .footer-map-img {
@@ -527,14 +527,14 @@ img, video, svg {
 
 /* ============ OUR OFFICES BAND (Always 3 Columns) ============ */
 .ft-offices {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  align-items: start;
-  gap: 40px;
-  padding: 40px 0 36px;
-  margin-top: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  width: 100%;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  align-items: start !important;
+  gap: 40px !important;
+  padding: 40px 0 36px !important;
+  margin-top: 8px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  width: 100% !important;
 }
 
 .ft-office,
@@ -645,18 +645,18 @@ img, video, svg {
 
 /* ── Tablet (≤1024px) ── */
 @media (max-width: 1024px) {
-  .footer { padding: 52px 40px 32px; }
-  .ft { gap: 28px; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.5fr; }
+  .footer { padding: 52px 40px 32px !important; }
+  .ft { gap: 28px !important; grid-template-columns: 2fr 1fr 1.2fr 1fr 1.5fr !important; }
   .ft-desc { max-width: 200px; }
 }
 
 /* ── Tablet / Large Mobile (≤900px) ── */
 @media (max-width: 900px) {
-  .footer { padding: 48px 28px 28px; }
+  .footer { padding: 48px 28px 28px !important; }
 
   .ft {
-    grid-template-columns: 2fr 1fr 1.2fr 1fr 1.5fr;
-    gap: 20px;
+    grid-template-columns: 2fr 1fr 1.2fr 1fr 1.5fr !important;
+    gap: 20px !important;
   }
 
   .ft-brand {
@@ -672,8 +672,8 @@ img, video, svg {
   .socials { justify-content: flex-start; }
 
   .ft-offices {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 20px !important;
   }
 
   .ft-flag-img {
@@ -688,16 +688,16 @@ img, video, svg {
 
 /* ── Mobile (≤768px) ── */
 @media (max-width: 768px) {
-  .footer { padding: 40px 18px 24px; }
+  .footer { padding: 40px 18px 24px !important; }
 
   /* Keep 4 link columns in a row below the brand */
   .ft {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr !important;
     grid-template-areas:
       "brand brand brand brand"
-      "s1    s2    s3    s4";
-    gap: 22px;
+      "s1    s2    s3    s4" !important;
+    gap: 22px !important;
   }
 
   .ft-brand  { grid-area: brand; align-items: center; text-align: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,.06); }
@@ -722,7 +722,7 @@ img, video, svg {
   .ft-global .footer-map-wrap {
     margin-left: 0;
     margin-right: 0;
-    max-width: 100%;
+    max-width: 100% !important;
   }
 
   .ft-regions {
@@ -733,9 +733,9 @@ img, video, svg {
 
   /* Offices: keep 3-column layout on mobile */
   .ft-offices {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    padding: 24px 0 22px;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 10px !important;
+    padding: 24px 0 22px !important;
   }
 
   .ft-office,
@@ -761,11 +761,11 @@ img, video, svg {
 
   /* Bottom bar stacks */
   .fbot {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
     justify-items: center;
     text-align: center;
     gap: 14px;
-    padding-top: 22px;
+    padding-top: 22px !important;
   }
 
   .fcopy { text-align: center; font-size: 12px; }
@@ -787,16 +787,16 @@ img, video, svg {
 
 /* ── Small Phones (≤480px) ── */
 @media (max-width: 480px) {
-  .footer { padding: 32px 12px 20px; }
+  .footer { padding: 32px 12px 20px !important; }
 
   /* Keep 4 link columns in 2×2 grid below the brand */
   .ft {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr !important;
     grid-template-areas:
       "brand brand"
       "s1    s2"
-      "s3    s4";
-    gap: 20px;
+      "s3    s4" !important;
+    gap: 20px !important;
   }
 
   .ft-logo { height: 34px; }
@@ -808,9 +808,9 @@ img, video, svg {
 
   /* Offices remain 3-column */
   .ft-offices {
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-    padding: 22px 0 18px;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 6px !important;
+    padding: 22px 0 18px !important;
   }
 
   .ft-flag-img {
@@ -844,7 +844,7 @@ img, video, svg {
 
 /* ── Extra Small (≤380px) ── */
 @media (max-width: 380px) {
-  .footer { padding: 28px 10px 18px; }
+  .footer { padding: 28px 10px 18px !important; }
 
   .ft-logo { height: 30px; }
   .ft-desc { font-size: 11px; }
@@ -856,7 +856,7 @@ img, video, svg {
   .ft-phone { font-size: 10px; }
   .ft-email { font-size: 9px; }
 
-  .ft-offices { gap: 4px; }
+  .ft-offices { gap: 4px !important; }
 
   .map-popover {
     width: 135px;
@@ -1171,28 +1171,28 @@ img, video, svg {
 @media (min-width: 1025px) {
   /* Remove the white line between the main footer and the offices band */
   .ft-offices {
-    border-bottom: none;
+    border-bottom: none !important;
   }
 
   .footer {
     /* Further reduced top and bottom padding */
-    padding-top: 36px;
-    padding-bottom: 18px;
+    padding-top: 36px !important;
+    padding-bottom: 18px !important;
   }
 
   .ft {
     /* Significantly reduced space between the top grid and the offices band */
-    padding-bottom: 24px;
+    padding-bottom: 24px !important;
   }
 
   .ft-offices {
     /* Reduced vertical space around the offices band */
-    padding-top: 24px;
-    padding-bottom: 24px;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
   }
 
   .fbot {
     /* Reduced space above the bottom copyright bar */
-    padding-top: 20px;
+    padding-top: 20px !important;
   }
 }
