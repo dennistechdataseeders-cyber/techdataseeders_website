@@ -2,7 +2,10 @@
   <div class="ft">
     <!-- Brand Column -->
     <div class="ft-brand">
-      <img src="/logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Tech DataSeeders" loading="lazy" class="ft-logo">
+      <picture>
+        <source srcset="/logo/TDS%20Logo%20Set/Tech%20DataSeeders%20Logo%20white.webp" type="image/webp">
+        <img src="/logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Tech DataSeeders" loading="lazy" decoding="async" class="ft-logo" width="180" height="44">
+      </picture>
       <p class="ft-tagline">SEEDING INTELLIGENCE FROM THE WEB</p>
       <p class="ft-desc">A global provider of enterprise web scraping, data extraction, and intelligent automation — seeding intelligence from the web.</p>
       <div class="socials" aria-label="Social media links">
@@ -61,7 +64,7 @@
       <h4>Global Presence</h4>
       <p class="ft-regions">SERVING CLIENTS ACROSS NORTH AMERICA, ASIA &amp; THE MIDDLE EAST.</p>
       <div class="footer-map-wrap" id="footer-world-map">
-        <img class="footer-map-img" id="footer-map-img" alt="Map showing our offices in San Jose, Ahmedabad, and Dubai" loading="lazy">
+        <img src="https://res.cloudinary.com/dhcwcyqke/image/upload/v1790160816/download_ypnp3i.svg" class="footer-map-img" id="footer-map-img" alt="Map showing our offices in San Jose, Ahmedabad, and Dubai" width="440" height="220" loading="lazy" decoding="async" onload="this.classList.add('is-loaded')">
 
         <!-- San Jose Marker -->
         <div class="map-marker" data-marker="sanjose" style="--mx:21%; --my:35%;" tabindex="0">
@@ -110,7 +113,10 @@
   <div class="ft-offices">
     <!-- USA - Left Corner -->
     <div class="ft-office ft-office-left">
-      <img src="/images/footer/USA_flag.png" alt="USA Flag" class="ft-flag-img">
+      <picture>
+        <source srcset="/images/footer/USA_flag.webp" type="image/webp">
+        <img src="/images/footer/USA_flag.png" alt="USA Flag" class="ft-flag-img" width="52" height="52" loading="lazy" decoding="async">
+      </picture>
       <div class="ft-office-info">
         <address>
           1715 Lundy Ave, Suite 192<br>
@@ -124,7 +130,10 @@
 
     <!-- India - Center -->
     <div class="ft-office ft-office-center">
-      <img src="/images/footer/INDIAN_flag.png" alt="India Flag" class="ft-flag-img">
+      <picture>
+        <source srcset="/images/footer/INDIAN_flag.webp" type="image/webp">
+        <img src="/images/footer/INDIAN_flag.png" alt="India Flag" class="ft-flag-img" width="52" height="52" loading="lazy" decoding="async">
+      </picture>
       <div class="ft-office-info">
         <address>
           9th Floor, Sankalp Square 3B<br>
@@ -138,7 +147,10 @@
 
     <!-- UAE - Right Corner -->
     <div class="ft-office ft-office-right">
-      <img src="/images/footer/UAE_flag.png" alt="UAE Flag" class="ft-flag-img">
+      <picture>
+        <source srcset="/images/footer/UAE_flag.webp" type="image/webp">
+        <img src="/images/footer/UAE_flag.png" alt="UAE Flag" class="ft-flag-img" width="52" height="52" loading="lazy" decoding="async">
+      </picture>
       <div class="ft-office-info">
         <address>
           Hamad Tower, Arjan<br>
@@ -161,22 +173,34 @@
     </div>
   </div>
 
-  <script type="module">
-    import DottedMap from 'https://esm.sh/dotted-map@2.2.1';
-
+  <script>
+  (function () {
     const img = document.getElementById('footer-map-img');
+    if (!img) return;
 
-    if (img) {
-      const map = new DottedMap({ height: 100, grid: 'diagonal' });
-      const svg = map.getSVG({
-        radius: 0.28,
-        color: '#ffffff',
-        shape: 'circle',
-        backgroundColor: '#000000'
-      });
-
-      img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
-      img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true });
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add('is-loaded');
+    } else {
+      img.addEventListener('load', function () {
+        img.classList.add('is-loaded');
+      }, { once: true });
     }
-  </script>
+
+    // Preload when user reaches ~40% of the page
+    let preloaded = false;
+    function checkMapPreload() {
+      if (preloaded) return;
+      const scrollPos = window.scrollY + window.innerHeight;
+      const totalHeight = document.documentElement.scrollHeight;
+      if (scrollPos >= totalHeight * 0.4) {
+        preloaded = true;
+        window.removeEventListener('scroll', checkMapPreload);
+        if (img.getAttribute('loading') === 'lazy') {
+          img.loading = 'eager';
+        }
+      }
+    }
+    window.addEventListener('scroll', checkMapPreload, { passive: true });
+  })();
+</script>
 </footer>

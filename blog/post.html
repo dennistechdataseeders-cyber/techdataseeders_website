@@ -91,10 +91,14 @@
   <meta name="twitter:title" content="<%= typeof metaTitle !== 'undefined' ? metaTitle : 'Article | Techdataseeders' %>">
   <meta name="twitter:description" content="<%= typeof metaDescription !== 'undefined' ? metaDescription : 'Techdataseeders blog article' %>">
   <meta name="twitter:image" content="<%= typeof ogImage !== 'undefined' ? ogImage : 'https://res.cloudinary.com/dhcwcyqke/image/upload/v1787127332/tds-icon_jflapc.webp' %>">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/assets/shared-components.css">
+    <link rel="preload" href="/assets/shared-components.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/shared-components.css"></noscript>
   <style>
     *,*::before,*::after {
   box-sizing:border-box;margin:0;padding:0;
@@ -877,7 +881,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 <%- include('../components/navbar.html') %>
-  <script src="/assets/navbar.js"></script>
+  <script src="/assets/navbar.js" defer></script>
 
 <div class="bd-shell" id="postRoot">
   <% if (typeof post !== 'undefined' && post) { %>

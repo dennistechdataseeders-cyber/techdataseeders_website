@@ -102,6 +102,7 @@
   </noscript>
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
@@ -145,7 +146,8 @@
         });
       });
       </script>
-    <link rel="stylesheet" href="/assets/shared-components.css">
+    <link rel="preload" href="/assets/shared-components.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/shared-components.css"></noscript>
   <style>
     :root {
   --blue: #2563FF;
@@ -5729,7 +5731,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- LOADER -->
   <div class="loader" id="loader">
-    <img src="/logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Techdataseeders">
+    <picture>
+      <source srcset="/logo/TDS%20Logo%20Set/Tech%20DataSeeders%20Logo%20white.webp" type="image/webp">
+      <img src="/logo/TDS Logo Set/Tech DataSeeders Logo white.png" alt="Techdataseeders" width="400" height="56" fetchpriority="high" loading="eager" decoding="async">
+    </picture>
     <div class="loader-bar">
       <div class="loader-fill"></div>
     </div>
@@ -5741,7 +5746,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- NAVBAR -->
   <%- include('components/navbar.html') %>
-  <script src="/assets/navbar.js"></script>
+  <script src="/assets/navbar.js" defer></script>
 
   <!-- ======================== HERO ======================== -->
   <section class="hero" id="home">
@@ -5846,21 +5851,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <!-- Stats bar + CTA in one row -->
       <div class="hero-stats">
   <div class="h-stat">
-    <div class="h-stat-ico"><img src="/logo/ri_star-fill.svg" alt="Records"></div>
+    <div class="h-stat-ico"><img src="/logo/ri_star-fill.svg" alt="Records" width="24" height="24" decoding="async"></div>
     <div>
       <div class="h-stat-num">100M+</div>
       <div class="h-stat-lbl">Records Scraped Every Day</div>
     </div>
   </div>
   <div class="h-stat">
-    <div class="h-stat-ico"><img src="/logo/solar_medal-ribbon-star-bold.svg" alt="Accuracy"></div>
+    <div class="h-stat-ico"><img src="/logo/solar_medal-ribbon-star-bold.svg" alt="Accuracy" width="24" height="24" decoding="async"></div>
     <div>
       <div class="h-stat-num">50+</div>
       <div class="h-stat-lbl">Platforms Monitored Daily</div>
     </div>
   </div>
   <div class="h-stat">
-    <div class="h-stat-ico"><img src="/logo/weui_done2-filled.svg" alt="Happy Clients"></div>
+    <div class="h-stat-ico"><img src="/logo/weui_done2-filled.svg" alt="Happy Clients" width="24" height="24" decoding="async"></div>
     <div>
       <div class="h-stat-num">100+</div>
       <div class="h-stat-lbl">Clients Served Worldwide</div>
@@ -7522,21 +7527,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Column 1 -->
         <div class="ind-col ind-col-1">
           <a href="/industries/ecomm.html" class="ind-photo" data-id="0">
-            <img src="/./images/optimized/ecommerce_under700kb.webp" alt="E-commerce" loading="lazy">
+            <img src="/images/optimized/ecommerce_under700kb.webp" alt="E-commerce" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">E-commerce</div>
             </div>
           </a>
           <a href="/industries/travel-hotel.html" class="ind-photo" data-id="3">
-            <img src="/./images/optimized/travel.webp" alt="Travel & Hotel" loading="lazy">
+            <img src="/images/optimized/travel.webp" alt="Travel & Hotel" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">Travel &<br>Hospitality</div>
             </div>
           </a>
           <a href="/industries/social-media.html" class="ind-photo" data-id="6">
-            <img src="/./images/optimized/social.webp" alt="Social Media" loading="lazy">
+            <img src="/images/optimized/social.webp" alt="Social Media" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">Social Media</div>
@@ -7547,21 +7552,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Column 2 (offset down) -->
         <div class="ind-col ind-col-2">
           <a href="/industries/real-estate.html" class="ind-photo" data-id="1">
-            <img src="/./images/optimized/realestate_under700kb.webp" alt="Real Estate" loading="lazy">
+            <img src="/images/optimized/realestate_under700kb.webp" alt="Real Estate" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">Real Estate</div>
             </div>
           </a>
           <a href="/industries/food-beverages.html" class="ind-photo" data-id="4">
-            <img src="/./images/optimized/food.webp" alt="Food & Beverages" loading="lazy">
+            <img src="/images/optimized/food.webp" alt="Food & Beverages" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">Food &<br>Beverages</div>
             </div>
           </a>
           <a href="/industries/retail.html" class="ind-photo" data-id="7">
-            <img src="/./images/optimized/advertised.webp" alt="Retail" loading="lazy">
+            <img src="/images/optimized/advertised.webp" alt="Retail" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">Retail</div>
@@ -7572,14 +7577,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- Column 3 (mid offset) -->
         <div class="ind-col ind-col-3">
           <a href="/industries/q-commerce.html" class="ind-photo" data-id="2">
-            <img src="/./images/optimized/ecommerce_under700kb.webp" alt="Quick Commerce" loading="lazy">
+            <img src="/images/optimized/ecommerce_under700kb.webp" alt="Quick Commerce" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">Quick<br>Commerce</div>
             </div>
           </a>
           <a href="/industries/entertainment-ott.html" class="ind-photo" data-id="5">
-            <img src="/./images/optimized/social.webp" alt="Entertainment & OTT" loading="lazy">
+            <img src="/images/optimized/social.webp" alt="Entertainment & OTT" loading="lazy" decoding="async">
             <div class="ind-photo-overlay">
               <div class="ind-photo-sub">data</div>
               <div class="ind-photo-name">Entertainment<br>& OTT</div>
@@ -7971,16 +7976,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- Scroll to top -->
   <div class="stb" id="stb" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- GSAP Lazy Loader -->
   <script>
+    /* ==== DYNAMIC GSAP LAZY LOADING ==== */
+    let gsapLoaded = false;
+    function loadGSAP(callback) {
+      if (gsapLoaded || window.gsap) {
+        gsapLoaded = true;
+        if (callback) callback();
+        return;
+      }
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js';
+      s.defer = true;
+      s.onload = () => {
+        const st = document.createElement('script');
+        st.src = 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js';
+        st.defer = true;
+        st.onload = () => {
+          gsapLoaded = true;
+          if (callback) callback();
+          if (typeof initGsapParallax === 'function') initGsapParallax();
+        };
+        document.body.appendChild(st);
+      };
+      document.body.appendChild(s);
+    }
+
     /* ==== LOADER ==== */
     window.addEventListener('load', () => {
       setTimeout(() => {
-        document.getElementById('loader').classList.add('gone');
-        heroAnim();
-      }, 1500);
+        const loader = document.getElementById('loader');
+        if (loader) loader.classList.add('gone');
+        loadGSAP(() => {
+          heroAnim();
+        });
+      }, 800);
     });
 
     /* ==== CURSOR ==== */
@@ -8338,7 +8369,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
 
     /* ==== GLOBE   Kuznetsov-style 3D wireframe ==== */
-    (function () {
+    function initGlobe() {
       const svg = document.getElementById('globeSvg');
       if (!svg) return;
 
@@ -8481,9 +8512,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       window.addEventListener('scroll', () => {
         scrollRot = (window.scrollY / window.innerHeight) * Math.PI * 1.8;
       }, { passive: true });
-    })();
+    }
 
-    /* ==== HERO DOTS FLASHLIGHT ==== */
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initGlobe);
+    } else {
+      setTimeout(initGlobe, 50);
+    }
+/* ==== HERO DOTS FLASHLIGHT ==== */
     (function () {
       const hero = document.getElementById('home');
       if (!hero) return;
@@ -8567,18 +8603,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
 
     /* ==== GSAP PARALLAX BG TEXT ==== */
-    if (typeof gsap !== 'undefined') {
-      if (typeof ScrollTrigger !== 'undefined') {
-        gsap.registerPlugin(ScrollTrigger);
-      }
-      document.querySelectorAll('.bgt').forEach(el => {
-        gsap.to(el, {
-          x: '-8%',
-          ease: 'none',
-          scrollTrigger: typeof ScrollTrigger !== 'undefined' ? { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1 } : undefined
+    function initGsapParallax() {
+      if (typeof gsap !== 'undefined') {
+        if (typeof ScrollTrigger !== 'undefined') {
+          gsap.registerPlugin(ScrollTrigger);
+        }
+        document.querySelectorAll('.bgt').forEach(el => {
+          gsap.to(el, {
+            x: '-8%',
+            ease: 'none',
+            scrollTrigger: typeof ScrollTrigger !== 'undefined' ? { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: 1 } : undefined
+          });
         });
-      });
+      }
     }
+    if (typeof gsap !== 'undefined') { initGsapParallax(); }
 
     /* ==== HERO ARC PARALLAX ==== */
     const heroArc = document.querySelector('.hero-arc');
@@ -8657,9 +8696,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </script> -->
   <!-- Dynamic blog cards (latest 3 from data/blogs.json or Sanity CMS) -->
   <script>window.BLOGS_PATH = './data/blogs.json'; window.POST_BASE = './blog/';</script>
-  <script src="/assets/sanity-client.js"></script>
-  <script src="./data/blogs-data.js"></script>
-  <script src="/assets/blog-store.js"></script>
+  <script src="/assets/sanity-client.js" defer></script>
+  <script src="./data/blogs-data.js" defer></script>
+  <script src="/assets/blog-store.js" defer></script>
   <script>
   // ============================================================
 // HOME PAGE - FETCH LATEST 3 BLOGS FROM MONGODB API
