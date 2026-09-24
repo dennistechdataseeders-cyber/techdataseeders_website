@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const cors = require('cors');
 const path = require('path');
 const fs = require('fs');
@@ -127,8 +128,24 @@ app.locals.renderBody = renderBody;
 connectDB();
 
 // Middleware
+app.use(compression({
+  level: 6,
+  threshold: 1024,
+  filter: (req, res) => {
+    if (req.headers['x-no-compression']) return false;
+    return compression.filter(req, res);
+  }
+}));
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+
+// HTML Caching Policy (1 hour for dynamic page renders)
+app.use((req, res, next) => {
+  if (req.method === 'GET' && (!path.extname(req.path) || req.path.endsWith('.html'))) {
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+  }
+  next();
+});
 
 // ---------------------------------------------------------------
 // REDIRECT: /index.html → / (301 Permanent)
@@ -296,6 +313,7 @@ app.get('/sitemap.xml', async (req, res) => {
 </urlset>`;
 
   res.header('Content-Type', 'application/xml');
+  res.header('Cache-Control', 'public, max-age=86400'); // 24 h — safe, sitemap refreshes nightly
   res.send(sitemap);
 });
 
@@ -482,9 +500,18 @@ app.get('/', async (req, res) => {
   }
 });
 
-// Serve static assets (CSS, images, JS, etc.) - explicitly skips .html files
+// Serve static assets (CSS, images, JS, etc.) with long-term immutable caching
 const staticHandler = express.static(baseDir, {
-  index: false // prevent serving index.html automatically
+  index: false, // prevent serving index.html automatically
+  maxAge: '1y',
+  immutable: true,
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+    } else if (/\.(webp|png|jpe?g|gif|svg|ico|css|js|woff2?|ttf|eot)$/i.test(filePath)) {
+      res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+    }
+  }
 });
 
 app.use((req, res, next) => {

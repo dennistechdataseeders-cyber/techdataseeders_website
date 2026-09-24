@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   'use strict';
 
   var _initialized = false;
@@ -69,16 +69,29 @@
     });
 
     // Scroll-to-dark behaviour.
-    window.addEventListener('scroll', function () {
+    function updateNavScroll() {
       var navLogo = document.getElementById('navLogo');
       var s = window.scrollY;
       nav.classList.toggle('dark', s > 80);
       if (navLogo) {
-        navLogo.src = s > 80
-          ? '/logo/TDS Logo Set/Tech DataSeeders Logo white.png'
-          : '/logo/Tech DataSeeders Logo.png';
+        var isDark = s > 80;
+        var whiteLogo = '/logo/TDS Logo Set/Tech DataSeeders Logo white.webp';
+        var darkLogo = '/logo/Tech DataSeeders Logo.webp';
+        var targetSrc = isDark ? whiteLogo : darkLogo;
+
+        if (navLogo.getAttribute('src') !== targetSrc) {
+          navLogo.src = targetSrc;
+        }
+
+        var navSource = nav.querySelector('.nav-logo source');
+        if (navSource) {
+          navSource.srcset = targetSrc;
+        }
       }
-    });
+    }
+
+    window.addEventListener('scroll', updateNavScroll, { passive: true });
+    updateNavScroll();
   }
 
   if (document.readyState === 'loading') {
