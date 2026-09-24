@@ -214,10 +214,12 @@
       background: #fff;
       color: #0a0a0a;
       -webkit-font-smoothing: antialiased;
-      cursor: none;
       position: relative;
       width: 100%;
       max-width: 100%;
+}
+@media (pointer: fine) {
+  body { cursor: none; }
 }
 
 
@@ -918,6 +920,14 @@
   .hero-cta-btn {
     margin-top: 20px !important;
   }
+
+  /* Mobile-only: reserve correct hero height to prevent font-swap CLS */
+  .hero-h1 {
+    min-height: 3.4em;
+  }
+  .hero-sub {
+    min-height: 5.5em;
+  }
 }
 @media(max-width: 480px) {
   .hero {
@@ -934,6 +944,13 @@
     transform: translate(-50%, -50%) translateZ(0) !important;
     opacity: 0.45 !important;
     z-index: 1 !important;
+  }
+
+  .hero-h1 {
+    min-height: 4.5em;
+  }
+  .hero-sub {
+    min-height: 6.5em;
   }
 }
 
@@ -2851,29 +2868,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       document.body.appendChild(s);
     }
 
-    /* ==== LOADER ==== */
+    /* ==== LOADER (mobile: dismiss instantly; desktop: unchanged) ==== */
     (function() {
       var dismissed = false;
+      var isMobile = window.matchMedia('(max-width: 768px)').matches;
+
       function dismissLoader() {
         if (dismissed) return;
         dismissed = true;
+
         var loader = document.getElementById('loader');
-        if (loader) loader.classList.add('gone');
-        loadGSAP(function() {
-          if (typeof heroAnim === 'function') heroAnim();
-        });
+        if (loader) {
+          loader.classList.add('gone');
+          // Remove from paint pipeline after fade completes
+          setTimeout(function () { loader.style.display = 'none'; }, 700);
+        }
+
+        if (!isMobile) {
+          // Desktop: preserve existing behavior EXACTLY
+          loadGSAP(function() {
+            if (typeof heroAnim === 'function') heroAnim();
+          });
+        } else {
+          // Mobile: reveal hero content instantly, no GSAP, no waiting
+          document.querySelectorAll('.hero-h1 .line span').forEach(function (el) {
+            el.style.transform = 'none';
+          });
+          var sub = document.querySelector('.hero-sub');
+          if (sub) { sub.style.opacity = '1'; sub.style.transform = 'none'; }
+          var stats = document.querySelector('.hero-stats');
+          if (stats) { stats.style.opacity = '1'; stats.style.transform = 'none'; }
+        }
       }
 
-      if (document.readyState === 'interactive' || document.readyState === 'complete') {
-        setTimeout(dismissLoader, 150);
+      if (isMobile) {
+        // Fire immediately — no waiting for window.load or DOMContentLoaded
+        dismissLoader();
       } else {
-        document.addEventListener('DOMContentLoaded', function() {
+        // Desktop: keep the existing timing
+        if (document.readyState === 'interactive' || document.readyState === 'complete') {
           setTimeout(dismissLoader, 150);
-        });
+        } else {
+          document.addEventListener('DOMContentLoaded', function () {
+            setTimeout(dismissLoader, 150);
+          });
+        }
+        window.addEventListener('load', dismissLoader);
       }
-      window.addEventListener('load', function() {
-        dismissLoader(); // call directly, no additional delay
-      });
     })();
 
     /* ==== CURSOR ==== */

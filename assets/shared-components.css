@@ -51,6 +51,10 @@ img, video, svg {
 /* ------------------------------------------------------------
    3. CUSTOM CURSOR (desktop only)
    ------------------------------------------------------------ */
+@media (pointer: fine) {
+  body { cursor: none; }
+}
+
 .cur-dot {
   width: 8px;
   height: 8px;
