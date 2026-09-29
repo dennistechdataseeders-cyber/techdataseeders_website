@@ -94,7 +94,6 @@
   font-family:var(--font-b);cursor:pointer;
 }
 
-
     /* top bar */
     .top {
   position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 28px;background:#fff;border-bottom:1px solid var(--line);flex-wrap:wrap;
@@ -152,7 +151,6 @@
   border-color:#dc2626;color:#dc2626;
 }
 
-
     .wrap {
   max-width:1080px;margin:0 auto;padding:28px 28px 80px;
 }
@@ -168,7 +166,6 @@
     .count {
   font-family:var(--font-d);font-size:18px;font-weight:700;margin-bottom:16px;
 }
-
 
     /* post list */
     .plist {
@@ -214,7 +211,6 @@
     .empty {
   text-align:center;color:#999;padding:60px 0;
 }
-
 
     /* editor modal */
     .overlay {
@@ -289,7 +285,6 @@
   color:#dc2626;font-size:13px;margin-right:auto;
 }
 
-
     /* login */
     .login {
   min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f4f6fb;
@@ -326,7 +321,6 @@
     .login-err {
   color:#dc2626;font-size:13px;margin-bottom:12px;min-height:18px;
 }
-
 
     .toast {
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#0a0a0a;color:#fff;padding:13px 22px;border-radius:100px;font-size:13.5px;font-weight:600;opacity:0;pointer-events:none;transition:all .3s;z-index:100;
@@ -374,22 +368,48 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="top">
     <div class="top-l">
       <a href="/#contact" class="top-logo"><img src="./logo/Tech DataSeeders Logo.png" alt="Techdataseeders"></a>
-      <span class="top-badge">Blog Admin</span>
+      <span class="top-badge" id="topBadge">Admin Panel</span>
     </div>
     <div class="top-r">
+      <button class="btn" id="backToSectionsBtn" style="display:none;">&#8592; Sections</button>
       <button class="btn" id="refreshBtn"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh</button>
-      <button class="btn btn-primary" id="newBtn"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Post</button>
+      <button class="btn btn-primary" id="newBtn" style="display:none;"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Post</button>
+      <button class="btn btn-primary" id="newSvcBtn" style="display:none;"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Service</button>
       <button class="btn btn-danger" id="logoutBtn">Logout</button>
     </div>
   </div>
 
-  <div class="wrap">
-    <div class="note">
-     All changes are saved directly to the database.
-      Posts are automatically available on the live site. No manual file uploads needed.
+  <!-- SECTION PICKER -->
+  <div id="sectionPicker" class="wrap">
+    <div class="note"><strong>Welcome!</strong> Choose a section to manage.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:600px;margin:0 auto;">
+      <button class="btn btn-primary" id="pickBlogsBtn" style="padding:30px 20px;font-size:16px;border-radius:16px;flex-direction:column;gap:10px;justify-content:center;align-items:center;height:auto;">
+        <svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M4 6h16M4 12h16M4 18h12"/></svg>
+        Blog Posts
+      </button>
+      <button class="btn btn-primary" id="pickSvcsBtn" style="padding:30px 20px;font-size:16px;border-radius:16px;flex-direction:column;gap:10px;justify-content:center;align-items:center;height:auto;">
+        <svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        Services
+      </button>
     </div>
-    <div class="count" id="count"></div>
-    <div class="plist" id="plist"></div>
+  </div>
+
+  <!-- BLOG VIEW -->
+  <div id="view-blogs" style="display:none;">
+    <div class="wrap">
+      <div class="note">All changes are saved directly to the database. Posts are automatically available on the live site. No manual file uploads needed.</div>
+      <div class="count" id="count"></div>
+      <div class="plist" id="plist"></div>
+    </div>
+  </div>
+
+  <!-- SERVICES VIEW -->
+  <div id="view-services" style="display:none;">
+    <div class="wrap">
+      <div class="note"><strong>Services</strong> are saved to the database and rendered dynamically. After seeding, the navbar and footer update automatically.</div>
+      <div class="count" id="svc-count"></div>
+      <div class="plist" id="svc-plist"></div>
+    </div>
   </div>
 </div>
 
@@ -469,6 +489,109 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="err" id="formErr"></span>
       <button class="btn" id="cancelBtn">Cancel</button>
       <button class="btn btn-primary" id="saveBtn">Save Post</button>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICE EDITOR MODAL -->
+<div class="overlay" id="svcOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="svcModalTitle">New Service</h2>
+      <button class="x" id="svcCloseBtn"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="sf-id">
+      <input type="hidden" id="sf-orig">
+      <div class="field">
+        <label>Title *</label>
+        <input type="text" id="sf-title" placeholder="e.g. Enterprise Web Scraping">
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>URL slug *</label>
+          <input type="text" id="sf-slug" placeholder="enterprise-web-scraping">
+          <div class="hint">Lowercase, words separated by dashes. Auto-filled from the title.</div>
+        </div>
+        <div class="field">
+          <label>Nav Label</label>
+          <input type="text" id="sf-navlabel" placeholder="Short navbar label">
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Badge</label>
+          <input type="text" id="sf-badge" placeholder="e.g. Service 01">
+        </div>
+        <div class="field">
+          <label>Tagline / Hero subtext</label>
+          <input type="text" id="sf-tagline" placeholder="One-line summary">
+        </div>
+      </div>
+      <div class="field">
+        <label>Hero Image URL</label>
+        <div style="display:flex;gap:8px;">
+          <input type="text" id="sf-hero" placeholder="https://… (leave blank for default)" style="flex:1;margin-bottom:0;">
+          <button type="button" class="btn" id="btn-svc-upload-image" style="flex-shrink:0;padding:11px 16px;display:inline-flex;align-items:center;gap:6px;">
+            <svg style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            Upload
+          </button>
+        </div>
+        <input type="file" id="svc-image-file-picker" style="display:none;" accept="image/*">
+      </div>
+      <div class="field">
+        <label>Intro Kicker</label>
+        <input type="text" id="sf-intro-kicker" placeholder="e.g. Custom Web Crawling for Enterprises">
+      </div>
+      <div class="field">
+        <label>Intro Heading</label>
+        <input type="text" id="sf-intro-heading" placeholder="e.g. The Data You Need.&lt;br&gt;&lt;em&gt;The Scale You Demand&lt;/em&gt;">
+      </div>
+      <div class="field">
+        <label>Intro Body</label>
+        <textarea id="sf-intro-body" placeholder="Intro paragraph…" style="min-height:80px;"></textarea>
+      </div>
+      <div class="field">
+        <label>Offers (What We Offer)</label>
+        <textarea id="sf-offers" placeholder="One per line: icon | title | description&#10;E.g.: | Complex Site Crawling | Handle Ajax/JS-heavy sites…" style="min-height:120px;"></textarea>
+        <div class="hint">One offer per line. Format: <strong>svgIcon | title | description</strong>. Leave icon blank to use the default.</div>
+      </div>
+      <div class="field">
+        <label>Why Choose Us (Points)</label>
+        <textarea id="sf-why" placeholder="One per line: title | description" style="min-height:100px;"></textarea>
+        <div class="hint">One point per line. Format: <strong>title | description</strong></div>
+      </div>
+      <div class="field">
+        <label>Process Steps</label>
+        <textarea id="sf-process" placeholder="One per line: num | title | description" style="min-height:100px;"></textarea>
+        <div class="hint">One step per line. Format: <strong>01 | Interaction | We connect with your team…</strong></div>
+      </div>
+      <div class="grid2">
+        <div class="field">
+          <label>Order (for navbar sorting)</label>
+          <input type="number" id="sf-order" placeholder="1" min="0">
+        </div>
+        <div class="field">
+          <label>Published</label>
+          <select id="sf-published">
+            <option value="true">Yes — live on site</option>
+            <option value="false">No — draft</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Meta Title</label>
+        <input type="text" id="sf-meta-title" placeholder="SEO page title">
+      </div>
+      <div class="field">
+        <label>Meta Description</label>
+        <textarea id="sf-meta-desc" placeholder="SEO meta description…" style="min-height:60px;"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="err" id="svcFormErr"></span>
+      <button class="btn" id="svcCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="svcSaveBtn">Save Service</button>
     </div>
   </div>
 </div>
@@ -572,7 +695,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   async function showApp() {
     loginEl.style.display = 'none';
     appEl.style.display = 'block';
-    await loadPosts();
+    showSectionPicker();
   }
 
   // Check if already logged in
@@ -964,15 +1087,288 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   /* ====== REFRESH ====== */
   document.getElementById('refreshBtn').addEventListener('click', function(){
-    loadPosts().then(function() {
-      toast('🔄 Posts refreshed');
-    });
+    if (typeof currentView !== 'undefined' && currentView === 'services') {
+      loadServices().then(function() {
+        toast('🔄 Services refreshed');
+      });
+    } else {
+      loadPosts().then(function() {
+        toast('🔄 Posts refreshed');
+      });
+    }
   });
+
+  /* ====== SECTION PICKER ====== */
+  var currentView = null;
+  var sectionPicker = document.getElementById('sectionPicker');
+  var viewBlogs = document.getElementById('view-blogs');
+  var viewServices = document.getElementById('view-services');
+  var backBtn = document.getElementById('backToSectionsBtn');
+  var newBlogBtn = document.getElementById('newBtn');
+  var newSvcBtn = document.getElementById('newSvcBtn');
+  var topBadge = document.getElementById('topBadge');
+
+  function showSectionPicker() {
+    currentView = null;
+    sectionPicker.style.display = '';
+    viewBlogs.style.display = 'none';
+    viewServices.style.display = 'none';
+    backBtn.style.display = 'none';
+    newBlogBtn.style.display = 'none';
+    newSvcBtn.style.display = 'none';
+    if (topBadge) topBadge.textContent = 'Admin Panel';
+  }
+
+  function showBlogView() {
+    currentView = 'blogs';
+    sectionPicker.style.display = 'none';
+    viewBlogs.style.display = '';
+    viewServices.style.display = 'none';
+    backBtn.style.display = '';
+    newBlogBtn.style.display = '';
+    newSvcBtn.style.display = 'none';
+    if (topBadge) topBadge.textContent = 'Blog Posts';
+    loadPosts();
+  }
+
+  function showServicesView() {
+    currentView = 'services';
+    sectionPicker.style.display = 'none';
+    viewBlogs.style.display = 'none';
+    viewServices.style.display = '';
+    backBtn.style.display = '';
+    newBlogBtn.style.display = 'none';
+    newSvcBtn.style.display = '';
+    if (topBadge) topBadge.textContent = 'Services';
+    loadServices();
+  }
+
+  document.getElementById('pickBlogsBtn').addEventListener('click', showBlogView);
+  document.getElementById('pickSvcsBtn').addEventListener('click', showServicesView);
+  backBtn.addEventListener('click', showSectionPicker);
+
+  /* ====== SERVICES MANAGEMENT ====== */
+  var svcPlist = document.getElementById('svc-plist');
+  var svcs = [];
+
+  async function fetchServices() {
+    try {
+      var data = await apiRequest('/services');
+      return data.data || [];
+    } catch(error) {
+      console.error('Error fetching services:', error);
+      toast('❌ Failed to load services');
+      return [];
+    }
+  }
+
+  async function loadServices() {
+    svcs = await fetchServices();
+    renderServices();
+  }
+
+  function renderServices() {
+    var svcCount = document.getElementById('svc-count');
+    svcCount.textContent = svcs.length + (svcs.length === 1 ? ' service' : ' services');
+    if (!svcs.length) {
+      svcPlist.innerHTML = '<div class="empty">No services yet. Click "New Service" to create one.</div>';
+      return;
+    }
+    svcPlist.innerHTML = svcs.map(function(s, i) {
+      var escapedTitle = String(s.title || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var escapedBadge = String(s.badge || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var escapedSlug = String(s.slug || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      var statusLabel = s.published ? '' : ' <span style="color:#dc2626;font-size:10px;">[draft]</span>';
+      return '<div class="pitem">' +
+        '<div class="pthumb" style="background:linear-gradient(135deg,#0d1840,#2563FF)">' +
+          '<svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>' +
+        '</div>' +
+        '<div class="pmeta">' +
+          '<div class="pcat">' + escapedBadge + statusLabel + '</div>' +
+          '<div class="ptitle">' + escapedTitle + '</div>' +
+          '<div class="psub">' + escapedSlug + ' &bull; order: ' + (s.order || 0) + '</div>' +
+        '</div>' +
+        '<div class="pacts">' +
+          '<a class="btn" target="_blank" href="/services/' + encodeURIComponent(s.slug) + '">View</a>' +
+          '<button class="btn" data-svc-edit="' + i + '">Edit</button>' +
+          '<button class="btn btn-danger" data-svc-del="' + i + '">Delete</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  svcPlist.addEventListener('click', function(e) {
+    var ed = e.target.getAttribute('data-svc-edit');
+    var dl = e.target.getAttribute('data-svc-del');
+    if (ed !== null && ed !== undefined) openSvcEditor(parseInt(ed));
+    if (dl !== null && dl !== undefined) {
+      var s = svcs[parseInt(dl)];
+      if (confirm('Delete "' + s.title + '"? This cannot be undone.')) {
+        apiRequest('/services/' + s._id, { method: 'DELETE' }).then(function() {
+          svcs.splice(parseInt(dl), 1);
+          renderServices();
+          toast('✅ Service deleted');
+        }).catch(function(err) {
+          toast('❌ Failed to delete: ' + err.message);
+        });
+      }
+    }
+  });
+
+  /* ====== SERVICE EDITOR ====== */
+  var svcOverlay = document.getElementById('svcOverlay');
+
+  function serializeArray(arr, fields) {
+    if (!arr || !arr.length) return '';
+    return arr.map(function(item) {
+      return fields.map(function(f) { return (item[f] || ''); }).join(' | ');
+    }).join('\n');
+  }
+
+  function slugify(s) {
+    return String(s || '').toLowerCase().trim()
+      .replace(/['"]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70);
+  }
+
+  function openSvcEditor(index) {
+    var s = (index != null) ? svcs[index] : {};
+    document.getElementById('svcModalTitle').textContent = (index != null) ? 'Edit Service' : 'New Service';
+    document.getElementById('sf-id').value = s._id || '';
+    document.getElementById('sf-orig').value = (index != null) ? (s.slug || '') : '';
+    document.getElementById('sf-title').value = s.title || '';
+    document.getElementById('sf-slug').value = s.slug || '';
+    document.getElementById('sf-navlabel').value = s.navLabel || '';
+    document.getElementById('sf-badge').value = s.badge || '';
+    document.getElementById('sf-tagline').value = s.tagline || '';
+    document.getElementById('sf-hero').value = s.heroImage || '';
+    document.getElementById('sf-intro-kicker').value = s.introKicker || '';
+    document.getElementById('sf-intro-heading').value = s.introHeading || '';
+    document.getElementById('sf-intro-body').value = s.introBody || '';
+    document.getElementById('sf-offers').value = serializeArray(s.offers || [], ['icon', 'title', 'desc']);
+    document.getElementById('sf-why').value = serializeArray(s.whyPoints || [], ['title', 'desc']);
+    document.getElementById('sf-process').value = serializeArray(s.processSteps || [], ['num', 'title', 'desc']);
+    document.getElementById('sf-order').value = s.order != null ? s.order : 0;
+    document.getElementById('sf-published').value = (s.published !== false) ? 'true' : 'false';
+    document.getElementById('sf-meta-title').value = s.metaTitle || '';
+    document.getElementById('sf-meta-desc').value = s.metaDescription || '';
+    document.getElementById('svcFormErr').textContent = '';
+    delete document.getElementById('sf-slug').dataset.touched;
+    svcOverlay.classList.add('show');
+  }
+
+  function closeSvcEditor() { svcOverlay.classList.remove('show'); }
+
+  // auto-slug from title in service modal
+  document.getElementById('sf-title').addEventListener('input', function() {
+    var slugField = document.getElementById('sf-slug');
+    if (!document.getElementById('sf-orig').value && !slugField.dataset.touched) {
+      slugField.value = slugify(this.value);
+    }
+  });
+  document.getElementById('sf-slug').addEventListener('input', function() { this.dataset.touched = '1'; });
+
+  document.getElementById('svcSaveBtn').addEventListener('click', async function() {
+    var title = document.getElementById('sf-title').value.trim();
+    var slug = slugify(document.getElementById('sf-slug').value || title);
+    var origSlug = document.getElementById('sf-orig').value;
+    var existingId = document.getElementById('sf-id').value;
+    var err = document.getElementById('svcFormErr');
+
+    if (!title) { err.textContent = 'Title is required.'; return; }
+    if (!slug) { err.textContent = 'A valid URL slug is required.'; return; }
+
+    var clash = svcs.some(function(s) {
+      if (origSlug && s.slug === origSlug) return false;
+      return s.slug === slug;
+    });
+    if (clash) { err.textContent = 'Another service already uses that slug.'; return; }
+
+    var obj = {
+      title: title,
+      slug: slug,
+      navLabel: document.getElementById('sf-navlabel').value.trim(),
+      badge: document.getElementById('sf-badge').value.trim(),
+      tagline: document.getElementById('sf-tagline').value.trim(),
+      heroImage: document.getElementById('sf-hero').value.trim(),
+      introKicker: document.getElementById('sf-intro-kicker').value.trim(),
+      introHeading: document.getElementById('sf-intro-heading').value.trim(),
+      introBody: document.getElementById('sf-intro-body').value.trim(),
+      offers: document.getElementById('sf-offers').value.trim(),
+      whyPoints: document.getElementById('sf-why').value.trim(),
+      processSteps: document.getElementById('sf-process').value.trim(),
+      order: parseInt(document.getElementById('sf-order').value) || 0,
+      published: document.getElementById('sf-published').value === 'true',
+      metaTitle: document.getElementById('sf-meta-title').value.trim(),
+      metaDescription: document.getElementById('sf-meta-desc').value.trim()
+    };
+
+    if (existingId) {
+      obj._id = existingId;
+      if (origSlug) obj.originalSlug = origSlug;
+    }
+
+    try {
+      var data = await apiRequest('/services', { method: 'POST', body: JSON.stringify(obj) });
+      var savedSvc = data.data;
+      if (origSlug) {
+        var idx = svcs.findIndex(function(s) { return s.slug === origSlug; });
+        if (idx > -1) svcs[idx] = savedSvc; else svcs.unshift(savedSvc);
+      } else {
+        svcs.unshift(savedSvc);
+      }
+      renderServices();
+      closeSvcEditor();
+      toast('✅ Service saved to database');
+    } catch(error) {
+      err.textContent = 'Failed to save: ' + error.message;
+      toast('❌ Error saving service');
+    }
+  });
+
+  document.getElementById('newSvcBtn').addEventListener('click', function() {
+    openSvcEditor(null);
+  });
+  document.getElementById('svcCloseBtn').addEventListener('click', closeSvcEditor);
+  document.getElementById('svcCancelBtn').addEventListener('click', closeSvcEditor);
+  svcOverlay.addEventListener('click', function(e) { if (e.target === svcOverlay) closeSvcEditor(); });
+
+  /* ====== SERVICE IMAGE UPLOAD ====== */
+  var svcUploadBtn = document.getElementById('btn-svc-upload-image');
+  var svcFilePicker = document.getElementById('svc-image-file-picker');
+  svcUploadBtn.addEventListener('click', function() { svcFilePicker.click(); });
+  svcFilePicker.addEventListener('change', async function() {
+    if (!svcFilePicker.files || !svcFilePicker.files.length) return;
+    var file = svcFilePicker.files[0];
+    if (file.size > 5 * 1024 * 1024) { toast('❌ Image size must be less than 5MB'); svcFilePicker.value = ''; return; }
+    var origHTML = svcUploadBtn.innerHTML;
+    svcUploadBtn.disabled = true;
+    svcUploadBtn.innerHTML = '<span>Uploading...</span>';
+    try {
+      var fd = new FormData();
+      fd.append('image', file);
+      var slug = document.getElementById('sf-slug').value.trim() || 'service';
+      var headers = {};
+      if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+      var resp = await fetch('/api/upload-image?slug=' + encodeURIComponent(slug), { method: 'POST', headers, body: fd });
+      var result = await resp.json();
+      if (!resp.ok) throw new Error(result.message || 'Upload failed');
+      if (result.success && result.imagePath) {
+        document.getElementById('sf-hero').value = result.imagePath;
+        toast('✅ Image uploaded successfully');
+      }
+    } catch(err) {
+      toast('❌ Upload failed: ' + err.message);
+    } finally {
+      svcUploadBtn.disabled = false;
+      svcUploadBtn.innerHTML = origHTML;
+      svcFilePicker.value = '';
+    }
+  });
+
+  /* Override showApp to show section picker first */
 
 })();
 </script>
-
-
 
 <!-- WhatsApp Floating Button -->
 <style>
@@ -1156,9 +1552,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 </script>
 
-
-
-
   <!-- Dynamic Component Loader Script -->
   <script>
   function includeComponent(id, url, callback) {
@@ -1189,7 +1582,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       const link = li.querySelector(':scope > a');
       if (link) {
         link.addEventListener('click', function(e) {
-          e.preventDefault();
+          if (window.matchMedia('(min-width: 961px)').matches) return;
+          
           e.stopPropagation();
           const willOpen = !li.classList.contains('open');
           closeDrops(li);
@@ -1230,8 +1624,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   }
 
-  includeComponent('navbar-placeholder', '/components/navbar.html', initNavbar);
-  includeComponent('footer-placeholder', '/components/footer.html');
+  includeComponent('navbar-placeholder', '/api/navbar-html', initNavbar);
+  includeComponent('footer-placeholder', '/api/footer-html');
   </script>
 
 </body>

@@ -116,11 +116,92 @@ const ContactSubmissionSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Service Schema
+const ServiceSchema = new mongoose.Schema({
+  slug: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
+  title: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  navLabel: {
+    type: String,
+    trim: true
+  },
+  tagline: {
+    type: String,
+    trim: true
+  },
+  badge: {
+    type: String,
+    trim: true
+  },
+  heroImage: {
+    type: String,
+    default: ''
+  },
+  introKicker: {
+    type: String,
+    default: ''
+  },
+  introHeading: {
+    type: String,
+    default: ''
+  },
+  introBody: {
+    type: String,
+    default: ''
+  },
+  offers: [{
+    _id: false,
+    icon: { type: String, default: '' },
+    title: { type: String, default: '' },
+    desc: { type: String, default: '' }
+  }],
+  whyPoints: [{
+    _id: false,
+    title: { type: String, default: '' },
+    desc: { type: String, default: '' }
+  }],
+  processSteps: [{
+    _id: false,
+    num: { type: String, default: '' },
+    title: { type: String, default: '' },
+    desc: { type: String, default: '' }
+  }],
+  order: {
+    type: Number,
+    default: 0
+  },
+  published: {
+    type: Boolean,
+    default: true
+  },
+  metaTitle: {
+    type: String,
+    default: ''
+  },
+  metaDescription: {
+    type: String,
+    default: ''
+  }
+}, {
+  timestamps: true
+});
+
 // Create models
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
 const ContactSubmission = mongoose.model('ContactSubmission', ContactSubmissionSchema);
+const Service = mongoose.model('Service', ServiceSchema);
 
 module.exports = {
   BlogPost,
-  ContactSubmission
+  ContactSubmission,
+  Service
 };

@@ -6,9 +6,10 @@ const fs = require('fs');
 const ejs = require('ejs');
 require('dotenv').config();
 
-const { connectDB, checkDBConnection, getBlogPosts, getBlogPostBySlug } = require('./db');
+const { connectDB, checkDBConnection, getBlogPosts, getBlogPostBySlug, getServices, getServiceBySlug } = require('./db');
 const { login, authMiddleware } = require('./auth');
 const blogAPI = require('./blog');
+const serviceAPI = require('./service');
 const contactAPI = require('./contact');
 const { ICONS, GRADIENTS, renderBody, getIcon, getGradient, getPostUrl } = require('./blogRenderer');
 const {
@@ -147,6 +148,17 @@ app.use((req, res, next) => {
   next();
 });
 
+// Global middleware to populate published services into res.locals.services
+app.use(async (req, res, next) => {
+  try {
+    res.locals.services = await getServices({ published: true });
+  } catch (err) {
+    console.error('Error fetching services for locals:', err.message);
+    res.locals.services = [];
+  }
+  next();
+});
+
 // ---------------------------------------------------------------
 // REDIRECT: /index.html → / (301 Permanent)
 // Fixes the homepage duplicate canonical issue in Google Search Console
@@ -246,13 +258,33 @@ app.get('/blog/post.html', async (req, res) => {
 // ---------------------------------------------------------------
 app.get('/sitemap.xml', async (req, res) => {
   let posts = [];
+  let services = [];
   try {
     posts = await getBlogPosts();
   } catch (err) {
     console.error('Error fetching posts for sitemap:', err.message);
   }
+  try {
+    services = await getServices({ published: true });
+  } catch (err) {
+    console.error('Error fetching services for sitemap:', err.message);
+  }
 
   const now = new Date().toISOString();
+
+  const serviceUrls = (services && services.length)
+    ? services.map(s => ({
+        loc: `https://techdataseeders.com/services/${s.slug}`,
+        changefreq: 'monthly',
+        priority: '0.8',
+        lastmod: s.updatedAt ? new Date(s.updatedAt).toISOString() : now
+      }))
+    : [
+        { loc: 'https://techdataseeders.com/services/enterprise-web-scraping.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
+        { loc: 'https://techdataseeders.com/services/mobile-app-scraping.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
+        { loc: 'https://techdataseeders.com/services/data-analytics-intelligence.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
+        { loc: 'https://techdataseeders.com/services/custom-data-api.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
+      ];
 
   const staticUrls = [
     // Homepage
@@ -262,10 +294,7 @@ app.get('/sitemap.xml', async (req, res) => {
     { loc: 'https://techdataseeders.com/case-studies.html', changefreq: 'weekly',  priority: '0.8', lastmod: now },
     { loc: 'https://techdataseeders.com/blog/',             changefreq: 'daily',   priority: '0.9', lastmod: now },
     // Services
-    { loc: 'https://techdataseeders.com/services/enterprise-web-scraping.html',   changefreq: 'monthly', priority: '0.8', lastmod: now },
-    { loc: 'https://techdataseeders.com/services/mobile-app-scraping.html',       changefreq: 'monthly', priority: '0.8', lastmod: now },
-    { loc: 'https://techdataseeders.com/services/data-analytics-intelligence.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
-    { loc: 'https://techdataseeders.com/services/custom-data-api.html',           changefreq: 'monthly', priority: '0.8', lastmod: now },
+    ...serviceUrls,
     // Industries
     { loc: 'https://techdataseeders.com/industries/ecomm.html',           changefreq: 'monthly', priority: '0.7', lastmod: now },
     { loc: 'https://techdataseeders.com/industries/entertainment-ott.html', changefreq: 'monthly', priority: '0.7', lastmod: now },
@@ -393,6 +422,37 @@ app.get(['/blog/:slug', '/blog/:slug/'], async (req, res, next) => {
   }
 });
 
+// ---------------------------------------------------------------
+// Dynamic service page route: /services/:slug and /services/:slug/
+// Looks up the service in DB by slug.
+// If found → renders services/_template.html EJS view with { service }.
+// If not found → calls next() so existing static HTML files still serve.
+// ---------------------------------------------------------------
+app.get(['/services/:slug', '/services/:slug/'], async (req, res, next) => {
+  const { slug } = req.params;
+  // If slug contains a dot (e.g. enterprise-web-scraping.html), pass to next() so static files serve
+  if (!slug || slug.includes('.')) {
+    return next();
+  }
+
+  // If a dedicated static HTML file exists for this service, render it directly
+  const staticFile = path.join(baseDir, 'services', `${slug}.html`);
+  if (checkFileExists(staticFile)) {
+    return res.render(`services/${slug}.html`);
+  }
+
+  try {
+    const service = await getServiceBySlug(slug);
+    if (!service || !service.published) {
+      return next();
+    }
+    return res.render('services/_template.html', { service });
+  } catch (err) {
+    console.error('Error rendering dynamic service:', err.message);
+    return next();
+  }
+});
+
 // Health check
 app.get('/api/health', async (req, res) => {
   const dbConnected = await checkDBConnection();
@@ -417,6 +477,35 @@ app.get('/api/blog/:slug', blogAPI.getPostBySlug);
 // Blog routes (protected)
 app.post('/api/blog', authMiddleware, blogAPI.createOrUpdatePost);
 app.delete('/api/blog/:slug', authMiddleware, blogAPI.deletePost);
+
+// Service routes (public)
+app.get('/api/services', serviceAPI.getAllServices);
+app.get('/api/services/:slug', serviceAPI.getService);
+
+// Service routes (protected)
+app.post('/api/services', authMiddleware, serviceAPI.createOrUpdateService);
+app.delete('/api/services/:id', authMiddleware, serviceAPI.deleteService);
+
+// Component HTML endpoints for dynamic loading without raw EJS leaks
+app.get('/api/navbar-html', (req, res) => {
+  res.render('components/navbar.html', (err, html) => {
+    if (err) {
+      console.error('Error rendering navbar-html:', err);
+      return res.status(500).send('Error rendering navbar');
+    }
+    res.send(html);
+  });
+});
+
+app.get('/api/footer-html', (req, res) => {
+  res.render('components/footer.html', (err, html) => {
+    if (err) {
+      console.error('Error rendering footer-html:', err);
+      return res.status(500).send('Error rendering footer');
+    }
+    res.send(html);
+  });
+});
 
 // Blog image upload endpoint (protected, limits to 5MB and processes using Sharp)
 app.post('/api/upload-image', authMiddleware, (req, res, next) => {

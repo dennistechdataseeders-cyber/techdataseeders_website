@@ -7,10 +7,16 @@
     <li class="has-drop">
       <a href="/#services">Services <span>▾</span></a>
       <div class="nav-drop">
-        <a class="nav-menu" href="/services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
-        <a class="nav-menu" href="/services/mobile-app-scraping.html">Mobile App Scraping</a>
-        <a class="nav-menu" href="/services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
-        <a class="nav-menu" href="/services/custom-data-api.html">Custom Data API Delivery</a>
+        <% if (typeof services !== 'undefined' && services.length) { %>
+          <% services.forEach(function(s) { %>
+            <a class="nav-menu" href="/services/<%= s.slug %>"><%= s.navLabel || s.title %></a>
+          <% }); %>
+        <% } else { %>
+          <a class="nav-menu" href="/services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+          <a class="nav-menu" href="/services/mobile-app-scraping.html">Mobile App Scraping</a>
+          <a class="nav-menu" href="/services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+          <a class="nav-menu" href="/services/custom-data-api.html">Custom Data API Delivery</a>
+        <% } %>
       </div>
     </li>
 

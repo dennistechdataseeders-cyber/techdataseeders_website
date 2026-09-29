@@ -19,12 +19,17 @@
       });
     }
 
-    // Desktop dropdowns — toggle on click, stop propagation so outside-click
-    // handler doesn't immediately close the one we just opened.
+    // Desktop dropdowns: let hover handle it, allow normal navigation on click.
+    // Mobile dropdowns: toggle on click.
     drops.forEach(function (li) {
       var link = li.querySelector(':scope > a');
       if (link) {
         link.addEventListener('click', function (e) {
+          // Desktop: let hover handle it, allow normal navigation on click
+          if (window.matchMedia('(min-width: 961px)').matches) {
+            return; // don't preventDefault, don't toggle
+          }
+          // Mobile: toggle submenu
           e.preventDefault();
           e.stopPropagation();
           var willOpen = !li.classList.contains('open');
@@ -38,9 +43,11 @@
     // Guard against the toggle button so the same click that opens the menu
     // doesn't bubble up here and immediately close it.
     document.addEventListener('click', function (e) {
-      var inDrop = e.target.closest('.has-drop');
+      if (window.matchMedia('(max-width: 960px)').matches) {
+        var inDrop = e.target.closest('.has-drop');
+        if (!inDrop) closeDrops(null);
+      }
       var inToggle = toggle && e.target.closest('#navToggle');
-      if (!inDrop) closeDrops(null);
       if (!inToggle) {
         nav.classList.remove('nav-open');
         if (toggle) toggle.setAttribute('aria-expanded', 'false');

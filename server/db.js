@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { BlogPost, ContactSubmission } = require('./models');
+const { BlogPost, ContactSubmission, Service } = require('./models');
 require('dotenv').config();
 
 let isConnected = false;
@@ -228,6 +228,133 @@ async function updateSubmissionStatus(id, status) {
   }
 }
 
+// SERVICES
+async function getServices(filter = {}) {
+  await connectDB();
+  try {
+    const services = await Service.find(filter)
+      .sort({ order: 1, createdAt: 1 })
+      .lean();
+    return services;
+  } catch (error) {
+    console.error('Error fetching services:', error);
+    return [];
+  }
+}
+
+async function getServiceBySlug(slug) {
+  await connectDB();
+  try {
+    const service = await Service.findOne({ slug }).lean();
+    return service;
+  } catch (error) {
+    console.error('Error fetching service:', error);
+    return null;
+  }
+}
+
+async function saveService(serviceData) {
+  await connectDB();
+  try {
+    if (!serviceData || typeof serviceData !== 'object') {
+      throw new Error('Invalid service data provided to saveService');
+    }
+
+    console.log('📝 saveService called with:', {
+      hasId: !!serviceData._id,
+      slug: serviceData.slug,
+      title: serviceData.title
+    });
+
+    let existing = null;
+    let existingId = null;
+
+    if (serviceData._id) {
+      try {
+        const ObjectId = mongoose.Types.ObjectId;
+        if (ObjectId.isValid(serviceData._id)) {
+          existing = await Service.findById(serviceData._id);
+          if (existing) {
+            existingId = existing._id;
+          }
+        }
+      } catch (err) {
+        console.log('⚠️ Error finding service by _id:', err.message);
+      }
+    }
+
+    if (!existing && serviceData.slug) {
+      existing = await Service.findOne({ slug: serviceData.slug });
+      if (existing) {
+        existingId = existing._id;
+      }
+    }
+
+    const updateData = { ...serviceData };
+    delete updateData._id;
+    delete updateData.originalSlug;
+    delete updateData.__v;
+
+    if (existing) {
+      console.log('🔄 Updating existing service:', existing.slug, 'with _id:', existingId);
+      const updated = await Service.findOneAndUpdate(
+        { _id: existingId },
+        {
+          $set: {
+            ...updateData,
+            updatedAt: new Date()
+          }
+        },
+        { new: true, runValidators: true }
+      );
+
+      if (!updated) {
+        const fallbackUpdate = await Service.findOneAndUpdate(
+          { slug: serviceData.slug },
+          {
+            $set: {
+              ...updateData,
+              updatedAt: new Date()
+            }
+          },
+          { new: true, runValidators: true }
+        );
+        if (!fallbackUpdate) {
+          throw new Error(`Failed to update service with id ${existingId}`);
+        }
+        return fallbackUpdate;
+      }
+      return updated;
+    } else {
+      console.log('📝 Creating new service:', serviceData.slug);
+      const newService = new Service(updateData);
+      await newService.save();
+      return newService;
+    }
+  } catch (error) {
+    console.error('❌ Error in saveService:', error);
+    throw error;
+  }
+}
+
+async function deleteService(id) {
+  await connectDB();
+  try {
+    const ObjectId = mongoose.Types.ObjectId;
+    let result = null;
+    if (ObjectId.isValid(id)) {
+      result = await Service.findByIdAndDelete(id);
+    }
+    if (!result) {
+      result = await Service.findOneAndDelete({ slug: id });
+    }
+    return result !== null;
+  } catch (error) {
+    console.error('Error deleting service:', error);
+    return false;
+  }
+}
+
 async function checkDBConnection() {
   await connectDB();
   const state = mongoose.connection.readyState;
@@ -243,5 +370,9 @@ module.exports = {
   deleteBlogPost,
   getSubmissions,
   saveSubmission,
-  updateSubmissionStatus
+  updateSubmissionStatus,
+  getServices,
+  getServiceBySlug,
+  saveService,
+  deleteService
 };

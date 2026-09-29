@@ -107,7 +107,6 @@
       --font-b: 'Inter', sans-serif;
 }
 
-
     *,
     *::before,
     *::after {
@@ -116,12 +115,10 @@
       box-sizing: border-box;
 }
 
-
     html {
   scroll-behavior: smooth;
       overflow-x: hidden;
 }
-
 
     body {
   font-family: var(--font-b);
@@ -136,30 +133,25 @@
       flex-direction: column;
 }
 
-
     
     main {
   flex: 1 0 auto;
       background: #fff;
 }
 
-
     img {
   max-width: 100%;
       display: block;
 }
-
 
     a {
   text-decoration: none;
       color: inherit;
 }
 
-
     ul {
   list-style: none;
 }
-
 
     /* CURSOR */
     .cur-dot {
@@ -176,7 +168,6 @@
       transition: width .15s, height .15s;
 }
 
-
     .cur-ring {
   width: 36px;
       height: 36px;
@@ -190,7 +181,6 @@
       transform: translate(-50%, -50%);
       transition: width .1s, height .1s, opacity .1s;
 }
-
 
     /* NAVBAR */
     .nav {
@@ -211,34 +201,28 @@
       transition: all .4s;
 }
 
-
     .nav.dark {
   background: rgba(8, 8, 8, .96);
       border-bottom-color: var(--border-dark);
 }
 
-
     .nav.dark .nl a {
   color: rgba(255, 255, 255, .85);
 }
-
 
     .nav.dark .nl a:hover {
   color: #fff;
 }
 
-
     .nav-logo img {
   height: 44px;
 }
-
 
     .nl {
   display: flex;
       align-items: center;
       gap: 36px;
 }
-
 
     .nl a {
   font-size: 14px;
@@ -247,7 +231,6 @@
       transition: color .25s;
       position: relative;
 }
-
 
     .nl a::after {
   content: '';
@@ -260,16 +243,13 @@
       transition: width .3s;
 }
 
-
     .nl a:hover::after {
   width: 100%;
 }
 
-
     .nl a:hover {
   color: var(--blue);
 }
-
 
     .nav-cta {
   background: var(--blue);
@@ -281,95 +261,35 @@
       transition: all .25s;
 }
 
-
     .nav-cta:hover {
   background: var(--blue-dark);
       box-shadow: 0 6px 20px rgba(37, 99, 255, .4);
       transform: translateY(-1px);
 }
 
-
     .nav-cta::after {
   display: none !important;
 }
 
+    
 
-    .nl .has-drop {
-  position: relative;
-}
+    
 
+    
 
-    .nl .has-drop>a::after {
-  display: none;
-}
+    
 
+    
 
-    .nl .has-drop>a {
-  cursor: pointer;
-}
+    
 
+    
 
-    .nl .has-drop>a span {
-  display: inline-block;
-      transition: transform .25s;
-}
+    
 
+    
 
-    .nl .has-drop.open>a span {
-  transform: rotate(180deg);
-}
-
-
-    .nav-drop {
-  display: none;
-      flex-direction: column;
-      gap: 2px;
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      border: 1px solid rgba(0, 0, 0, .08);
-      border-radius: 16px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, .12);
-      padding: 10px;
-      min-width: 230px;
-      z-index: 200;
-}
-
-
-    .nav-menu {
-  color: #333 !important;
-}
-
-
-    .has-drop.open>.nav-drop {
-  display: flex;
-}
-
-
-    .nav-drop a {
-  display: block;
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 500;
-      color: #333;
-      white-space: nowrap;
-      transition: background .18s, color .18s;
-}
-
-
-    .nav-drop a:hover {
-  background: #f0f4ff;
-      color: var(--blue);
-}
-
-
-    .nav-drop a::after {
-  display: none !important;
-}
-
+    
 
     .nav-toggle {
   display: none;
@@ -385,7 +305,6 @@
       z-index: 1100;
 }
 
-
     .nav-toggle span {
   display: block;
       width: 24px;
@@ -395,11 +314,9 @@
       transition: transform .3s, opacity .3s;
 }
 
-
     .nav.dark .nav-toggle span {
   background: #fff;
 }
-
 
     /* MAIN CONTENT */
     main {
@@ -410,7 +327,6 @@
       margin-right: auto;
       width: 100%;
 }
-
 
     .bd-crumb {
   display: flex;
@@ -476,11 +392,9 @@
   color:#444;font-weight:600;
 }
 
-
     .cs-header {
   margin-bottom: 40px;
 }
-
 
     .cs-header h1 {
   font-family: var(--font-d);
@@ -491,13 +405,11 @@
       letter-spacing: -.01em;
 }
 
-
     .cs-header p {
   font-size: 16px;
       color: #666;
       max-width: 600px;
 }
-
 
     /* CATEGORY TABS */
     .cs-filters {
@@ -506,7 +418,6 @@
       margin-bottom: 40px;
       flex-wrap: wrap;
 }
-
 
     .cs-filter-btn {
   padding: 10px 20px;
@@ -523,19 +434,16 @@
       white-space: nowrap;
 }
 
-
     .cs-filter-btn:hover {
   border-color: var(--blue);
       color: var(--blue);
 }
-
 
     .cs-filter-btn.active {
   background: var(--blue);
       color: #fff;
       border-color: var(--blue);
 }
-
 
     /* GRID LAYOUT */
     .cs-grid {
@@ -544,7 +452,6 @@
       gap: 28px;
       margin-bottom: 60px;
 }
-
 
     .cs-card {
   background: #fff;
@@ -556,13 +463,11 @@
       flex-direction: column;
 }
 
-
     .cs-card:hover {
   border-color: rgba(37, 99, 255, .15);
       box-shadow: 0 24px 64px rgba(0, 0, 0, .12);
       transform: translateY(-4px);
 }
-
 
     .cs-card-image {
   width: 100%;
@@ -570,7 +475,6 @@
       overflow: hidden;
       position: relative;
 }
-
 
     .cs-card-img {
   width: 100%;
@@ -580,11 +484,9 @@
       transition: transform .4s ease;
 }
 
-
     .cs-card:hover .cs-card-img {
   transform: scale(1.05);
 }
-
 
     .cs-card-content {
   padding: 24px;
@@ -594,13 +496,11 @@
       gap: 14px;
 }
 
-
     .cs-card-top {
   display: flex;
       flex-direction: column;
       gap: 8px;
 }
-
 
     .cs-badge {
   display: inline-block;
@@ -616,7 +516,6 @@
       width: fit-content;
 }
 
-
     .cs-client {
   font-size: 11px;
       color: #999;
@@ -624,7 +523,6 @@
       text-transform: uppercase;
       letter-spacing: .12em;
 }
-
 
     .cs-card-title {
   font-family: var(--font-d);
@@ -635,7 +533,6 @@
       margin: 0;
       letter-spacing: -.01em;
 }
-
 
     .cs-card-desc {
   font-size: 13px;
@@ -649,7 +546,6 @@
       overflow: hidden;
 }
 
-
     .cs-card-metrics {
   display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -658,14 +554,12 @@
       border-top: 1px solid rgba(0, 0, 0, .06);
 }
 
-
     .cs-metric {
   display: flex;
       flex-direction: column;
       gap: 4px;
       text-align: center;
 }
-
 
     .cs-metric-value {
   font-family: var(--font-d);
@@ -675,7 +569,6 @@
       line-height: 1.2;
 }
 
-
     .cs-metric-label {
   font-size: 8px;
       color: #999;
@@ -684,7 +577,6 @@
       letter-spacing: .04em;
       line-height: 1.3;
 }
-
 
     .cs-card-link {
   display: inline-flex;
@@ -702,12 +594,10 @@
       transition: all .25s;
 }
 
-
     .cs-card-link:hover {
   background: var(--blue);
       color: #fff;
 }
-
 
     .cs-card-link svg {
   width: 12px;
@@ -716,7 +606,6 @@
       fill: none;
       stroke-width: 2;
 }
-
 
     /* SCROLL TOP */
     .stb {
@@ -740,18 +629,15 @@
       box-shadow: 0 6px 20px rgba(37, 99, 255, .4);
 }
 
-
     .stb.on {
   opacity: 1;
       transform: none;
 }
 
-
     .stb:hover {
   background: var(--blue-dark);
       transform: translateY(-3px);
 }
-
 
     /* ================================================================ */
     /* ===== FULL RESPONSIVE ===== */
@@ -764,7 +650,6 @@
 }
 }
 
-
     /* Mobile Large */
     @media (max-width: 900px) {
   .nav {
@@ -776,7 +661,6 @@
         gap: 20px;
 }
 }
-
 
     /* Mobile */
     @media (max-width: 768px) {
@@ -830,26 +714,6 @@
   display: none !important;
 }
 
-      .nl .has-drop>a span {
-  float: right;
-}
-
-      .nav-drop {
-  position: static;
-        transform: none;
-        box-shadow: none;
-        border: none;
-        background: transparent;
-        padding: 2px 0 10px 14px;
-        min-width: 0;
-}
-
-      .nav-drop a {
-  font-size: 14px;
-        padding: 9px 8px;
-        color: #555;
-}
-
       .nl .nav-cta {
   display: block;
         text-align: center;
@@ -868,65 +732,53 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
-
       main {
   margin-top: 70px;
         padding: 20px 20px 40px;
 }
 
-
       .cs-header h1 {
   font-size: 32px;
 }
 
-
       .cs-header p {
   font-size: 14px;
 }
-
 
       .cs-grid {
   grid-template-columns: 1fr;
         gap: 20px;
 }
 
-
       .cs-card-image {
   height: 200px;
 }
-
 
       .cs-card-content {
   padding: 20px;
 }
 
-
       .cs-card-title {
   font-size: 16px;
 }
-
 
       .cs-card-desc {
   font-size: 13px;
         -webkit-line-clamp: 4;
 }
 
-
       .cs-card-metrics {
   grid-template-columns: repeat(3, 1fr);
         gap: 6px;
 }
 
-
       .cs-metric-value {
   font-size: 14px;
 }
 
-
       .cs-metric-label {
   font-size: 8px;
 }
-
 
       .cs-filters {
   gap: 8px;
@@ -937,11 +789,9 @@
         margin-bottom: 30px;
 }
 
-
       .cs-filters::-webkit-scrollbar {
   height: 0;
 }
-
 
       .cs-filter-btn {
   padding: 8px 16px;
@@ -951,25 +801,21 @@
         border-radius: 6px;
 }
 
-
       .bd-crumb {
   gap: 10px;
         margin-bottom: 24px;
 }
-
 
       .bd-back {
   font-size: 12px;
         padding: 6px 12px;
 }
 
-
       .bd-bread {
   font-size: 12px;
         gap: 6px;
 }
 }
-
 
     /* Small Phone */
     @media (max-width: 480px) {
@@ -978,55 +824,45 @@
         height: 70px;
 }
 
-
       .nav-logo img {
   height: 38px;
 }
-
 
       .nl {
   top: 70px;
         max-height: calc(100vh - 70px);
 }
 
-
       main {
   margin-top: 70px;
         padding: 16px 14px 30px;
 }
 
-
       .cs-header h1 {
   font-size: 26px;
 }
-
 
       .cs-header p {
   font-size: 13px;
 }
 
-
       .cs-card-image {
   height: 170px;
 }
-
 
       .cs-card-content {
   padding: 16px;
         gap: 10px;
 }
 
-
       .cs-card-title {
   font-size: 15px;
 }
-
 
       .cs-card-desc {
   font-size: 12px;
         -webkit-line-clamp: 3;
 }
-
 
       .cs-card-metrics {
   grid-template-columns: repeat(3, 1fr);
@@ -1034,46 +870,38 @@
         padding-top: 12px;
 }
 
-
       .cs-metric-value {
   font-size: 12px;
 }
 
-
       .cs-metric-label {
   font-size: 7px;
 }
-
 
       .cs-card-link {
   font-size: 10px;
         padding: 8px 12px;
 }
 
-
       .cs-filters {
   gap: 6px;
         margin-bottom: 20px;
 }
-
 
       .cs-filter-btn {
   font-size: 10px;
         padding: 6px 12px;
 }
 
-
       .bd-crumb {
   gap: 8px;
         margin-bottom: 18px;
 }
 
-
       .bd-back {
   font-size: 10px;
         padding: 5px 10px;
 }
-
 
       .bd-bread {
   font-size: 10px;
@@ -1081,50 +909,41 @@
 }
 }
 
-
     /* Extra Small */
     @media (max-width: 380px) {
   main {
   padding: 12px 10px 24px;
 }
 
-
       .cs-header h1 {
   font-size: 22px;
 }
 
-
       .cs-card-image {
   height: 140px;
 }
-
 
       .cs-card-content {
   padding: 12px;
         gap: 8px;
 }
 
-
       .cs-card-title {
   font-size: 13px;
 }
-
 
       .cs-card-metrics {
   gap: 3px;
         padding-top: 10px;
 }
 
-
       .cs-metric-value {
   font-size: 11px;
 }
 
-
       .cs-metric-label {
   font-size: 6px;
 }
-
 
       .cs-card-link {
   font-size: 9px;

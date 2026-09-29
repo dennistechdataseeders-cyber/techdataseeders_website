@@ -25,10 +25,16 @@
     <div class="fc">
       <h4>Services</h4>
       <div class="fl">
-        <a href="/services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
-        <a href="/services/mobile-app-scraping.html">Mobile App Scraping</a>
-        <a href="/services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
-        <a href="/services/custom-data-api.html">Custom Data API</a>
+        <% if (typeof services !== 'undefined' && services.length) { %>
+          <% services.forEach(function(s) { %>
+            <a href="/services/<%= s.slug %>"><%= s.navLabel || s.title %></a>
+          <% }); %>
+        <% } else { %>
+          <a href="/services/enterprise-web-scraping.html">Enterprise Web Scraping</a>
+          <a href="/services/mobile-app-scraping.html">Mobile App Scraping</a>
+          <a href="/services/data-analytics-intelligence.html">Data Analytics &amp; Intelligence</a>
+          <a href="/services/custom-data-api.html">Custom Data API</a>
+        <% } %>
       </div>
     </div>
 

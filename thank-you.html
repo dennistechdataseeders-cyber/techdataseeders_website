@@ -54,7 +54,6 @@
   box-sizing: border-box; margin: 0; padding: 0;
 }
 
-
     :root {
   --blue: #2563FF;
       --blue-dark: #1a4fd8;
@@ -63,11 +62,9 @@
       --font-b: 'Inter', sans-serif;
 }
 
-
     html {
   scroll-behavior: smooth;
 }
-
 
     body {
   font-family: var(--font-b);
@@ -80,11 +77,9 @@
       flex-direction: column;
 }
 
-
     a {
   text-decoration: none; color: inherit;
 }
-
 
     /* ---- CUSTOM CURSOR ---- */
     .cur-dot {
@@ -104,7 +99,6 @@
       transform: translate(-50%, -50%);
       transition: width .1s, height .1s, opacity .1s;
 }
-
 
     /* ---- NAV ---- */
     .nav {
@@ -168,49 +162,25 @@
   display: none !important;
 }
 
-    .nl .has-drop {
-  position: relative;
-}
+    
 
-    .nl .has-drop > a::after {
-  display: none;
-}
+    
 
-    .nl .has-drop > a {
-  cursor: pointer;
-}
+    
 
-    .nl .has-drop > a span {
-  display: inline-block; transition: transform .25s;
-}
+    
 
-    .nl .has-drop.open > a span {
-  transform: rotate(180deg);
-}
+    
 
-    .nav-drop {
-  display: none; flex-direction: column; gap: 2px; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,.12); padding: 10px; min-width: 230px; z-index: 200;
-}
+    
 
-    .nav-menu {
-  color: #333 !important;
-}
+    
 
-    .has-drop.open > .nav-drop {
-  display: flex;
-}
+    
 
-    .nav-drop a {
-  display: block; padding: 10px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333; white-space: nowrap; transition: background .18s, color .18s;
-}
+    
 
-    .nav-drop a:hover {
-  background: #f0f4ff; color: var(--blue);
-}
-
-    .nav-drop a::after {
-  display: none !important;
-}
+    
 
     .nav-toggle {
   display: none; flex-direction: column; justify-content: center; gap: 5px; width: 42px; height: 42px; background: none; border: none; cursor: pointer; padding: 0; z-index: 1100;
@@ -232,7 +202,6 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
-
     /* ---- HERO ---- */
     .ty-hero {
   flex: 1;
@@ -245,7 +214,6 @@
       position: relative;
       overflow: hidden;
 }
-
 
     /* Background decorative blobs */
     .ty-hero::before {
@@ -268,7 +236,6 @@
       pointer-events: none;
 }
 
-
     .ty-card {
   position: relative;
       z-index: 2;
@@ -277,7 +244,6 @@
       width: 100%;
       animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
-
 
     @keyframes fadeUp {
   from { opacity: 0; transform: translateY(30px);
@@ -366,7 +332,6 @@
       margin-bottom: 22px;
 }
 
-
     .ty-h1 {
   font-family: var(--font-d);
       font-size: clamp(42px, 7vw, 72px);
@@ -384,7 +349,6 @@
       background-clip: text;
 }
 
-
     .ty-sub {
   font-size: 17px;
       line-height: 1.7;
@@ -394,7 +358,6 @@
       margin-left: auto;
       margin-right: auto;
 }
-
 
     /* ---- COUNTDOWN ---- */
     .ty-countdown-wrap {
@@ -443,7 +406,6 @@
       font-variant-numeric: tabular-nums;
 }
 
-
     /* ---- BUTTONS ---- */
     .ty-actions {
   display: flex;
@@ -452,7 +414,6 @@
       justify-content: center;
       flex-wrap: wrap;
 }
-
 
     .ty-btn-primary {
   display: inline-flex;
@@ -485,7 +446,6 @@
   transform: translateX(3px);
 }
 
-
     .ty-btn-ghost {
   display: inline-flex;
       align-items: center;
@@ -504,7 +464,6 @@
       border-color: rgba(255, 255, 255, 0.28);
       background: rgba(255, 255, 255, 0.06);
 }
-
 
     /* ---- STATS STRIP ---- */
     .ty-stats {
@@ -555,7 +514,6 @@
       font-weight: 500;
 }
 
-
     /* ---- SCROLL TO TOP ---- */
     .stb {
   position: fixed; bottom: 32px; right: 32px; width: 46px; height: 46px; background: var(--blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; cursor: pointer; z-index: 500; opacity: 0; transform: translateY(16px); transition: all .3s; box-shadow: 0 6px 20px rgba(37,99,255,.4);
@@ -568,7 +526,6 @@
     .stb:hover {
   background: var(--blue-dark); transform: translateY(-3px);
 }
-
 
     /* ---- RESPONSIVE ---- */
     @media (max-width: 768px) {
@@ -600,18 +557,6 @@
   display: none !important;
 }
 
-      .nl .has-drop > a span {
-  float: right;
-}
-
-      .nav-drop {
-  position: static; transform: none; box-shadow: none; border: none; background: transparent; padding: 2px 0 10px 14px; min-width: 0;
-}
-
-      .nav-drop a {
-  font-size: 14px; padding: 9px 8px; color: #555;
-}
-
       .nl .nav-cta {
   display: block; text-align: center; margin-top: 16px;
 }
@@ -636,7 +581,6 @@
   display: none;
 }
 }
-
 
     @media (max-width: 480px) {
   .ty-actions {

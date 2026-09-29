@@ -95,7 +95,6 @@
   text-decoration:none;color:inherit;
 }
 
-
     /* CURSOR */
     .cur-dot {
   width:8px;height:8px;background:var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;
@@ -104,7 +103,6 @@
     .cur-ring {
   width:36px;height:36px;border:1.5px solid var(--blue);border-radius:50%;position:fixed;top:0;left:0;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .1s,height .1s,opacity .1s;
 }
-
 
     /* NAVBAR - MATCHING REST OF WEBSITE */
     .nav {
@@ -159,49 +157,25 @@
   display:none !important;
 }
 
-    .nl .has-drop {
-  position:relative;
-}
+    
 
-    .nl .has-drop>a::after {
-  display:none;
-}
+    
 
-    .nl .has-drop>a {
-  cursor:pointer;
-}
+    
 
-    .nl .has-drop>a span {
-  display:inline-block;transition:transform .25s;
-}
+    
 
-    .nl .has-drop.open>a span {
-  transform:rotate(180deg);
-}
+    
 
-    .nav-drop {
-  display:none;flex-direction:column;gap:2px;position:absolute;top: 100%;left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.12);padding:10px;min-width:230px;z-index:200;
-}
+    
 
-    .nav-menu {
-  color:#333 !important;
-}
+    
 
-    .has-drop.open>.nav-drop {
-  display:flex;
-}
+    
 
-    .nav-drop a {
-  display:block;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;color:#333;white-space:nowrap;transition:background .18s,color .18s;
-}
+    
 
-    .nav-drop a:hover {
-  background:#f0f4ff;color:var(--blue);
-}
-
-    .nav-drop a::after {
-  display:none !important;
-}
+    
 
     .nav-toggle {
   display:none;flex-direction:column;justify-content:center;gap:5px;width:42px;height:42px;background:none;border:none;cursor:pointer;padding:0;z-index:1100;
@@ -227,7 +201,6 @@
   transform:translateY(-7px) rotate(-45deg);
 }
 
-
     /* HERO */
     .page-hero {
   background:linear-gradient(150deg,#06091a 0%,#0d1840 60%,#162050 100%);padding:140px 80px 80px;position:relative;overflow:hidden;
@@ -252,7 +225,6 @@
     .page-meta {
   font-size:14px;color:rgba(255,255,255,.45);
 }
-
 
     /* CONTENT */
     .doc-wrap {
@@ -303,7 +275,6 @@
   font-size:14.5px;line-height:1.75;color:#444;
 }
 
-
     /* SCROLL TOP */
     .stb {
   position:fixed;bottom:32px;right:32px;width:46px;height:46px;background:var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;cursor:pointer;z-index:500;opacity:0;transform:translateY(16px);transition:all .3s;box-shadow:0 6px 20px rgba(37,99,255,.4);
@@ -316,7 +287,6 @@
     .stb:hover {
   background:var(--blue-dark);transform:translateY(-3px);
 }
-
 
     /* MOBILE */
     @media(max-width:960px) {
@@ -346,18 +316,6 @@
 
       .nl a::after {
   display:none !important;
-}
-
-      .nl .has-drop>a span {
-  float:right;
-}
-
-      .nav-drop {
-  position:static;transform:none;box-shadow:none;border:none;background:transparent;padding:2px 0 10px 14px;min-width:0;
-}
-
-      .nav-drop a {
-  font-size:14px;padding:9px 8px;color:#555;
 }
 
       .nl .nav-cta {
@@ -566,7 +524,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     // Handle all "Get a Quote" links with data-scroll-to attribute
     document.querySelectorAll('[data-scroll-to="contact"]').forEach(function(link) {
       link.addEventListener('click', function(e) {
-        e.preventDefault();
+          if (window.matchMedia('(min-width: 961px)').matches) return;
+          
         const href = this.getAttribute('href') || '/index.html';
         
         // If already on index page, just scroll
