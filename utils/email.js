@@ -264,4 +264,295 @@ Techdataseeders
   }
 }
 
-module.exports = { sendContactEmail };
+/**
+ * Send OTP verification email for chat widget
+ */
+async function sendOtpEmail({ email, otp }) {
+  const mailOptions = {
+    from: process.env.SMTP_FROM,
+    to: email,
+    subject: `Your Techdataseeders Verification Code: ${otp}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a2e;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+          }
+          .container {
+            max-width: 500px;
+            margin: 24px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            border-top: 4px solid #2563ff;
+          }
+          .header {
+            background: #ffffff;
+            padding: 32px 32px 20px;
+            text-align: center;
+            border-bottom: 1px solid #f1f5f9;
+          }
+          .header-logo {
+            max-width: 260px;
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+          }
+          .content {
+            padding: 32px 28px;
+            text-align: center;
+          }
+          .intro-text {
+            font-size: 15px;
+            color: #4b5563;
+            margin: 0 0 20px;
+          }
+          .otp-code {
+            display: inline-block;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            color: #2563ff;
+            background: #f0f4ff;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: 1px dashed #2563ff;
+            margin: 10px 0 20px;
+          }
+          .note {
+            font-size: 13px;
+            color: #888;
+            margin: 0;
+          }
+          .footer {
+            text-align: center;
+            padding: 18px 24px;
+            color: #6b7280;
+            font-size: 12px;
+            border-top: 1px solid #e5e7eb;
+            background: #fafbfc;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header" style="background: #ffffff; padding: 32px 32px 20px; text-align: center; border-bottom: 1px solid #f1f5f9;">
+            <img src="https://res.cloudinary.com/dhcwcyqke/image/upload/v1779973871/image_1_1_c60r0l.png" alt="Techdataseeders" width="260" class="header-logo" style="max-width: 260px; width: 100%; height: auto; display: block; margin: 0 auto; border: 0;">
+          </div>
+          <div class="content">
+            <p class="intro-text">Here is your one-time verification code to start chatting with the Techdataseeders Assistant:</p>
+            <div class="otp-code">${otp}</div>
+            <p class="note">This code will expire in 5 minutes. If you did not request this, please ignore this email.</p>
+          </div>
+          <div class="footer">
+            <p>&copy; 2026 Techdataseeders. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `Your Techdataseeders chat verification code is: ${otp}\n\nThis code will expire in 5 minutes.`
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`[chatbot] OTP email sent to ${email}: ${info.messageId}`);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error('[chatbot] OTP email send error:', error.message);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Format timestamp for chat transcript (e.g. "Oct 5, 2026 · 11:52 AM")
+ */
+function formatTranscriptTimestamp(date) {
+  const d = date ? new Date(date) : new Date();
+  const dateStr = d.toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+  const timeStr = d.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  });
+  return `${dateStr} · ${timeStr}`;
+}
+
+/**
+ * Escape HTML characters to prevent rendering issues in email clients
+ */
+function escapeTranscriptHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+/**
+ * Send full chat transcript email after session inactivity
+ */
+async function sendChatTranscriptEmail({ to, identifier, messages }) {
+  const safeIdentifier = escapeTranscriptHtml(identifier);
+  const messageList = Array.isArray(messages) ? messages : [];
+
+  const htmlMessages = messageList.map(msg => {
+    const isUser = msg.role === 'user';
+    const sender = isUser ? 'User' : 'Jenny (Techdataseeders)';
+    const timestamp = formatTranscriptTimestamp(msg.createdAt);
+    const content = escapeTranscriptHtml(msg.content).replace(/\n/g, '<br>');
+
+    if (isUser) {
+      return `
+        <div style="margin-bottom: 18px; text-align: right;">
+          <div style="display: inline-block; max-width: 80%; text-align: left; background: #2563ff; color: #ffffff; padding: 12px 16px; border-radius: 12px 12px 2px 12px; font-size: 14px; line-height: 1.5; word-break: break-word;">
+            ${content}
+          </div>
+          <div style="font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #94a3b8; margin-top: 4px; padding-right: 4px;">
+            ${sender} &bull; ${timestamp}
+          </div>
+        </div>
+      `;
+    } else {
+      return `
+        <div style="margin-bottom: 18px; text-align: left;">
+          <div style="display: inline-block; max-width: 80%; text-align: left; background: #f8f9fa; color: #1a1a2e; padding: 12px 16px; border-radius: 12px 12px 12px 2px; font-size: 14px; line-height: 1.5; word-break: break-word; border-left: 3px solid #2563ff; border-top: 1px solid #e5e7eb; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb;">
+            ${content}
+          </div>
+          <div style="font-family: 'Courier New', Courier, monospace; font-size: 11px; color: #94a3b8; margin-top: 4px; padding-left: 4px;">
+            ${sender} &bull; ${timestamp}
+          </div>
+        </div>
+      `;
+    }
+  }).join('');
+
+  const textMessages = messageList.map(msg => {
+    const sender = msg.role === 'user' ? `User (${identifier})` : 'Jenny (Assistant)';
+    const timestamp = formatTranscriptTimestamp(msg.createdAt);
+    return `[${timestamp}] ${sender}:\n${msg.content}`;
+  }).join('\n\n----------------------------------------\n\n');
+
+  const mailOptions = {
+    from: process.env.SMTP_FROM,
+    to: to,
+    subject: `Chat transcript: ${identifier} — Techdataseeders`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #1a1a2e;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+          }
+          .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+          }
+          .header {
+            background: linear-gradient(135deg, #1a237e 0%, #2563ff 100%);
+            color: #ffffff;
+            padding: 28px 32px;
+          }
+          .header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+          }
+          .header p {
+            margin: 6px 0 0;
+            opacity: 0.8;
+            font-size: 14px;
+          }
+          .content {
+            padding: 32px;
+          }
+          .footer {
+            text-align: center;
+            padding: 20px 32px 28px;
+            color: #6b7280;
+            font-size: 13px;
+            border-top: 1px solid #e5e7eb;
+            background: #fafbfc;
+          }
+          .footer p {
+            margin: 4px 0;
+          }
+          .footer .brand {
+            color: #1a237e;
+            font-weight: 600;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h2>Chat Transcript</h2>
+            <p>User: ${safeIdentifier} &bull; ${messageList.length} message${messageList.length === 1 ? '' : 's'}</p>
+          </div>
+          <div class="content">
+            ${htmlMessages || '<p style="color: #6b7280; text-align: center;">No messages in this session.</p>'}
+          </div>
+          <div class="footer">
+            <p>This transcript was automatically generated after 2 hours of chat inactivity.</p>
+            <p>&mdash; <span class="brand">Techdataseeders</span> &mdash;</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `,
+    text: `CHAT TRANSCRIPT: ${identifier}
+========================================
+Total Messages: ${messageList.length}
+========================================
+
+${textMessages || 'No messages in this session.'}
+
+--
+This transcript was automatically generated after 2 hours of chat inactivity.
+Techdataseeders
+`
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`[chatbot] Chat transcript email sent to ${to} for ${identifier}: ${info.messageId}`);
+    return { success: true, messageId: info.messageId };
+  } catch (error) {
+    console.error(`[chatbot] Chat transcript email send error for ${identifier}:`, error.message);
+    return { success: false, error: error.message };
+  }
+}
+
+module.exports = {
+  sendContactEmail,
+  sendOtpEmail,
+  sendChatTranscriptEmail,
+  transporter
+};

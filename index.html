@@ -3618,6 +3618,235 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 })();
 </script>
 
+
+  <!-- ==================== EVENT PROMOTION MODAL ==================== -->
+  <div class="event-modal-overlay" id="eventModalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="event-modal-card" id="eventModalCard">
+      <button type="button" class="event-modal-close" id="eventModalClose" aria-label="Close event promotion">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <a href="#" class="event-modal-link" id="eventModalLink">
+        <img src="" alt="Event Promotion" class="event-modal-image" id="eventModalImage">
+      </a>
+    </div>
+  </div>
+
+  <!-- Event Promotion Modal Logic -->
+  <script>
+  (function () {
+    'use strict';
+
+    var STORAGE_KEY = 'dismissed_events';
+    var pendingQueue = [];
+    var currentEvent = null;
+
+    // DOM references — assigned lazily inside initEventModals()
+    var overlay  = null;
+    var closeBtn = null;
+    var linkEl   = null;
+    var imgEl    = null;
+
+    // ── 1. LocalStorage Dismissal Helpers (with 24-hour expiry) ───────────────
+    // Fix 2: Store a timestamp instead of `true` so dismissals expire after 24 h.
+    // Prevents an event from being permanently suppressed after a single dismiss.
+    function getDismissedEvents() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return {};
+        var parsed = JSON.parse(raw);
+        var now    = Date.now();
+        var cutoff = now - (24 * 60 * 60 * 1000); // 24 hours ago
+        var cleaned = {};
+        Object.keys(parsed).forEach(function (id) {
+          // Honor the dismissal only if it was stored within the last 24 h.
+          if (typeof parsed[id] === 'number' && parsed[id] > cutoff) {
+            cleaned[id] = parsed[id];
+          }
+          // Legacy boolean dismissals (from old code) are intentionally discarded
+          // so users aren't permanently locked out of events they dismissed before.
+        });
+        return cleaned;
+      } catch (e) {
+        return {};
+      }
+    }
+
+    function markEventDismissed(id) {
+      if (!id) return;
+      try {
+        var dismissed = getDismissedEvents();
+        dismissed[id] = Date.now(); // Timestamp, not boolean
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(dismissed));
+      } catch (e) {
+        // Silently ignore private browsing / quota issues
+      }
+    }
+
+    // ── 2. Fetch Active Events from Backend API ──────────────────────────────
+    // Fix 1: `cache: 'no-store'` ensures the browser always issues a real
+    // network request, bypassing any locally cached stale /api/events response.
+    async function fetchActiveEvents() {
+      try {
+        var res = await fetch('/api/events', { cache: 'no-store' });
+        if (!res.ok) return [];
+        var json = await res.json();
+        return (json && json.success && Array.isArray(json.data)) ? json.data : [];
+      } catch (err) {
+        console.error('[EventModal] Error fetching event promotions:', err);
+        return [];
+      }
+    }
+
+    function filterPendingModals(eventsList) {
+      var dismissed = getDismissedEvents();
+      var now = Date.now();
+
+      return eventsList.filter(function (evt) {
+        var id = evt._id || evt.id;
+        if (!id || dismissed[id]) return false;
+        if (evt.startDate && evt.endDate) {
+          var start = new Date(evt.startDate).getTime();
+          var end   = new Date(evt.endDate).getTime();
+          if (now < start || now > end) return false;
+        }
+        return true;
+      });
+    }
+
+    // ── 3. Modal Display & State Logic ────────────────────────────────────────
+    // Fix 3: Guard against missing DOM refs with a 200 ms retry loop instead of
+    // a silent return — prevents the queue from being swallowed if refs aren't
+    // ready at the moment showNextModal() is first called.
+    function showNextModal() {
+      if (!overlay || !closeBtn || !linkEl || !imgEl) {
+        setTimeout(showNextModal, 200);
+        return;
+      }
+      if (!pendingQueue.length) {
+        currentEvent = null;
+        return;
+      }
+
+      currentEvent = pendingQueue.shift();
+
+      // Reset any stale inline sizing from a previous event
+      imgEl.removeAttribute('width');
+      imgEl.removeAttribute('height');
+      imgEl.style.width = imgEl.style.height = '';
+      imgEl.style.maxWidth = imgEl.style.maxHeight = '';
+
+      imgEl.src = currentEvent.imageUrl;
+      imgEl.alt = currentEvent.title || 'Event Promotion';
+      linkEl.href = currentEvent.linkUrl || '#';
+
+      if (currentEvent.linkUrl && /^https?:\/\//i.test(currentEvent.linkUrl)) {
+        linkEl.target = '_blank';
+        linkEl.rel = 'noopener noreferrer';
+      } else {
+        linkEl.removeAttribute('target');
+        linkEl.removeAttribute('rel');
+      }
+
+      overlay.classList.add('active');
+      overlay.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('event-modal-open');
+      document.body.classList.add('event-modal-open');
+    }
+
+    function closeCurrentModal() {
+      if (!overlay || !overlay.classList.contains('active')) return;
+
+      var id = currentEvent ? (currentEvent._id || currentEvent.id) : null;
+      if (id) {
+        markEventDismissed(id);
+      }
+
+      overlay.classList.remove('active');
+      overlay.setAttribute('aria-hidden', 'true');
+      document.documentElement.classList.remove('event-modal-open');
+      document.body.classList.remove('event-modal-open');
+
+      // Sequential display: show the next queued event after a brief pause
+      if (pendingQueue.length > 0) {
+        setTimeout(showNextModal, 500);
+      } else {
+        currentEvent = null;
+      }
+    }
+
+    // ── 4. Initialization & Event Listeners ───────────────────────────────────
+    // Fix 4: Console diagnostics so the data flow is visible in DevTools during
+    // testing. Remove or comment out after confirming everything works correctly.
+    async function initEventModals() {
+      overlay  = document.getElementById('eventModalOverlay');
+      closeBtn = document.getElementById('eventModalClose');
+      linkEl   = document.getElementById('eventModalLink');
+      imgEl    = document.getElementById('eventModalImage');
+
+      if (!overlay || !closeBtn || !linkEl || !imgEl) {
+        console.warn('[EventModal] DOM refs missing — modal cannot initialise', {
+          overlay: !!overlay, closeBtn: !!closeBtn, linkEl: !!linkEl, imgEl: !!imgEl
+        });
+        return;
+      }
+
+      // Close on X button click
+      closeBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeCurrentModal();
+      });
+
+      // Close on dark overlay background click
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
+          closeCurrentModal();
+        }
+      });
+
+      // Close on Escape key
+      window.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+          closeCurrentModal();
+        }
+      });
+
+      // Auto-close when the user navigates to an on-page anchor via the image link
+      linkEl.addEventListener('click', function () {
+        var href = currentEvent ? currentEvent.linkUrl : '';
+        if (href && (href.startsWith('#') || href.startsWith('/#'))) {
+          closeCurrentModal();
+        }
+      });
+
+      // Fetch fresh data, log the intermediate state, then show the first event
+      var fetched = await fetchActiveEvents();
+      console.log('[EventModal] API returned:', fetched.length, 'active event(s)', fetched.map(function (e) { return e.title || e._id; }));
+      console.log('[EventModal] Currently dismissed (24-h window):', Object.keys(getDismissedEvents()));
+
+      pendingQueue = filterPendingModals(fetched);
+      console.log('[EventModal] Pending queue after filter:', pendingQueue.map(function (e) { return e.title || e._id; }));
+
+      if (pendingQueue.length > 0) {
+        showNextModal();
+      }
+    }
+
+    // ── 5. Trigger 2 seconds AFTER window.load ────────────────────────────────
+    // The 2-second delay is intentional to avoid layout jank while the page settles.
+    if (document.readyState === 'complete') {
+      setTimeout(initEventModals, 2000);
+    } else {
+      window.addEventListener('load', function () {
+        setTimeout(initEventModals, 2000);
+      });
+    }
+  })();
+  </script>
+
 </body>
 
 </html>

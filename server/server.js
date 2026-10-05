@@ -10,7 +10,9 @@ const { connectDB, checkDBConnection, getBlogPosts, getBlogPostBySlug, getServic
 const { login, authMiddleware } = require('./auth');
 const blogAPI = require('./blog');
 const serviceAPI = require('./service');
+const eventAPI = require('./event');
 const contactAPI = require('./contact');
+const chatbotAPI = require('./chatbot');
 const { ICONS, GRADIENTS, renderBody, getIcon, getGradient, getPostUrl } = require('./blogRenderer');
 const {
   formatDate,
@@ -127,6 +129,7 @@ app.locals.renderBody = renderBody;
 
 // Connect to MongoDB immediately
 connectDB();
+chatbotAPI.startChatTranscriptScheduler();
 
 // Middleware
 app.use(compression({
@@ -486,6 +489,14 @@ app.get('/api/services/:slug', serviceAPI.getService);
 app.post('/api/services', authMiddleware, serviceAPI.createOrUpdateService);
 app.delete('/api/services/:id', authMiddleware, serviceAPI.deleteService);
 
+// Event routes (public)
+app.get('/api/events', eventAPI.getActiveEvents);
+
+// Event routes (protected)
+app.get('/api/events/all',    authMiddleware, eventAPI.getAllEvents);
+app.post('/api/events',       authMiddleware, eventAPI.createOrUpdateEvent);
+app.delete('/api/events/:id', authMiddleware, eventAPI.deleteEvent);
+
 // Component HTML endpoints for dynamic loading without raw EJS leaks
 app.get('/api/navbar-html', (req, res) => {
   res.render('components/navbar.html', (err, html) => {
@@ -560,6 +571,10 @@ app.post('/api/upload-image', authMiddleware, (req, res, next) => {
 
 // Contact routes (public)
 app.post('/api/contact', contactAPI.submitContact);
+app.post('/api/chat/request-otp', chatbotAPI.requestOtp);
+app.post('/api/chat/verify-otp',  chatbotAPI.verifyOtp);
+app.post('/api/chat/message',     chatbotAPI.sendChatMessage);
+app.get ('/api/chat/history',     chatbotAPI.getChatHistory);
 
 // Contact routes (protected)
 app.get('/api/submissions', authMiddleware, contactAPI.getAllSubmissions);
@@ -588,7 +603,42 @@ app.get('/', async (req, res) => {
     res.render('index.html', { posts: [], itemListSchema: null });
   }
 });
+// Manual transcript trigger (admin only)
+app.post('/api/admin/send-transcripts', authMiddleware, async (req, res) => {
+  try {
+    const { ChatSession, ChatMessage } = require('./chatbot-models');
+    const { sendChatTranscriptEmail } = require('../utils/email');
+    const RECIPIENT = 'dennislalwani09@gmail.com';
 
+    const sessions = await ChatSession.find({ transcriptSent: false }).lean();
+    let sent = 0, failed = 0;
+
+    for (const s of sessions) {
+      const messages = await ChatMessage.find({ identifier: s.identifier })
+        .sort({ createdAt: 1 })
+        .lean();
+      if (!messages.length) {
+        await ChatSession.updateOne({ _id: s._id }, { $set: { transcriptSent: true } });
+        continue;
+      }
+      const result = await sendChatTranscriptEmail({
+        to: RECIPIENT,
+        identifier: s.identifier,
+        messages
+      });
+      if (result.success) {
+        await ChatSession.updateOne({ _id: s._id }, { $set: { transcriptSent: true } });
+        sent++;
+      } else {
+        failed++;
+      }
+    }
+
+    res.json({ success: true, sent, failed, total: sessions.length });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 // Serve static assets (CSS, images, JS, etc.) with long-term immutable caching
 const staticHandler = express.static(baseDir, {
   index: false, // prevent serving index.html automatically

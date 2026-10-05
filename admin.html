@@ -342,6 +342,122 @@
 }
 }
 
+/* ====== EVENT & PICKER MOBILE-FRIENDLY STYLES ====== */
+.admin-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.admin-pick-btn {
+  padding: 30px 20px;
+  font-size: 16px;
+  border-radius: 16px;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  min-height: 120px;
+}
+
+.admin-pick-ico {
+  width: 32px;
+  height: 32px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (max-width: 640px) {
+  .admin-picker-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .admin-pick-btn {
+    flex-direction: row;
+    padding: 20px 18px;
+    min-height: 64px;
+    font-size: 15px;
+    gap: 12px;
+  }
+  .admin-pick-ico {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 380px) {
+  .admin-pick-btn {
+    padding: 16px 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  #eventOverlay .modal-body {
+    padding: 18px 16px;
+  }
+  #eventOverlay .modal-head,
+  #eventOverlay .modal-foot {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  #eventOverlay .modal-foot {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  #eventOverlay .modal-foot .btn,
+  #eventOverlay .modal-foot .btn-primary {
+    flex: 1 1 40%;
+    min-width: 120px;
+  }
+  #eventOverlay .grid2 {
+    grid-template-columns: 1fr;
+  }
+  #eventOverlay input,
+  #eventOverlay select,
+  #eventOverlay textarea {
+    font-size: 16px; /* prevents iOS zoom */
+  }
+}
+
+@media (max-width: 640px) {
+  .pitem {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px;
+  }
+  .pitem .pthumb {
+    width: 52px;
+    height: 52px;
+  }
+  .pitem .pmeta {
+    flex: 1 1 calc(100% - 68px);
+  }
+  .pitem .pacts {
+    flex: 1 1 100%;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .pitem .pacts .btn {
+    padding: 8px 14px;
+    font-size: 12.5px;
+    min-height: 40px;
+  }
+}
+@media (max-width: 380px) {
+  .pitem .pacts .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+    min-height: 36px;
+  }
+}
+
   </style>
 </head>
 <body>
@@ -375,6 +491,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="btn" id="refreshBtn"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Refresh</button>
       <button class="btn btn-primary" id="newBtn" style="display:none;"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Post</button>
       <button class="btn btn-primary" id="newSvcBtn" style="display:none;"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Service</button>
+      <button class="btn btn-primary" id="newEventBtn" style="display:none;"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>New Event</button>
       <button class="btn btn-danger" id="logoutBtn">Logout</button>
     </div>
   </div>
@@ -382,14 +499,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- SECTION PICKER -->
   <div id="sectionPicker" class="wrap">
     <div class="note"><strong>Welcome!</strong> Choose a section to manage.</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:600px;margin:0 auto;">
-      <button class="btn btn-primary" id="pickBlogsBtn" style="padding:30px 20px;font-size:16px;border-radius:16px;flex-direction:column;gap:10px;justify-content:center;align-items:center;height:auto;">
-        <svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><path d="M4 6h16M4 12h16M4 18h12"/></svg>
-        Blog Posts
+    <div class="admin-picker-grid">
+      <button class="btn btn-primary admin-pick-btn" id="pickBlogsBtn">
+        <svg viewBox="0 0 24 24" class="admin-pick-ico"><path d="M4 6h16M4 12h16M4 18h12"/></svg>
+        <span>Blog Posts</span>
       </button>
-      <button class="btn btn-primary" id="pickSvcsBtn" style="padding:30px 20px;font-size:16px;border-radius:16px;flex-direction:column;gap:10px;justify-content:center;align-items:center;height:auto;">
-        <svg viewBox="0 0 24 24" style="width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-        Services
+      <button class="btn btn-primary admin-pick-btn" id="pickSvcsBtn">
+        <svg viewBox="0 0 24 24" class="admin-pick-ico"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+        <span>Services</span>
+      </button>
+      <button class="btn btn-primary admin-pick-btn" id="pickEventsBtn">
+        <svg viewBox="0 0 24 24" class="admin-pick-ico"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>Events</span>
       </button>
     </div>
   </div>
@@ -409,6 +530,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="note"><strong>Services</strong> are saved to the database and rendered dynamically. After seeding, the navbar and footer update automatically.</div>
       <div class="count" id="svc-count"></div>
       <div class="plist" id="svc-plist"></div>
+    </div>
+  </div>
+
+  <!-- EVENTS VIEW -->
+  <div id="view-events" style="display:none;">
+    <div class="wrap">
+      <div class="note">
+        <strong>Event Promotions</strong> appear as modals on the homepage. The date range controls when they show automatically.
+      </div>
+      <div class="count" id="event-count"></div>
+      <div class="plist" id="event-plist"></div>
     </div>
   </div>
 </div>
@@ -592,6 +724,76 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <span class="err" id="svcFormErr"></span>
       <button class="btn" id="svcCancelBtn">Cancel</button>
       <button class="btn btn-primary" id="svcSaveBtn">Save Service</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="eventOverlay">
+  <div class="modal">
+    <div class="modal-head">
+      <h2 id="eventModalTitle">New Event</h2>
+      <button class="x" id="eventCloseBtn" aria-label="Close">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ef-id">
+
+      <div class="field">
+        <label>Event Title *</label>
+        <input type="text" id="ef-title" placeholder="e.g. Groceryshop 2026 — Meet Techdataseeders">
+      </div>
+
+      <div class="field">
+        <label>Image URL *</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="ef-image" placeholder="https://... or /images/..." style="flex:1;min-width:180px;margin-bottom:0;">
+          <button type="button" class="btn" id="btn-event-upload-image">
+            <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            Upload
+          </button>
+        </div>
+        <input type="file" id="event-image-file-picker" style="display:none;" accept="image/*">
+      </div>
+
+      <div class="field">
+        <label>Link URL</label>
+        <input type="text" id="ef-link" placeholder="/#contact or https://...">
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Start Date &amp; Time *</label>
+          <input type="datetime-local" id="ef-start">
+        </div>
+        <div class="field">
+          <label>End Date &amp; Time *</label>
+          <input type="datetime-local" id="ef-end">
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label>Order (lower = shown first)</label>
+          <input type="number" id="ef-order" placeholder="0" min="0" value="0">
+        </div>
+        <div class="field">
+          <label>Status</label>
+          <select id="ef-active">
+            <option value="true">Active — show on site during range</option>
+            <option value="false">Inactive — hide from site</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <span class="err" id="eventFormErr"></span>
+      <button class="btn" id="eventCancelBtn">Cancel</button>
+      <button class="btn btn-primary" id="eventSaveBtn">Save Event</button>
     </div>
   </div>
 </div>
@@ -1087,35 +1289,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   /* ====== REFRESH ====== */
   document.getElementById('refreshBtn').addEventListener('click', function(){
-    if (typeof currentView !== 'undefined' && currentView === 'services') {
-      loadServices().then(function() {
-        toast('🔄 Services refreshed');
-      });
-    } else {
-      loadPosts().then(function() {
-        toast('🔄 Posts refreshed');
-      });
+    if (currentView === 'services') {
+      loadServices().then(function() { toast('🔄 Services refreshed'); });
+    } else if (currentView === 'events') {
+      loadEvents().then(function() { toast('🔄 Events refreshed'); });
+    } else if (currentView === 'blogs') {
+      loadPosts().then(function() { toast('🔄 Blog posts refreshed'); });
     }
   });
 
   /* ====== SECTION PICKER ====== */
   var currentView = null;
   var sectionPicker = document.getElementById('sectionPicker');
-  var viewBlogs = document.getElementById('view-blogs');
-  var viewServices = document.getElementById('view-services');
-  var backBtn = document.getElementById('backToSectionsBtn');
-  var newBlogBtn = document.getElementById('newBtn');
-  var newSvcBtn = document.getElementById('newSvcBtn');
-  var topBadge = document.getElementById('topBadge');
+  var viewBlogs     = document.getElementById('view-blogs');
+  var viewServices  = document.getElementById('view-services');
+  var viewEvents    = document.getElementById('view-events');
+  var backBtn       = document.getElementById('backToSectionsBtn');
+  var newBlogBtn    = document.getElementById('newBtn');
+  var newSvcBtn     = document.getElementById('newSvcBtn');
+  var newEventBtn   = document.getElementById('newEventBtn');
+  var topBadge      = document.getElementById('topBadge');
 
   function showSectionPicker() {
     currentView = null;
     sectionPicker.style.display = '';
     viewBlogs.style.display = 'none';
     viewServices.style.display = 'none';
+    viewEvents.style.display = 'none';
     backBtn.style.display = 'none';
     newBlogBtn.style.display = 'none';
     newSvcBtn.style.display = 'none';
+    newEventBtn.style.display = 'none';
     if (topBadge) topBadge.textContent = 'Admin Panel';
   }
 
@@ -1124,9 +1328,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     sectionPicker.style.display = 'none';
     viewBlogs.style.display = '';
     viewServices.style.display = 'none';
+    viewEvents.style.display = 'none';
     backBtn.style.display = '';
     newBlogBtn.style.display = '';
     newSvcBtn.style.display = 'none';
+    newEventBtn.style.display = 'none';
     if (topBadge) topBadge.textContent = 'Blog Posts';
     loadPosts();
   }
@@ -1136,15 +1342,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     sectionPicker.style.display = 'none';
     viewBlogs.style.display = 'none';
     viewServices.style.display = '';
+    viewEvents.style.display = 'none';
     backBtn.style.display = '';
     newBlogBtn.style.display = 'none';
     newSvcBtn.style.display = '';
+    newEventBtn.style.display = 'none';
     if (topBadge) topBadge.textContent = 'Services';
     loadServices();
   }
 
+  function showEventsView() {
+    currentView = 'events';
+    sectionPicker.style.display = 'none';
+    viewBlogs.style.display = 'none';
+    viewServices.style.display = 'none';
+    viewEvents.style.display = '';
+    backBtn.style.display = '';
+    newBlogBtn.style.display = 'none';
+    newSvcBtn.style.display = 'none';
+    newEventBtn.style.display = '';
+    if (topBadge) topBadge.textContent = 'Events';
+    loadEvents();
+  }
+
   document.getElementById('pickBlogsBtn').addEventListener('click', showBlogView);
   document.getElementById('pickSvcsBtn').addEventListener('click', showServicesView);
+  document.getElementById('pickEventsBtn').addEventListener('click', showEventsView);
   backBtn.addEventListener('click', showSectionPicker);
 
   /* ====== SERVICES MANAGEMENT ====== */
@@ -1362,6 +1585,208 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       svcUploadBtn.disabled = false;
       svcUploadBtn.innerHTML = origHTML;
       svcFilePicker.value = '';
+    }
+  });
+
+  /* ====== EVENTS MANAGEMENT ====== */
+  var eventPlist = document.getElementById('event-plist');
+  var events = [];
+
+  function pad2(n) { return n < 10 ? '0' + n : n; }
+
+  function formatDateForInput(dateVal) {
+    if (!dateVal) return '';
+    var d = new Date(dateVal);
+    if (isNaN(d.getTime())) return '';
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()) +
+           'T' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+  }
+
+  function formatDateForDisplay(dateVal) {
+    if (!dateVal) return '';
+    var d = new Date(dateVal);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function isEventCurrentlyActive(evt) {
+    if (!evt.active) return false;
+    var now = Date.now();
+    return now >= new Date(evt.startDate).getTime() && now <= new Date(evt.endDate).getTime();
+  }
+
+  function statusBadgeFor(evt) {
+    if (!evt.active) return '<span style="color:#888;font-size:10px;font-weight:700;">[INACTIVE]</span>';
+    var now = Date.now();
+    var s = new Date(evt.startDate).getTime();
+    var e = new Date(evt.endDate).getTime();
+    if (now >= s && now <= e) return '<span style="color:#059669;font-size:10px;font-weight:700;">[LIVE]</span>';
+    if (now < s) return '<span style="color:#f59e0b;font-size:10px;font-weight:700;">[UPCOMING]</span>';
+    return '<span style="color:#dc2626;font-size:10px;font-weight:700;">[EXPIRED]</span>';
+  }
+
+  async function fetchEvents() {
+    try {
+      var data = await apiRequest('/events/all');
+      return data.data || [];
+    } catch (error) {
+      console.error('Error fetching events:', error);
+      toast('❌ Failed to load events');
+      return [];
+    }
+  }
+
+  async function loadEvents() {
+    events = await fetchEvents();
+    renderEvents();
+  }
+
+  function renderEvents() {
+    var countEl = document.getElementById('event-count');
+    countEl.textContent = events.length + (events.length === 1 ? ' event' : ' events');
+    if (!events.length) {
+      eventPlist.innerHTML = '<div class="empty">No events yet. Click "New Event" to create one.</div>';
+      return;
+    }
+    eventPlist.innerHTML = events.map(function(evt, i) {
+      var esc = function(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); };
+      return '<div class="pitem">' +
+        '<div class="pthumb" style="background:linear-gradient(135deg,#0d1840,#2563FF);overflow:hidden;">' +
+          (evt.imageUrl ? '<img src="' + esc(evt.imageUrl) + '" alt="" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'">' : '') +
+        '</div>' +
+        '<div class="pmeta">' +
+          '<div class="pcat">' + statusBadgeFor(evt) + '</div>' +
+          '<div class="ptitle">' + esc(evt.title) + '</div>' +
+          '<div class="psub">' + formatDateForDisplay(evt.startDate) + ' → ' + formatDateForDisplay(evt.endDate) + '</div>' +
+        '</div>' +
+        '<div class="pacts">' +
+          '<button class="btn" data-event-edit="' + i + '">Edit</button>' +
+          '<button class="btn btn-danger" data-event-del="' + i + '">Delete</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  eventPlist.addEventListener('click', function(e) {
+    var ed = e.target.getAttribute('data-event-edit');
+    var dl = e.target.getAttribute('data-event-del');
+    if (ed !== null && ed !== undefined) openEventEditor(parseInt(ed));
+    if (dl !== null && dl !== undefined) {
+      var evt = events[parseInt(dl)];
+      if (confirm('Delete "' + evt.title + '"? This cannot be undone.')) {
+        apiRequest('/events/' + evt._id, { method: 'DELETE' })
+          .then(function() {
+            events.splice(parseInt(dl), 1);
+            renderEvents();
+            toast('✅ Event deleted');
+          })
+          .catch(function(err) { toast('❌ ' + err.message); });
+      }
+    }
+  });
+
+  var eventOverlay = document.getElementById('eventOverlay');
+
+  function openEventEditor(index) {
+    var evt = (index != null) ? events[index] : {};
+    document.getElementById('eventModalTitle').textContent = (index != null) ? 'Edit Event' : 'New Event';
+    document.getElementById('ef-id').value     = evt._id || '';
+    document.getElementById('ef-title').value  = evt.title || '';
+    document.getElementById('ef-image').value  = evt.imageUrl || '';
+    document.getElementById('ef-link').value   = evt.linkUrl || '/#contact';
+    document.getElementById('ef-start').value  = formatDateForInput(evt.startDate) || formatDateForInput(new Date());
+    document.getElementById('ef-end').value    = formatDateForInput(evt.endDate)   || formatDateForInput(new Date(Date.now() + 30 * 24 * 60 * 60 * 1000));
+    document.getElementById('ef-order').value  = evt.order != null ? evt.order : 0;
+    document.getElementById('ef-active').value = (evt.active !== false) ? 'true' : 'false';
+    document.getElementById('eventFormErr').textContent = '';
+    eventOverlay.classList.add('show');
+  }
+
+  function closeEventEditor() { eventOverlay.classList.remove('show'); }
+
+  document.getElementById('eventSaveBtn').addEventListener('click', async function() {
+    var title     = document.getElementById('ef-title').value.trim();
+    var imageUrl  = document.getElementById('ef-image').value.trim();
+    var startDate = document.getElementById('ef-start').value;
+    var endDate   = document.getElementById('ef-end').value;
+    var err = document.getElementById('eventFormErr');
+
+    if (!title)     { err.textContent = 'Title is required.'; return; }
+    if (!imageUrl)  { err.textContent = 'Image URL is required.'; return; }
+    if (!startDate) { err.textContent = 'Start date is required.'; return; }
+    if (!endDate)   { err.textContent = 'End date is required.'; return; }
+    if (new Date(endDate) <= new Date(startDate)) { err.textContent = 'End must be after start.'; return; }
+
+    var existingId = document.getElementById('ef-id').value;
+    var obj = {
+      title: title,
+      imageUrl: imageUrl,
+      linkUrl: document.getElementById('ef-link').value.trim() || '/#contact',
+      startDate: new Date(startDate).toISOString(),
+      endDate: new Date(endDate).toISOString(),
+      order: parseInt(document.getElementById('ef-order').value) || 0,
+      active: document.getElementById('ef-active').value === 'true'
+    };
+    if (existingId) obj._id = existingId;
+
+    try {
+      var data = await apiRequest('/events', { method: 'POST', body: JSON.stringify(obj) });
+      var saved = data.data;
+      if (existingId) {
+        var idx = events.findIndex(function(x) { return x._id === existingId; });
+        if (idx > -1) events[idx] = saved; else events.unshift(saved);
+      } else {
+        events.unshift(saved);
+      }
+      renderEvents();
+      closeEventEditor();
+      toast('✅ Event saved');
+    } catch (error) {
+      err.textContent = 'Failed to save: ' + error.message;
+      toast('❌ Error saving event');
+    }
+  });
+
+  document.getElementById('newEventBtn').addEventListener('click', function() { openEventEditor(null); });
+  document.getElementById('eventCloseBtn').addEventListener('click', closeEventEditor);
+  document.getElementById('eventCancelBtn').addEventListener('click', closeEventEditor);
+  eventOverlay.addEventListener('click', function(e) { if (e.target === eventOverlay) closeEventEditor(); });
+
+  /* Event image uploader */
+  var eventUploadBtn  = document.getElementById('btn-event-upload-image');
+  var eventFilePicker = document.getElementById('event-image-file-picker');
+
+  eventUploadBtn.addEventListener('click', function() { eventFilePicker.click(); });
+
+  eventFilePicker.addEventListener('change', async function() {
+    if (!eventFilePicker.files || !eventFilePicker.files.length) return;
+    var file = eventFilePicker.files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      toast('❌ Image must be under 5MB');
+      eventFilePicker.value = '';
+      return;
+    }
+    var origHTML = eventUploadBtn.innerHTML;
+    eventUploadBtn.disabled = true;
+    eventUploadBtn.innerHTML = '<span>Uploading...</span>';
+    try {
+      var fd = new FormData();
+      fd.append('image', file);
+      var headers = {};
+      if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+      var resp = await fetch('/api/upload-image?slug=event-' + Date.now(), { method: 'POST', headers, body: fd });
+      var result = await resp.json();
+      if (!resp.ok) throw new Error(result.message || 'Upload failed');
+      if (result.success && result.imagePath) {
+        document.getElementById('ef-image').value = result.imagePath;
+        toast('✅ Image uploaded');
+      }
+    } catch (err) {
+      toast('❌ Upload failed: ' + err.message);
+    } finally {
+      eventUploadBtn.disabled = false;
+      eventUploadBtn.innerHTML = origHTML;
+      eventFilePicker.value = '';
     }
   });
 
