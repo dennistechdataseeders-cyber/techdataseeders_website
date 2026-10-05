@@ -25,10 +25,168 @@ const DISPOSABLE_EMAIL_DOMAINS = new Set([
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
 
 // ─────────────────────────────────────────────────────────────
+// Gemini resilience helpers
+// ─────────────────────────────────────────────────────────────
+
+// Models tried in order. First success wins.
+// gemini-3.8-flash  → primary, fastest
+// gemini-3.8-pro    → higher quality fallback (slower)
+// gemini-2.5-flash  → legacy stable fallback
+const GEMINI_MODELS = [
+  'gemini-3.8-flash',        // primary, stable
+  'gemini-3.7-flash',        // stable fallback
+  'gemini-3.5-flash-lite'         // legacy stable fallback
+];
+
+// HTTP statuses worth retrying.
+const RETRYABLE_STATUSES = new Set([429, 500, 502, 503, 504]);
+
+// Per-attempt network timeout (ms).
+const GEMINI_TIMEOUT_MS = 8000;
+
+// Total time budget across all models + retries (ms).
+// Set to 10s so secondary/tertiary fallback models always get a fair chance to run.
+const GEMINI_TOTAL_BUDGET_MS = 10000;
+
+// Sleep helper.
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Exponential backoff with full jitter.
+// attempt = 1, 2, 3 → base 300ms, 600ms, 1200ms (± 50% jitter)
+function backoffDelay(attempt) {
+  const base = 300 * Math.pow(2, attempt - 1);
+  const jitter = base * 0.5 * Math.random();
+  return Math.floor(base + jitter);
+}
+
+/**
+ * Calls Gemini for a single model with retry + timeout.
+ * Returns { ok: true, text } on success.
+ * Returns { ok: false, status, retryable } on failure.
+ */
+async function callGeminiModel(model, systemPrompt, messages, timeoutMs = GEMINI_TIMEOUT_MS) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`;
+  const body = JSON.stringify({
+    system_instruction: { parts: [{ text: systemPrompt }] },
+    contents: messages,
+    generationConfig: { temperature: 0.7, maxOutputTokens: 300 }
+  });
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+      signal: controller.signal
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) return { ok: true, text: text.trim() };
+      return { ok: false, status: 200, retryable: false, reason: 'empty response' };
+    }
+
+    const errorText = await response.text();
+    return {
+      ok: false,
+      status: response.status,
+      retryable: RETRYABLE_STATUSES.has(response.status),
+      reason: errorText.slice(0, 200)
+    };
+  } catch (err) {
+    // Network error, abort, DNS failure, etc. — treat as retryable.
+    return {
+      ok: false,
+      status: 0,
+      retryable: true,
+      reason: err.name === 'AbortError' ? 'timeout' : err.message
+    };
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+/**
+ * Orchestrates the full multi-model, multi-retry Gemini call.
+ * Returns the text reply or null if all attempts fail.
+ */
+async function callGeminiWithFallback(systemPrompt, messages) {
+  const startTime = Date.now();
+
+  for (let i = 0; i < GEMINI_MODELS.length; i++) {
+    const model = GEMINI_MODELS[i];
+    // Only allow retry on primary model if budget permits.
+    const maxAttempts = i === 0 ? 2 : 1;
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      const elapsed = Date.now() - startTime;
+      const remainingBudget = GEMINI_TOTAL_BUDGET_MS - elapsed;
+
+      // Need at least 1500ms to complete a round-trip
+      if (remainingBudget < 1500) {
+        console.warn(`[chatbot] Gemini budget depleted (${remainingBudget}ms left) before trying ${model}`);
+        return null;
+      }
+
+      // Bound per-call timeout by remaining budget so no attempt overshoots
+      const effectiveTimeout = Math.min(GEMINI_TIMEOUT_MS, remainingBudget);
+
+      const t0 = Date.now();
+      const result = await callGeminiModel(model, systemPrompt, messages, effectiveTimeout);
+      const dt = Date.now() - t0;
+
+      if (result.ok) {
+        console.log(`[chatbot] Gemini OK model=${model} attempt=${attempt} ${dt}ms`);
+        return result.text;
+      }
+
+      console.warn(
+        `[chatbot] Gemini FAIL model=${model} attempt=${attempt} status=${result.status} ` +
+        `retryable=${result.retryable} ${dt}ms reason=${result.reason}`
+      );
+
+      // Non-retryable (400, 401, 403, 404) -> stop retrying this model
+      if (!result.retryable) {
+        break;
+      }
+
+      // On 503 (model overloaded) or timeout (status 0) or server error (500/502/504):
+      // Retrying the SAME overloaded/hung model wastes precious budget.
+      // Immediately failover to the next model in the chain!
+      if (result.status === 503 || result.status === 0 || result.status === 500 || result.status === 502 || result.status === 504) {
+        console.log(`[chatbot] Model ${model} is overloaded or timed out — failing over to next model immediately`);
+        break;
+      }
+
+      // If rate limited (429), back off and retry primary once if budget allows
+      if (attempt < maxAttempts) {
+        const delay = backoffDelay(attempt);
+        if (Date.now() - startTime + delay + 2000 >= GEMINI_TOTAL_BUDGET_MS) {
+          console.warn('[chatbot] Gemini budget would be exceeded by backoff — moving to next model');
+          break;
+        }
+        await sleep(delay);
+      }
+    }
+  }
+
+  console.error('[chatbot] All Gemini models failed — falling back to rules');
+  return null;
+}
+
+// ─────────────────────────────────────────────────────────────
 // Startup AI provider check
 // ─────────────────────────────────────────────────────────────
 if (process.env.GEMINI_API_KEY) {
-  console.log('[chatbot] AI provider: Google Gemini (gemini-2.0-flash)');
+  console.log('[chatbot] AI provider: Google Gemini');
+  console.log(`[chatbot] Model chain: ${GEMINI_MODELS.join(' → ')}`);
+  console.log(`[chatbot] Retry policy: dynamic per-call timeout (max ${GEMINI_TIMEOUT_MS}ms), failover on 503/timeout, total budget=${GEMINI_TOTAL_BUDGET_MS}ms`);
 } else if (process.env.ANTHROPIC_API_KEY) {
   console.log('[chatbot] AI provider: Anthropic Claude');
 } else {
@@ -486,15 +644,13 @@ async function getAssistantReply(userMessage, conversationHistory, userAlreadyGr
   const cleanQuery = String(userMessage || '').trim();
 
   // ─────────────────────────────────────────────────────────────
-  // 1. Google Gemini Chat Completion (primary — free tier)
+  // 1. Google Gemini Chat Completion (with retry + model fallback)
   // ─────────────────────────────────────────────────────────────
   if (process.env.GEMINI_API_KEY) {
     try {
       const systemPrompt = await buildSystemPrompt(userAlreadyGreeted);
       const messages = [];
 
-      // Append up to last 6 history items.
-      // Gemini uses role "model" for assistant replies.
       if (Array.isArray(conversationHistory)) {
         for (const item of conversationHistory.slice(-6)) {
           messages.push({
@@ -509,32 +665,10 @@ async function getAssistantReply(userMessage, conversationHistory, userAlreadyGr
         parts: [{ text: cleanQuery }]
       });
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            system_instruction: { parts: [{ text: systemPrompt }] },
-            contents: messages,
-            generationConfig: {
-              temperature: 0.7,
-              maxOutputTokens: 300
-            }
-          })
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (reply) return reply.trim();
-      } else {
-        const errorText = await response.text();
-        console.error('[chatbot] Gemini API error:', response.status, errorText);
-      }
+      const reply = await callGeminiWithFallback(systemPrompt, messages);
+      if (reply) return reply;
     } catch (err) {
-      console.error('[chatbot] Gemini request failed:', err.message);
+      console.error('[chatbot] Gemini orchestration error:', err.message);
     }
   }
 
