@@ -3642,6 +3642,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var STORAGE_KEY = 'dismissed_events';
     var pendingQueue = [];
     var currentEvent = null;
+    var scrollTriggerFired = false;
 
     // DOM references — assigned lazily inside initEventModals()
     var overlay  = null;
@@ -3769,10 +3770,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       document.documentElement.classList.remove('event-modal-open');
       document.body.classList.remove('event-modal-open');
 
-      // Sequential display: show the next queued event after a brief pause
-      if (pendingQueue.length > 0) {
-        setTimeout(showNextModal, 500);
-      } else {
+      // Gravity-aware display: only fire the next modal after the user
+      // has scrolled 30% of the page. Only one scroll trigger per page load.
+      if (pendingQueue.length > 0 && !scrollTriggerFired) {
+        scrollTriggerFired = true;
+
+        window.addEventListener('scroll', function onScrollForNextEvent() {
+          var scrollY = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+          var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+          if (docHeight > 0 && (scrollY / docHeight) >= 0.2) {
+            window.removeEventListener('scroll', onScrollForNextEvent);
+            showNextModal();
+          }
+        }, { passive: true });
+      } else if (pendingQueue.length === 0) {
         currentEvent = null;
       }
     }
@@ -3821,6 +3833,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           closeCurrentModal();
         }
       });
+
+      scrollTriggerFired = false;
 
       // Fetch fresh data, log the intermediate state, then show the first event
       var fetched = await fetchActiveEvents();

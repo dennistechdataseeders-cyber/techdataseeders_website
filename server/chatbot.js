@@ -269,7 +269,7 @@ async function touchChatSession(identifier) {
 function startChatTranscriptScheduler() {
   const INTERVAL_MS   = 10 * 60 * 1000;       // 10 minutes
   const INACTIVITY_MS =  2 * 60 * 60 * 1000;  // 2 hours
-  const RECIPIENT     = 'dennislalwani09@gmail.com';
+  const RECIPIENT     = 'sales@techdataseeders.com';
 
   setInterval(async () => {
     try {

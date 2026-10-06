@@ -608,7 +608,8 @@ app.post('/api/admin/send-transcripts', authMiddleware, async (req, res) => {
   try {
     const { ChatSession, ChatMessage } = require('./chatbot-models');
     const { sendChatTranscriptEmail } = require('../utils/email');
-    const RECIPIENT = 'dennislalwani09@gmail.com';
+    // const RECIPIENT = 'dennislalwani09@gmail.com';
+    const RECIPIENT = 'sales@techdataseeders.com';
 
     const sessions = await ChatSession.find({ transcriptSent: false }).lean();
     let sent = 0, failed = 0;
