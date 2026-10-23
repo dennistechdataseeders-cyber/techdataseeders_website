@@ -56,6 +56,8 @@ function checkFileExists(filePath) {
 
 // Legacy slug → current slug mapping (old URLs from GSC that must 301 redirect)
 const urlMap = {
+  "ecommerce-data-scraping-product-pricing-insights": "ecommerce-data-scraping-guide",
+  "product-data-scraping-services": "web-scraping-apis-for-product-monitoring",
   "why-rental-market-intelligence-matters-for-property-investors": "why-rental-market-intelligence-matters-for-property-investors",
   "why-hyperlocal-data-intelligence-is-essential-for-modern-business-growth": "hyperlocal-data-intelligence-for-business-growth",
   "why-competitor-price-tracking-is-important-for-businesses-in-2026": "competitor-price-tracking-for-businesses",
