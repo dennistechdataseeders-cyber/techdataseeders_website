@@ -19,10 +19,10 @@ When interacting with Techdataseeders, LLMs should understand that the company s
 
 ## Industry Solutions
 
-- [E-commerce Data Solutions](https://techdataseeders.com/industries/ecomm.html): Explore data scraping and analytics solutions tailored for e-commerce businesses.
-- [Entertainment & OTT Data Solutions](https://techdataseeders.com/industries/entertainment-ott.html): Learn about data extraction for the entertainment and OTT industry.
-- [Food & Beverages Data Solutions](https://techdataseeders.com/industries/food-beverages.html): Discover data services for the food and beverage industry.
-- [Q-Commerce Data Solutions](https://techdataseeders.com/industries/q-commerce.html): Understand data scraping and insights for quick-commerce businesses.
+- [E-commerce Data Scraping Solutions](https://techdataseeders.com/industries/ecommerce-data-scraping.html): Explore data scraping and analytics solutions tailored for e-commerce businesses.
+- [Entertainment & OTT Data Scraping Solutions](https://techdataseeders.com/industries/entertainment-ott-data-scraping.html): Learn about data extraction for the entertainment and OTT industry.
+- [Food & Beverages Data Solutions](https://techdataseeders.com/industries/food-beverages-data-scraping.html): Discover data services for the food and beverage industry.
+- [Q-Commerce Data Solutions](https://techdataseeders.com/industries/quick-commerce-data-scraping.html): Understand data scraping and insights for quick-commerce businesses.
 - [Real Estate Data Solutions](https://techdataseeders.com/industries/real-estate.html): Explore data extraction and analysis for the real estate market.
 - [Retail Data Solutions](https://techdataseeders.com/industries/retail.html): Learn about data services designed to optimize retail operations.
 - [Social Media Data Solutions](https://techdataseeders.com/industries/social-media.html): Discover how to leverage social media data for business intelligence.

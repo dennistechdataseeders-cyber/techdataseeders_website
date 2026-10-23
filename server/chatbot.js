@@ -397,14 +397,14 @@ const KNOWLEDGE_BASE = {
     }
   ],
   industries: [
-    { name: "E-Commerce", url: "/industries/ecomm.html", summary: "Catalog indexing, real-time competitor price tracking, inventory monitoring, and review sentiment across Amazon, Walmart, Target, etc." },
+    { name: "E-Commerce", url: "/industries/ecommerce-data-scraping.html", summary: "Catalog indexing, real-time competitor price tracking, inventory monitoring, and review sentiment across Amazon, Walmart, Target, etc." },
     { name: "Retail", url: "/industries/retail.html", summary: "Omnichannel price matching, SKU reconciliation, automated product categorization, and local promotional monitoring." },
     { name: "Real Estate", url: "/industries/real-estate.html", summary: "Property listings, rental yields, price-per-square-foot analytics, and historical valuation intelligence from major portals." },
     { name: "Travel & Hospitality", url: "/industries/travel-hotel.html", summary: "Hotel room rate intelligence, airline seat availability, OTA benchmark data, and seasonal booking trends." },
-    { name: "Food & Beverages", url: "/industries/food-beverages.html", summary: "Restaurant menu pricing, item availability, delivery platform data (DoorDash, Uber Eats, Grubhub), and consumer reviews." },
-    { name: "Quick Commerce", url: "/industries/q-commerce.html", summary: "Hyperlocal dark store stock tracking, 10-minute delivery pricing, and competitor catalog surveillance (Blinkit, Zepto, Instamart)." },
+    { name: "Food & Beverages", url: "/industries/food-beverages-data-scraping.html", summary: "Restaurant menu pricing, item availability, delivery platform data (DoorDash, Uber Eats, Grubhub), and consumer reviews." },
+    { name: "Quick Commerce", url: "/industries/quick-commerce-data-scraping.html", summary: "Hyperlocal dark store stock tracking, 10-minute delivery pricing, and competitor catalog surveillance (Blinkit, Zepto, Instamart)." },
     { name: "Social Media", url: "/industries/social-media.html", summary: "Social listening, brand mentions, engagement analytics, trend forecasting, and influencer intelligence." },
-    { name: "Entertainment & OTT", url: "/industries/entertainment-ott.html", summary: "Streaming catalog monitoring, regional content availability, viewer sentiment, and release schedule tracking." }
+    { name: "Entertainment & OTT", url: "/industries/entertainment-ott-data-scraping.html", summary: "Streaming catalog monitoring, regional content availability, viewer sentiment, and release schedule tracking." }
   ],
   caseStudies: CASE_STUDIES.map(cs => ({
     category: cs.category,
@@ -467,7 +467,7 @@ RULES:
   [Mobile App Scraping](/services/mobile-app-scraping.html)
   [Custom Data API](/services/custom-data-api.html)
   [Data Analytics & Intelligence](/services/data-analytics-intelligence.html)
-  [E-Commerce](/industries/ecomm.html)
+  [E-Commerce](/industries/ecommerce-data-scraping.html)
   [Real Estate](/industries/real-estate.html)
   [Contact Us](/#contact)
   Never output a bare path like /services/... in a reply.
@@ -546,7 +546,7 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
   if (/\b(amazon|walmart|target|ebay|flipkart|etsy|shopify|alibaba|noon|jumia|instacart|costco)\b/i.test(q)) {
     const m = q.match(/\b(amazon|walmart|target|ebay|flipkart|etsy|shopify|alibaba|noon|jumia|instacart|costco)\b/i);
     const pretty = m[1].charAt(0).toUpperCase() + m[1].slice(1);
-    return `🛍️ Yes — we scrape **${pretty}** data as part of our **E-Commerce** solutions. We extract catalog listings, real-time prices, buyer reviews, stock levels, seller info, and Buy Box signals — delivered in JSON, CSV, or straight to your database.\n\nRead more → [E-Commerce](/industries/ecomm.html) or [Contact Us](/#contact) for a custom quote 😊`;
+    return `🛍️ Yes — we scrape **${pretty}** data as part of our **E-Commerce** solutions. We extract catalog listings, real-time prices, buyer reviews, stock levels, seller info, and Buy Box signals — delivered in JSON, CSV, or straight to your database.\n\nRead more → [E-Commerce](/industries/ecommerce-data-scraping.html) or [Contact Us](/#contact) for a custom quote 😊`;
   }
 
   // 6. Industries-list
@@ -554,7 +554,7 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
   //    can no longer hijack "what about amazon can you scrape it".
   //    "cater" is mapped to "cover" by normalizeQuery above.
   if (/\b(what|which|list|name|tell me)\b.{0,20}\b(industries|sectors|verticals|domains|categories)\b/i.test(q)) {
-    return "We scrape data across **8 major industries** 🌐\n- 🛒 **E-Commerce** — product catalogs, pricing, reviews\n- 🏬 **Retail** — pricing compliance, shelf analytics\n- 🏠 **Real Estate** — listings, rental trends, valuations\n- ✈️ **Travel & Hospitality** — hotel rates, flights, OTA data\n- 🍔 **Food & Beverages** — menus, pricing, delivery data\n- ⚡ **Quick Commerce** — dark store inventory, hyperlocal pricing\n- 💬 **Social Media** — posts, sentiment, influencer data\n- 🎬 **Entertainment & OTT** — content catalogs, ratings\n\nExplore more at [E-Commerce](/industries/ecomm.html) or [Contact Us](/#contact) 😊";
+    return "We scrape data across **8 major industries** 🌐\n- 🛒 **E-Commerce** — product catalogs, pricing, reviews\n- 🏬 **Retail** — pricing compliance, shelf analytics\n- 🏠 **Real Estate** — listings, rental trends, valuations\n- ✈️ **Travel & Hospitality** — hotel rates, flights, OTA data\n- 🍔 **Food & Beverages** — menus, pricing, delivery data\n- ⚡ **Quick Commerce** — dark store inventory, hyperlocal pricing\n- 💬 **Social Media** — posts, sentiment, influencer data\n- 🎬 **Entertainment & OTT** — content catalogs, ratings\n\nExplore more at [E-Commerce](/industries/ecommerce-data-scraping.html) or [Contact Us](/#contact) 😊";
   }
 
   // 7. Mobile App Scraping
@@ -574,12 +574,12 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
 
   // 10. Quick Commerce
   if (/\b(q-commerce|quick commerce|dark store|zepto|blinkit|instamart|10 minute|10-minute)\b/i.test(q)) {
-    return "⚡ In **Quick Commerce**, we track real-time hyperlocal SKU availability, dark-store pricing, and stockouts across Blinkit, Zepto, and Instamart.\n\nCheck out [Quick Commerce](/industries/q-commerce.html) 😊";
+    return "⚡ In **Quick Commerce**, we track real-time hyperlocal SKU availability, dark-store pricing, and stockouts across Blinkit, Zepto, and Instamart.\n\nCheck out [Quick Commerce](/industries/quick-commerce-data-scraping.html) 😊";
   }
 
   // 11. E-Commerce (generic — platform-specific already handled above)
   if (/\b(ecommerce|e-commerce|product pricing|catalog|product data|marketplace)\b/i.test(q)) {
-    return "🛍️ For **E-Commerce** we extract catalog listings, real-time prices, buyer reviews, and stock levels across Amazon, Walmart, Target, eBay, Flipkart, and more.\n\nRead more → [E-Commerce](/industries/ecomm.html)";
+    return "🛍️ For **E-Commerce** we extract catalog listings, real-time prices, buyer reviews, and stock levels across Amazon, Walmart, Target, eBay, Flipkart, and more.\n\nRead more → [E-Commerce](/industries/ecommerce-data-scraping.html)";
   }
 
   // 12. Real Estate
@@ -594,7 +594,7 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
 
   // 14. Food & Beverages
   if (/\b(food|restaurant|menu|beverage|doordash|ubereats|grubhub|zomato|swiggy|deliveroo|talabat)\b/i.test(q)) {
-    return "🍔 For **Food & Beverages**, we extract restaurant menus, delivery aggregator pricing, customer review ratings, and fees across DoorDash, Uber Eats, Zomato, and more.\n\nExplore → [Food & Beverages](/industries/food-beverages.html)";
+    return "🍔 For **Food & Beverages**, we extract restaurant menus, delivery aggregator pricing, customer review ratings, and fees across DoorDash, Uber Eats, Zomato, and more.\n\nExplore → [Food & Beverages](/industries/food-beverages-data-scraping.html)";
   }
 
   // 15. Social Media
@@ -604,7 +604,7 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
 
   // 16. Entertainment & OTT
   if (/\b(ott|entertainment|streaming|netflix|disney|movies|shows|prime video|hulu)\b/i.test(q)) {
-    return "🎬 In **Entertainment & OTT**, we track catalog availability, release dates, viewer ratings, and regional content across all major streaming platforms.\n\nLearn more → [Entertainment & OTT](/industries/entertainment-ott.html)";
+    return "🎬 In **Entertainment & OTT**, we track catalog availability, release dates, viewer ratings, and regional content across all major streaming platforms.\n\nLearn more → [Entertainment & OTT](/industries/entertainment-ott-data-scraping.html)";
   }
 
   // 17. GENERIC web scraping — LAST among topic branches

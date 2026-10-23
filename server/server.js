@@ -178,6 +178,34 @@ app.get('/blog/index.html', (req, res) => {
   return res.redirect(301, '/blog/');
 });
 
+// ---------------------------------------------------------------
+// REDIRECT: /industries/ecomm.html and /industries/ecomm → /industries/ecommerce-data-scraping.html (301 Permanent)
+// ---------------------------------------------------------------
+app.get(['/industries/ecomm.html', '/industries/ecomm'], (req, res) => {
+  return res.redirect(301, '/industries/ecommerce-data-scraping.html');
+});
+
+// ---------------------------------------------------------------
+// REDIRECT: /industries/entertainment-ott.html and /industries/entertainment-ott → /industries/entertainment-ott-data-scraping.html (301 Permanent)
+// ---------------------------------------------------------------
+app.get(['/industries/entertainment-ott.html', '/industries/entertainment-ott'], (req, res) => {
+  return res.redirect(301, '/industries/entertainment-ott-data-scraping.html');
+});
+
+// ---------------------------------------------------------------
+// REDIRECT: /industries/food-beverages.html and /industries/food-beverages → /industries/food-beverages-data-scraping.html (301 Permanent)
+// ---------------------------------------------------------------
+app.get(['/industries/food-beverages.html', '/industries/food-beverages'], (req, res) => {
+  return res.redirect(301, '/industries/food-beverages-data-scraping.html');
+});
+
+// ---------------------------------------------------------------
+// REDIRECT: /industries/q-commerce.html and /industries/q-commerce → /industries/quick-commerce-data-scraping.html (301 Permanent)
+// ---------------------------------------------------------------
+app.get(['/industries/q-commerce.html', '/industries/q-commerce'], (req, res) => {
+  return res.redirect(301, '/industries/quick-commerce-data-scraping.html');
+});
+
 app.get('/case-studies.html', (req, res) => {
   const collectionPageSchema = buildCollectionPageSchema({
     name: "Case Studies | Web Scraping & Data Solutions | Techdataseeders",
@@ -299,10 +327,10 @@ app.get('/sitemap.xml', async (req, res) => {
     // Services
     ...serviceUrls,
     // Industries
-    { loc: 'https://techdataseeders.com/industries/ecomm.html',           changefreq: 'monthly', priority: '0.7', lastmod: now },
-    { loc: 'https://techdataseeders.com/industries/entertainment-ott.html', changefreq: 'monthly', priority: '0.7', lastmod: now },
-    { loc: 'https://techdataseeders.com/industries/food-beverages.html',   changefreq: 'monthly', priority: '0.7', lastmod: now },
-    { loc: 'https://techdataseeders.com/industries/q-commerce.html',       changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/ecommerce-data-scraping.html', changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/entertainment-ott-data-scraping.html', changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/food-beverages-data-scraping.html',   changefreq: 'monthly', priority: '0.7', lastmod: now },
+    { loc: 'https://techdataseeders.com/industries/quick-commerce-data-scraping.html',  changefreq: 'monthly', priority: '0.7', lastmod: now },
     { loc: 'https://techdataseeders.com/industries/real-estate.html',      changefreq: 'monthly', priority: '0.7', lastmod: now },
     { loc: 'https://techdataseeders.com/industries/retail.html',           changefreq: 'monthly', priority: '0.7', lastmod: now },
     { loc: 'https://techdataseeders.com/industries/social-media.html',     changefreq: 'monthly', priority: '0.7', lastmod: now },

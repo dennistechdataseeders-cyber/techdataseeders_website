@@ -5,6 +5,18 @@
   # Redirect /index.html to root domain /
   RewriteRule ^index\.html$ / [R=301,L]
 
+  # Redirect old industry ecomm URL to new slug (301 Permanent)
+  RewriteRule ^industries/ecomm(\.html)?$ /industries/ecommerce-data-scraping.html [R=301,L]
+
+  # Redirect old industry entertainment-ott URL to new slug (301 Permanent)
+  RewriteRule ^industries/entertainment-ott(\.html)?$ /industries/entertainment-ott-data-scraping.html [R=301,L]
+
+  # Redirect old industry food-beverages URL to new slug (301 Permanent)
+  RewriteRule ^industries/food-beverages(\.html)?$ /industries/food-beverages-data-scraping.html [R=301,L]
+
+  # Redirect old industry q-commerce URL to new slug (301 Permanent)
+  RewriteRule ^industries/q-commerce(\.html)?$ /industries/quick-commerce-data-scraping.html [R=301,L]
+
   # Serve post.html for /blog/slug/ or /blog/slug requests (if served via Apache)
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
