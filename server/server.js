@@ -210,6 +210,13 @@ app.get(['/industries/q-commerce.html', '/industries/q-commerce'], (req, res) =>
   return res.redirect(301, '/industries/quick-commerce-data-scraping.html');
 });
 
+// ---------------------------------------------------------------
+// REDIRECT: /services/data-analytics-intelligence.html and /services/data-analytics-intelligence → /services/digital-shelf-analytics.html (301 Permanent)
+// ---------------------------------------------------------------
+app.get(['/services/data-analytics-intelligence.html', '/services/data-analytics-intelligence', '/services/data-analytics-intelligence/'], (req, res) => {
+  return res.redirect(301, '/services/digital-shelf-analytics.html');
+});
+
 app.get('/case-studies.html', (req, res) => {
   const collectionPageSchema = buildCollectionPageSchema({
     name: "Case Studies | Web Scraping & Data Solutions | Techdataseeders",
@@ -317,7 +324,7 @@ app.get('/sitemap.xml', async (req, res) => {
     : [
         { loc: 'https://techdataseeders.com/services/enterprise-web-scraping.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
         { loc: 'https://techdataseeders.com/services/mobile-app-scraping.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
-        { loc: 'https://techdataseeders.com/services/data-analytics-intelligence.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
+        { loc: 'https://techdataseeders.com/services/digital-shelf-analytics.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
         { loc: 'https://techdataseeders.com/services/custom-data-api.html', changefreq: 'monthly', priority: '0.8', lastmod: now },
       ];
 

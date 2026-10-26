@@ -4,7 +4,7 @@ const pages = [
   'services/mobile-app-scraping.html',
   'services/enterprise-web-scraping.html',
   'services/custom-data-api.html',
-  'services/data-analytics-intelligence.html'
+  'services/digital-shelf-analytics.html'
 ];
 
 pages.forEach(p => {

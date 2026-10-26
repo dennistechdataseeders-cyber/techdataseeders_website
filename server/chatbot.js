@@ -386,8 +386,8 @@ const KNOWLEDGE_BASE = {
       summary: "Specialized mobile data extraction capturing encrypted traffic, private mobile APIs, and app-only endpoints across Android and iOS applications with 99.9% uptime."
     },
     {
-      name: "Data Analytics & Intelligence",
-      url: "/services/data-analytics-intelligence.html",
+      name: "Digital Shelf Analytics",
+      url: "/services/digital-shelf-analytics.html",
       summary: "Transforming unstructured data feeds into automated executive dashboards, competitive price intelligence, sentiment analysis, brand monitoring, and predictive market models."
     },
     {
@@ -466,7 +466,7 @@ RULES:
   [Enterprise Web Scraping](/services/enterprise-web-scraping.html)
   [Mobile App Scraping](/services/mobile-app-scraping.html)
   [Custom Data API](/services/custom-data-api.html)
-  [Data Analytics & Intelligence](/services/data-analytics-intelligence.html)
+  [Digital Shelf Analytics](/services/digital-shelf-analytics.html)
   [E-Commerce](/industries/ecommerce-data-scraping.html)
   [Real Estate](/industries/real-estate.html)
   [Contact Us](/#contact)
@@ -481,7 +481,7 @@ RULES:
   - Treat any subsequent greeting as a casual check-in, not a new conversation.
 - CRITICAL: NEVER re-introduce yourself after the first message. If the conversation history contains even one prior assistant message, skip all greetings and self-introductions — go straight to the answer.
 - BAD example (forbidden after first msg): "Hey! 👋 I'm Jenny from Techdataseeders. We offer Enterprise Web Scraping..."
-- GOOD example (direct answer): "We offer four core services: **Enterprise Web Scraping**, **Mobile App Scraping**, **Custom Data APIs**, and **Data Analytics & Intelligence**. Want details on any of these? 😊"
+- GOOD example (direct answer): "We offer four core services: **Enterprise Web Scraping**, **Mobile App Scraping**, **Custom Data APIs**, and **Digital Shelf Analytics**. Want details on any of these? 😊"
 
 KNOWLEDGE BASE:
 ${JSON.stringify(context, null, 2)}`;
@@ -527,7 +527,7 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
       return "Hey again! 👋 What else can I help you with? Still happy to answer any questions about web scraping, mobile app data, custom APIs, or analytics.";
     }
     const greetWord = q.startsWith('hi') ? 'Hi' : q.startsWith('hello') ? 'Hello' : 'Hey';
-    return `${greetWord}! 👋 Great to meet you. I'm Jenny — how can I help you today? Whether it's [Enterprise Web Scraping](/services/enterprise-web-scraping.html), [Mobile App Scraping](/services/mobile-app-scraping.html), [Custom Data APIs](/services/custom-data-api.html), or [Data Analytics](/services/data-analytics-intelligence.html), I've got you covered. (Looking for a quote? → [Contact Us](/#contact) 😊)`;
+    return `${greetWord}! 👋 Great to meet you. I'm Jenny — how can I help you today? Whether it's [Enterprise Web Scraping](/services/enterprise-web-scraping.html), [Mobile App Scraping](/services/mobile-app-scraping.html), [Custom Data APIs](/services/custom-data-api.html), or [Digital Shelf Analytics](/services/digital-shelf-analytics.html), I've got you covered. (Looking for a quote? → [Contact Us](/#contact) 😊)`;
   }
 
   // 3. PRICING — highest priority among topic intents
@@ -569,7 +569,7 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
 
   // 9. Data Analytics
   if (/\b(analytics|intelligence|sentiment|dashboard|market research|reporting)\b/i.test(q)) {
-    return "📊 Our **Data Analytics & Intelligence** service turns raw data into executive dashboards, competitor benchmarks, pricing trends, and sentiment insights.\n\nSee how it works → [Data Analytics & Intelligence](/services/data-analytics-intelligence.html)";
+    return "📊 Our **Digital Shelf Analytics** service turns raw data into executive dashboards, competitor benchmarks, pricing trends, and sentiment insights.\n\nSee how it works → [Digital Shelf Analytics](/services/digital-shelf-analytics.html)";
   }
 
   // 10. Quick Commerce
@@ -629,7 +629,7 @@ function fallbackRuleMatcher(query, userAlreadyGreeted) {
 
   // 21. Generic services enquiry
   if (/\b(service|what do you (do|offer)|offerings|solutions|capabilities)\b/i.test(q)) {
-    return "We offer four core services:\n- 🌐 [Enterprise Web Scraping](/services/enterprise-web-scraping.html) — high-scale managed data pipelines.\n- 📱 [Mobile App Scraping](/services/mobile-app-scraping.html) — iOS & Android app data extraction.\n- 💡 [Custom Data API](/services/custom-data-api.html) — REST, GraphQL, and webhook delivery.\n- 📊 [Data Analytics & Intelligence](/services/data-analytics-intelligence.html) — dashboards, pricing intelligence, sentiment analysis.\n\nExplore or [Contact Us](/#contact) for a custom quote 🚀";
+    return "We offer four core services:\n- 🌐 [Enterprise Web Scraping](/services/enterprise-web-scraping.html) — high-scale managed data pipelines.\n- 📱 [Mobile App Scraping](/services/mobile-app-scraping.html) — iOS & Android app data extraction.\n- 💡 [Custom Data API](/services/custom-data-api.html) — REST, GraphQL, and webhook delivery.\n- 📊 [Digital Shelf Analytics](/services/digital-shelf-analytics.html) — dashboards, pricing intelligence, sentiment analysis.\n\nExplore or [Contact Us](/#contact) for a custom quote 🚀";
   }
 
   // 22. Default

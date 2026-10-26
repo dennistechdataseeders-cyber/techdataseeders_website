@@ -42,9 +42,9 @@ const SERVICES_TO_SEED = [
     metaDescription: 'Extract accurate, real-time data from iOS & Android apps with our mobile app scraping services. Reliable, scalable & compliant. Get started today!'
   },
   {
-    slug: 'data-analytics-intelligence',
-    title: 'Data Analytics & Intelligence Services Backed by Scraped Data',
-    navLabel: 'Data Analytics & Intelligence',
+    slug: 'digital-shelf-analytics',
+    title: 'Digital Shelf Analytics Services in USA',
+    navLabel: 'Digital Shelf Analytics',
     badge: 'Service 03',
     tagline: 'Turn raw scraped data into structured business intelligence — benchmarks, price signals, demand forecasting, and sentiment scoring.',
     order: 3,
