@@ -1113,6 +1113,416 @@
       .cta-band { padding: 72px 20px; }
       .ben-list2 { grid-template-columns: 1fr; }
     }
+  
+    /* ================================================================
+       TASK 1 & 3: SCHEMA TABLE FULL-WIDTH & PROCESS 2x2 GRID
+       ================================================================ */
+    #topic-fields.wws-topic {
+      display: block;
+      padding: 40px 44px;
+      scroll-margin-top: 90px;
+    }
+    #topic-fields .wws-topic-num {
+      display: inline-flex;
+      margin-bottom: 16px;
+      width: 40px;
+      height: 40px;
+      font-size: 15px;
+    }
+    #topic-fields .wws-topic-body {
+      width: 100%;
+      max-width: none;
+    }
+    .dt-eyebrow {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-weight: 700;
+      color: #1e3a8a;
+      margin-bottom: 10px;
+      display: block;
+    }
+    #topic-fields .wws-topic-t {
+      font-size: clamp(28px, 3vw, 40px);
+      line-height: 1.25;
+      font-weight: 800;
+      color: var(--black);
+      margin-bottom: 12px;
+    }
+    .dt-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, .03);
+      width: 100%;
+    }
+    .dt-caption {
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 14px 24px;
+      border-bottom: 1px solid #e2e8f0;
+      letter-spacing: .01em;
+    }
+    #topic-fields .data-table-wrap {
+      width: 100%;
+      max-width: none;
+      overflow: hidden;
+    }
+    .data-table {
+      table-layout: fixed;
+      width: 100%;
+      min-width: 0;
+      border-collapse: collapse;
+      font-size: 15.5px;
+    }
+    .data-table th:nth-child(1), .data-table td:nth-child(1) { width: 24%; }
+    .data-table th:nth-child(2), .data-table td:nth-child(2) { width: 10%; }
+    .data-table th:nth-child(3), .data-table td:nth-child(3) { width: 50%; }
+    .data-table th:nth-child(4), .data-table td:nth-child(4) { width: 16%; }
+    .data-table thead th {
+      background: #eef2ff !important;
+      color: #0d1840 !important;
+      font-size: 14px;
+      font-weight: 700;
+      padding: 18px 24px;
+      text-align: left;
+      font-family: var(--font-d);
+      letter-spacing: .02em;
+      border-bottom: 1px solid #e2e8f0;
+      border-radius: 0 !important;
+    }
+    .data-table tbody tr {
+      border-bottom: 1px solid #e2e8f0;
+      background: #fff !important;
+      transition: background .15s;
+    }
+    .data-table tbody tr:hover {
+      background: #f8fafc !important;
+    }
+    .data-table tbody tr:last-child {
+      border-bottom: none;
+    }
+    .data-table tbody tr:nth-child(even) td {
+      background: transparent !important;
+    }
+    .data-table tbody td {
+      font-size: 15.5px;
+      line-height: 1.55;
+      padding: 20px 24px;
+      vertical-align: middle;
+      color: #334155;
+      border: none;
+    }
+    .data-table code {
+      background: #eef2ff;
+      color: #1e3a8a;
+      padding: 4px 10px;
+      border-radius: 6px;
+      white-space: normal;
+      word-break: break-word;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 13.5px;
+      font-weight: 600;
+      display: inline-block;
+    }
+    .data-table .dt-badge {
+      background: rgba(37,99,255,.08);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    @media (max-width: 900px) {
+      #topic-fields.wws-topic {
+        padding: 30px 24px;
+      }
+      #topic-fields .data-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .data-table {
+        min-width: 640px;
+      }
+    }
+    @media (max-width: 600px) {
+      #topic-fields.wws-topic {
+        padding: 20px 16px;
+      }
+      .dt-caption {
+        padding: 12px 14px;
+        font-size: 12px;
+      }
+      .data-table thead th {
+        padding: 14px;
+        font-size: 13px;
+      }
+      .data-table tbody td {
+        padding: 14px;
+        font-size: 14px;
+      }
+      .data-table code {
+        padding: 3px 8px;
+        font-size: 12px;
+      }
+    }
+
+    /* Process 2x2 grid */
+    .proc-steps2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 28px;
+      width: 100%;
+    }
+    .proc-step2 {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, .02);
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+    }
+    .proc-step2:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .06);
+      border-color: rgba(37, 99, 255, .3);
+    }
+    @media (max-width: 899px) {
+      .proc-steps2 {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+      .proc-step2 {
+        padding: 22px;
+      }
+    }
+
+  
+    /* ================================================================
+       TASK A: FULL-WIDTH LAYOUT & HORIZONTAL TOC CHIP BAR
+       ================================================================ */
+    .wws-shell {
+      display: block !important;
+      max-width: 1280px !important;
+      margin: 0 auto !important;
+      padding: 0 24px !important;
+    }
+    .wws-toc {
+      position: sticky !important;
+      top: 72px !important;
+      z-index: 20 !important;
+      margin: 0 0 28px !important;
+      padding: 10px 14px !important;
+      background: rgba(248, 249, 252, .92) !important;
+      backdrop-filter: blur(8px) !important;
+      -webkit-backdrop-filter: blur(8px) !important;
+      border: 1px solid rgba(0, 0, 0, .07) !important;
+      border-radius: 14px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 14px !important;
+      overflow-x: auto !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .toc-label {
+      display: inline-block !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: .12em !important;
+      color: #64748b !important;
+      white-space: nowrap !important;
+      margin: 0 !important;
+      padding: 0 4px !important;
+    }
+    .toc-list {
+      display: flex !important;
+      flex-direction: row !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+    .toc-list a {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 8px 14px !important;
+      border-radius: 999px !important;
+      font-size: 14px !important;
+      font-weight: 500 !important;
+      color: var(--black) !important;
+      white-space: nowrap !important;
+      text-decoration: none !important;
+      transition: all .15s ease !important;
+      background: transparent !important;
+      border: 1px solid transparent !important;
+    }
+    .toc-list a .toc-num {
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      color: var(--blue) !important;
+    }
+    .toc-list a:hover,
+    .toc-list a.active {
+      background: #eef2ff !important;
+      color: #1e3a8a !important;
+      border-color: rgba(37, 99, 255, .2) !important;
+    }
+    @media (max-width: 900px) {
+      .wws-toc {
+        display: none !important;
+      }
+    }
+
+    .wws-main,
+    .wws-topic,
+    .wws-topic-body,
+    .data-table-wrap {
+      width: 100% !important;
+      max-width: none !important;
+    }
+    .data-table {
+      min-width: 0 !important;
+    }
+    @media (max-width: 900px) {
+      .data-table-wrap {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+      }
+      .data-table {
+        min-width: 640px !important;
+      }
+    }
+
+    /* ================================================================
+       TASK B: OUR PROCESS FOR DELIVERING PROJECTS SECTION
+       ================================================================ */
+    .wws-topic--proc {
+      display: block !important;
+      padding: 48px 44px !important;
+      scroll-margin-top: 90px;
+    }
+    .proc-head {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 40px;
+    }
+    .proc-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .proc-kicker::before,
+    .proc-kicker::after {
+      content: '';
+      width: 20px;
+      height: 2px;
+      background: var(--blue);
+      border-radius: 2px;
+    }
+    .proc-h {
+      font-family: var(--font-d);
+      font-size: clamp(24px, 2.5vw, 36px);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -.02em;
+      color: var(--black);
+      word-wrap: break-word;
+    }
+    .proc-h em {
+      font-style: italic;
+      color: var(--blue);
+    }
+    .proc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      width: 100%;
+    }
+    .proc-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, .07);
+      border-radius: 18px;
+      padding: 30px 26px;
+      transition: all .35s cubic-bezier(.16, 1, .3, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .proc-card:hover {
+      border-color: rgba(37, 99, 255, .25);
+      box-shadow: 0 16px 40px rgba(37, 99, 255, .08);
+      transform: translateY(-4px);
+    }
+    .proc-num {
+      font-family: var(--font-d);
+      font-size: 38px;
+      font-weight: 800;
+      color: rgba(37, 99, 255, .2);
+      line-height: 1;
+      margin-bottom: 14px;
+      transition: color .3s;
+    }
+    .proc-card:hover .proc-num {
+      color: var(--blue);
+    }
+    .proc-t {
+      font-family: var(--font-d);
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 10px;
+      line-height: 1.35;
+    }
+    .proc-d {
+      font-size: 14px;
+      color: #64748b;
+      line-height: 1.65;
+    }
+    @media (max-width: 900px) {
+      .wws-topic--proc {
+        padding: 32px 24px !important;
+      }
+      .wws-topic--proc .proc-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+    @media (max-width: 600px) {
+      .wws-topic--proc {
+        padding: 24px 16px !important;
+      }
+      .proc-card {
+        padding: 22px 18px;
+      }
+      .proc-num {
+        font-size: 30px;
+      }
+      .proc-h {
+        font-size: 22px;
+      }
+    }
+
   </style>
 </head>
 
@@ -1184,14 +1594,15 @@
   <!-- WWS SECTION (SHELL + STICKY TOC + TOPIC CARDS) -->
   <section class="sec-wws">
     <div class="wws-shell">
-      <aside class="wws-toc">
+            <aside class="wws-toc">
         <div class="toc-label">On This Page</div>
         <nav class="toc-list">
-          <a href="#topic-fields"><span class="toc-num">01</span>Quick Commerce SKU Schema</a>
+          <a href="#topic-fields"><span class="toc-num">01</span>Data Fields Captured</a>
           <a href="#topic-process"><span class="toc-num">02</span>How It Works</a>
           <a href="#topic-teams"><span class="toc-num">03</span>Teams We Support</a>
-          <a href="#topic-why-us"><span class="toc-num">04</span>Why Choose Us</a>
-          <a href="#topic-faqs"><span class="toc-num">05</span>Frequently Asked Questions</a>
+          <a href="#topic-delivery"><span class="toc-num">04</span>Our Process</a>
+          <a href="#topic-why-us"><span class="toc-num">05</span>Why Choose Us</a>
+          <a href="#topic-faqs"><span class="toc-num">06</span>Frequently Asked Questions</a>
         </nav>
       </aside>
 
@@ -1205,12 +1616,15 @@
         <div class="wws-topic" id="topic-fields">
           <div class="wws-topic-num">01</div>
           <div class="wws-topic-body">
+            <div class="dt-eyebrow">SCHEMA</div>
             <h3 class="wws-topic-t">Quick Commerce SKU Data Extraction: Data Fields You Get</h3>
             <span class="wws-topic-h2">Standardized Dark Store &amp; SKU Schema</span>
             <p class="wws-topic-p">Our grocery marketplace data scraper collects the fields below for every product, store area, and platform in scope. This is a typical list. We can add fields or drop the ones you don't need.</p>
 
-            <div class="table-container data-table-wrap">
-              <table class="data-table">
+            <div class="dt-card">
+              <div class="dt-caption">Deliverable schema &mdash; core fields (full dictionary: 180+ fields)</div>
+              <div class="table-container data-table-wrap">
+                <table class="data-table">
                 <thead>
                   <tr>
                     <th>Field</th>
@@ -1318,6 +1732,7 @@
                   </tr>
                 </tbody>
               </table>
+              </div>
             </div>
             <p class="wws-topic-p" style="font-size:13.5px;color:#777;"><em>(Refresh values are typical defaults. The real schedule is agreed for your project, and fast-changing fields such as stock and prices can be collected several times a day.)</em></p>
           </div>
@@ -1401,9 +1816,39 @@
           </div>
         </div>
 
-        <!-- TOPIC 04: WHY CHOOSE US -->
+                <!-- TOPIC 04: OUR PROCESS (DELIVERY) -->
+        <div class="wws-topic wws-topic--proc" id="topic-delivery">
+          <div class="proc-head">
+            <div class="proc-kicker">Our Process</div>
+            <h2 class="proc-h">Our Process for Delivering<br><em>Quick Commerce Data Scraping Projects</em></h2>
+          </div>
+          <div class="proc-grid">
+            <div class="proc-card">
+              <div class="proc-num">01</div>
+              <div class="proc-t">Requirement &amp; Source Mapping</div>
+              <div class="proc-d">We start by mapping the quick commerce apps and dark store networks to monitor across pin codes, pinpointing high-velocity FMCG categories, pack sizes, stock flags, promotional tags, and promised delivery windows.</div>
+            </div>
+            <div class="proc-card">
+              <div class="proc-num">02</div>
+              <div class="proc-t">Crawler Architecture &amp; Compliance Check</div>
+              <div class="proc-d">Our technical team establishes mobile and web scraping pipelines with hyper-local geo-targeting, managing high-frequency polling rates, dark store inventory availability, and robots.txt directives responsibly.</div>
+            </div>
+            <div class="proc-card">
+              <div class="proc-num">03</div>
+              <div class="proc-t">Custom Web Crawler Development</div>
+              <div class="proc-d">Specialized crawlers are written to handle intraday price shifts, flash deals, and real-time out-of-stock transitions. Test runs verify consistency across dark store locations, with monitoring systems detecting app updates instantly.</div>
+            </div>
+            <div class="proc-card">
+              <div class="proc-num">04</div>
+              <div class="proc-t">Data Processing, Validation &amp; Delivery</div>
+              <div class="proc-d">Data points are matched across platforms, standardized per unit of measurement, and audited for anomalies. Datasets are dispatched in real time or on schedule via CSV, JSON, XML, cloud warehouse pipelines, or <a href="/services/custom-data-api.html" class="inline-link2">Custom data API</a>.</div>
+            </div>
+          </div>
+        </div>
+
+<!-- TOPIC 05: WHY CHOOSE US -->
         <div class="wws-topic" id="topic-why-us">
-          <div class="wws-topic-num">04</div>
+          <div class="wws-topic-num">05</div>
           <div class="wws-topic-body">
             <h3 class="wws-topic-t">Why Choose Techdataseeders for Quick Commerce Data Scraping?</h3>
             <span class="wws-topic-h2">Engineered for Dark Stores, Dynamic Inventories &amp; Real-Time Shifts</span>
@@ -1462,6 +1907,17 @@
         </div>
 
       </div>
+    </div>
+  </section>
+
+  <!-- CTA BAND -->
+  <section class="cta-band">
+    <div class="cta-kicker">Get Started</div>
+    <h2 class="cta-h">Get Started with<br><em>Quick Commerce Data Scraping Services USA</em></h2>
+    <p class="cta-p">Send us the apps, cities or pincodes, and products you want to follow, and tell us how your team will use the data. We will set up the collection, matching, checks, and Stock and Price Data Delivery around that, whether you need a CSV or Excel file, a JSON or XML feed, a database-ready dataset, or an API into your planning tools. A proposal reaches you within 24 hours.</p>
+    <div class="cta-btns">
+      <a href="/#contact" class="btn-p">Start Your Project →</a>
+      <a href="/#services" class="btn-s">See All Services</a>
     </div>
   </section>
 
@@ -1542,17 +1998,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- CTA BAND -->
-  <section class="cta-band">
-    <div class="cta-kicker">Get Started</div>
-    <h2 class="cta-h">Get Started with<br><em>Quick Commerce Data Scraping Services USA</em></h2>
-    <p class="cta-p">Send us the apps, cities or pincodes, and products you want to follow, and tell us how your team will use the data. We will set up the collection, matching, checks, and Stock and Price Data Delivery around that, whether you need a CSV or Excel file, a JSON or XML feed, a database-ready dataset, or an API into your planning tools. A proposal reaches you within 24 hours.</p>
-    <div class="cta-btns">
-      <a href="/#contact" class="btn-p">Start Your Project →</a>
-      <a href="/#services" class="btn-s">See All Services</a>
     </div>
   </section>
 
