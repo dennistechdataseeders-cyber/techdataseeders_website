@@ -11,7 +11,9 @@
     "backup": "node scripts/backup-db.js",
     "optimize-images": "node scripts/optimize-images.js optimize ./images/uploads ./images/blog",
     "migrate-images": "node scripts/migrate-blog-images.js",
-    "download-image": "node scripts/optimize-images.js download"
+    "download-image": "node scripts/optimize-images.js download",
+    "build": "node scripts/minify-assets.js",
+    "minify": "node scripts/minify-assets.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -29,11 +31,13 @@
     "nodemailer": "^9.0.3"
   },
   "devDependencies": {
+    "clean-css": "^5.3.3",
     "imagemin": "^9.0.1",
     "imagemin-mozjpeg": "^10.0.0",
     "imagemin-pngquant": "^10.0.0",
     "imagemin-webp": "^8.0.0",
     "nodemon": "^3.1.14",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "terser": "^5.51.2"
   }
 }

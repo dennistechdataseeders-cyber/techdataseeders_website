@@ -179,36 +179,7 @@
     </div>
   </div>
 
-  <script>
-  (function () {
-    const img = document.getElementById('footer-map-img');
-    if (!img) return;
-
-    if (img.complete && img.naturalWidth > 0) {
-      img.classList.add('is-loaded');
-    } else {
-      img.addEventListener('load', function () {
-        img.classList.add('is-loaded');
-      }, { once: true });
-    }
-
-    // Preload when user reaches ~40% of the page
-    let preloaded = false;
-    function checkMapPreload() {
-      if (preloaded) return;
-      const scrollPos = window.scrollY + window.innerHeight;
-      const totalHeight = document.documentElement.scrollHeight;
-      if (scrollPos >= totalHeight * 0.4) {
-        preloaded = true;
-        window.removeEventListener('scroll', checkMapPreload);
-        if (img.getAttribute('loading') === 'lazy') {
-          img.loading = 'eager';
-        }
-      }
-    }
-    window.addEventListener('scroll', checkMapPreload, { passive: true });
-  })();
-</script>
+  <script>!function(){const img=document.getElementById("footer-map-img");if(!img)return;img.complete&&img.naturalWidth>0?img.classList.add("is-loaded"):img.addEventListener("load",function(){img.classList.add("is-loaded")},{once:!0});let preloaded=!1;window.addEventListener("scroll",function checkMapPreload(){preloaded||window.scrollY+window.innerHeight>=.4*document.documentElement.scrollHeight&&(preloaded=!0,window.removeEventListener("scroll",checkMapPreload),"lazy"===img.getAttribute("loading")&&(img.loading="eager"))},{passive:!0})}();</script>
 </footer>
-<link rel="stylesheet" href="/assets/chatbot.css">
-<script src="/assets/chatbot.js" defer></script>
+<link rel="stylesheet" href="/assets/chatbot.min.css">
+<script src="/assets/chatbot.min.js" defer></script>

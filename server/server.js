@@ -117,7 +117,9 @@ const urlMap = {
 };
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+// const PORT = process.env.PORT || 3000;
+const PORT = 7000;
+
 const baseDir = path.join(__dirname, '..');
 
 // Configure EJS view engine for .html files
