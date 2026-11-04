@@ -40,11 +40,12 @@ mongodump/
 uploads/
 temp/
 
-# Build
+# Build output directories only (NOT .min.css / .min.js files)
+# Minified assets are intentionally committed to Git so that the VPS
+# always has valid optimized assets immediately after `git pull`.
+# Run `npm run build` locally and commit the .min files before pushing.
 dist/
 build/
-*.min.js
-*.min.css
 
 # PM2
 .pm2/
